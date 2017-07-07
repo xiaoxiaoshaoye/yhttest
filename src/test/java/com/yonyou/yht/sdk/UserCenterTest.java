@@ -181,6 +181,24 @@ public class UserCenterTest {
 		Assert.assertTrue(node.get("status").asInt() == 1);
 		Assert.assertTrue(node.get("user").get("userCode").asText().equals(userCode));
 	}
+
+	@Test
+	public void addUserTest2() {
+		Map<String, String> params = new HashMap<String, String>();
+		int index = 6;
+		String userCode = "sdk中文测试_shicztest_00" + index;
+		params.put("tenantId", "00000000");
+		params.put("userCode", userCode);
+		params.put("userName", userCode);
+		params.put("userMobile", "1370000100" + index);
+		params.put("userEmail", "shicztest_00" + index + "@yonyou.com");
+		
+		String msg = UserCenter.addUser(params);
+		System.out.println(msg);
+		JsonNode node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+		Assert.assertTrue(node.get("user").get("userCode").asText().equals(userCode));
+	}
 	
 	@Test
 	public void profileTest() {
@@ -330,7 +348,8 @@ public class UserCenterTest {
 	
 	@Test
 	public void getUserByIdTest() {
-		String userId = "906c8e75-2da4-473f-b14d-4ed8acaaab4f";
+//		String userId = "906c8e75-2da4-473f-b14d-4ed8acaaab4f";
+		String userId = "06db845c-d260-4044-b3d1-82784a74b384";
 		String msg = UserCenter.getUserById(userId);
 		System.out.println(msg);
 		JsonNode node = Utils.getJson(mapper, msg);
@@ -471,7 +490,32 @@ public class UserCenterTest {
 		Assert.assertTrue(node.get("users").get("totalElements").asInt() == 3);
 		Assert.assertTrue(node.get("users").get("numberOfElements").asInt() == 1);
 	}
-	
+
+	@Test
+	public void searchUserNotInTest() {
+		String userName1 = "shicztest_001";
+		String userName2 = "shicztest_002";
+		String id1 = getUserByLoginName(userName1).getUserId();
+		String id2 = getUserByLoginName(userName2).getUserId();
+		
+		String[] pks = new String[] {id1, id2};
+		String msg = UserCenter.searchUser(pks, userName1);
+		System.out.println(msg);
+		Assert.assertNotNull(msg);
+		JsonNode node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+		Assert.assertTrue(node.get("users").get("totalElements").asInt() == 1);
+		Assert.assertTrue(node.get("users").get("content").get(0).get("userId").asText().equals(id1));
+
+		msg = UserCenter.searchUserNotIn(pks, userName1);
+		System.out.println(msg);
+		Assert.assertNotNull(msg);
+		node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+		Assert.assertTrue(node.get("users").get("totalElements").asInt() == 0);
+		
+	}
+
 	@Test
 	public void sendcodeTest() {
 //		String contact = "13716968294";
@@ -561,15 +605,28 @@ public class UserCenterTest {
 	@Test
 	public void generateOauthTokenTest() {
 //		String userName = "shicz@yonyou.com";
-		String userName = "shicz@ufida.com.cn";
-//		String userName = "13716968294";
+//		String userName = "shicz@ufida.com.cn";
+		String userName = "13716968294";
 		String userId = UserCenterUtil.getUserIdByLoginName(userName);
-		String clientId = "";
-		String clientSerect = "";
-		String scop = "";
-		String msg = UserCenter.generateOauthToken(userId, clientId, clientSerect, scop);
+		String clientId = "2";
+		String clientSecret = "2bf34a073bdbcf0d026d9a54279ead7d";
+		String scope = "7";
+		String msg = UserCenter.generateOauthToken(userId, clientId, clientSecret, scope);
 		System.out.println(msg);
-		
+	}
+
+	@Test
+	public void checkOauthTokenTest() {
+		String accessToken = "e409ec5a-bc9b-422f-9097-dc93682a8bc9";
+		String msg = UserCenter.checkOauthToken(accessToken);
+		System.out.println(msg);
+	}
+
+	@Test
+	public void getUserByTokenTest() {
+		String accessToken = "e409ec5a-bc9b-422f-9097-dc93682a8bc9";
+		String msg = UserCenter.getUserByToken(accessToken);
+		System.out.println(msg);
 	}
 	
 }

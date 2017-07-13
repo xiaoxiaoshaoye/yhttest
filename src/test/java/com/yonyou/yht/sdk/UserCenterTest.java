@@ -391,6 +391,16 @@ public class UserCenterTest {
 		Map<String, Object> node = Utils.getMap(mapper, msg);
 		Assert.assertTrue(node.get("status").toString().equals("1"));
 	}
+
+	@Test
+	public void getUserByCodesTest() {
+		String[] codes = new String[] {"test_001", "test_002"};
+		String msg = UserCenter.getUserByCodes(codes);
+		System.out.println(msg);
+		Assert.assertNotNull(msg);
+		Map<String, Object> node = Utils.getMap(mapper, msg);
+		Assert.assertTrue(node.get("status").toString().equals("1"));
+	}
 	
 	@Test
 	public void addUsersTest() {

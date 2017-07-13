@@ -663,4 +663,20 @@ public class UserCenterTest {
 		System.out.println(msg);
 	}
 	
+	@Test
+	public void verifyHSYUserTest() {
+		String tenantCode = "";
+		String name = "shicztest_009";
+		String psw = "shicztest_009";
+		String msg = UserCenter.verifyHSYUser(tenantCode, name, psw);
+		System.out.println(msg);
+		JsonNode node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+
+		psw = "shicztest_009_err";
+		msg = UserCenter.verifyHSYUser(tenantCode, name, psw);
+		System.out.println(msg);
+		node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 0);
+	}
 }

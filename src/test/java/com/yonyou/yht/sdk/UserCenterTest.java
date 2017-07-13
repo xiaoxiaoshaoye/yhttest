@@ -158,6 +158,29 @@ public class UserCenterTest {
 		node = mapper.readTree(msg);
 		Assert.assertTrue(node.get("status").asInt() == 0);
 	}
+
+	/**
+	 * 根据登录名和Sysid判断用户是否存在
+	 * @throws IOException
+	 */
+	@Test
+	public void isUserExistTest2() throws IOException {
+		String userName = "shicztest_008";
+		String sysid = "00000000";
+		String msg = UserCenter.isUserExist(userName, sysid);
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+		Assert.assertTrue(node.get("flag").asInt() == 1);
+		
+		userName = "shicztest_007";
+		sysid = "00000000";
+		msg = UserCenter.isUserExist(userName, sysid);
+		System.out.println(msg);
+		node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+		Assert.assertTrue(node.get("flag").asInt() == 0);
+	}
 	
 	@Test
 	public void addUserTest() {

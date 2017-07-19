@@ -679,4 +679,30 @@ public class UserCenterTest {
 		node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 0);
 	}
+
+	/**
+	 * 根据租户ID，用户名，密码获取accesstoken
+	 */
+	@Test
+	public void createAccessTokenTest() {
+		String tenantId = "";
+		String userName = "shicztest_009";
+		String password = "shicztest_009";
+		String clientId = "2";
+		
+		String msg = UserCenter.createAccessToken(tenantId, userName, password, clientId);
+		System.out.println(msg);
+		JsonNode node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+		Assert.assertTrue(node.get("data").has("access_token"));
+		
+		password = "shicztest_009_err";
+		
+		msg = UserCenter.createAccessToken(tenantId, userName, password, clientId);
+		System.out.println(msg);
+		node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 0);
+		Assert.assertTrue(node.get("code").asInt() == 400);
+	}
+
 }

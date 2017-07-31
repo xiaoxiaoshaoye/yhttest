@@ -49,6 +49,32 @@ public class RestTest {
 	}
 
 	@Test
+	public void sendcode2Test() {
+		String url = "http://idtest.yyuap.com/user/sendcode2";
+//		String contact = "shicz@yonyou.com";
+//		String contact = "shicz@ufida.com.cn";
+//		String contact = "shicz@ufsoft.com.cn";
+		String contact = "13716968294";
+		Map<String, String> params = new HashMap<String, String>();
+		String type = "email";
+		if (contact.matches("\\d{11}")) {
+			type = "mobile";
+			params.put("mobile", contact);
+		} else {
+			params.put("email", contact);
+		}
+		params.put("type", type);
+		params.put("key", "1495615240000");
+		params.put("code", "erk2");
+
+		String msg = SignUtils.signAndPost(url, params);
+		System.out.println(msg);
+		
+		JsonNode node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+	}
+
+	@Test
 	public void validatecodeTest() {
 		String url = baseurl + "/user/validatecode";
 //		String userName = "13716968294";

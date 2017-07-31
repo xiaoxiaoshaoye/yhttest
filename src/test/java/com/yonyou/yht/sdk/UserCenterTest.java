@@ -190,13 +190,14 @@ public class UserCenterTest {
 //		params.put("userCode", userCode);
 //		params.put("userName", userCode);
 //		params.put("userMobile", "13700000002");
-		int index = 9;
-		String userCode = "shicztest_00" + index;
+		String index = String.format("%03d", 10);
+		System.out.println(index);
+		String userCode = "shicztest_" + index;
 		params.put("sysId", "00000000");
 		params.put("userCode", userCode);
 		params.put("userName", userCode);
-		params.put("userMobile", "1370000000" + index);
-		params.put("userEmail", "shicztest_00" + index + "@yonyou.com");
+		params.put("userMobile", "13700000" + index);
+		params.put("userEmail", "shicztest_" + index + "@yonyou.com");
 		params.put("userPassword", userCode);
 		
 		String msg = UserCenter.addUser(params);

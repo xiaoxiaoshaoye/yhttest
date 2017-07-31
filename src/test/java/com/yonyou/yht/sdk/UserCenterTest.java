@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -706,4 +707,105 @@ public class UserCenterTest {
 		Assert.assertTrue(node.get("code").asInt() == 400);
 	}
 
+	@Test
+	public void createAccessTokenByValidateCodeTest() {
+		String sysId = "";
+		String userName = "13716968294";
+		String clientId = "2";
+		String validateCode = "701141";
+		String msg = UserCenter.createAccessTokenByValidateCode(sysId, userName, validateCode, clientId);
+		System.out.println(msg);
+		JsonNode node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+		Assert.assertTrue(node.get("data").has("access_token"));
+		System.out.println(node.get("data").get("access_token").asText());
+	}
+	
+	@Test
+	public void isUserActivateTest() {
+		String loginname = "13716968294";
+		String msg = UserCenter.isUserActivate(loginname);
+		System.out.println(msg);
+		JsonNode node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 0);
+		Assert.assertTrue(node.get("msg").asText().equals("active"));
+		
+		loginname = "13716968295";
+		msg = UserCenter.isUserActivate(loginname);
+		System.out.println(msg);
+		node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 0);
+		Assert.assertTrue(node.get("msg").asText().equals("notexits"));
+
+		loginname = "";
+		msg = UserCenter.isUserActivate(loginname);
+		System.out.println(msg);
+		node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 0);
+		Assert.assertTrue(node.get("msg").asText().equals("empty"));
+
+		loginname = "shicz@ufida.com.cn";
+		msg = UserCenter.isUserActivate(loginname);
+		System.out.println(msg);
+		node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+		Assert.assertTrue(node.get("code").asText().equals("0"));
+	}
+	
+	@Test 
+	public void activateUserTest() {
+		String userContact = "shicz@ufida.com.cn";
+		String userpwd = "12345678";
+		userpwd = DigestUtils.sha1Hex(userpwd);
+		String code = "827438";
+		String msg = UserCenter.activateUser(userContact, userpwd, code);
+		System.out.println(msg);
+		JsonNode node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+	}
+
+	@Test
+	public void activateUserTest2() {
+		String olduserContact = "13716968294";
+		String userContact = "shicz@ufsoft.com.cn";
+		String userpwd = "12345678";
+		userpwd = DigestUtils.sha1Hex(userpwd);
+		String code = "641125";
+		String userId = UserCenterUtil.getUserIdByLoginName(olduserContact);
+		boolean changecontactFlag = true;
+		String msg = UserCenter.activateUser(userContact, userpwd, code, userId, changecontactFlag);
+		System.out.println(msg);
+		JsonNode node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+	}
+	
+	@Test
+	public void getConflictUserByIdTest() {
+//		String userName = "13716968294";
+//		String userName = "shicz@ufida.com.cn";
+//		String userName = "shicz";
+		String userName = "shicz@yonyou.com";
+		String userId = UserCenterUtil.getUserIdByLoginName(userName);
+		String msg = UserCenter.getConflictUserById(userId);
+		System.out.println(msg);
+		JsonNode node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+		Assert.assertTrue(node.has("users"));
+		System.out.println(node.get("users").size() == 2);
+	}
+
+	@Test
+	public void getUserLoginLogTest() {
+		String userName = "13716968294";
+//		String userName = "shicz@ufida.com.cn";
+//		String userName = "shicz";
+//		String userName = "shicz@yonyou.com";
+		String userId = UserCenterUtil.getUserIdByLoginName(userName);
+		System.out.println(userId);
+		String msg = UserCenter.getUserLoginLog(userId + "00000");
+		System.out.println(msg);
+		JsonNode node = Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+	}
+	
 }

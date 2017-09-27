@@ -62,13 +62,13 @@
 		<dependency>
 			<groupId>com.yonyou.yht</groupId>
 			<artifactId>yht-sso-cache</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.3-SNAPSHOT</version>
 		</dependency>
 		<!--调用友户通SDK的依赖 -->
 		<dependency>
 			<groupId>com.yonyou.yht</groupId>
 			<artifactId>yht-sdk</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>

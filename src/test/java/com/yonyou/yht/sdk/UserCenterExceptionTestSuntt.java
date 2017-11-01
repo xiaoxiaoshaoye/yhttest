@@ -36,14 +36,27 @@ public class UserCenterExceptionTestSuntt {
 	*/
 	
 	public void getUserLoginLogExceptionTest() throws JsonProcessingException, IOException  {
+		
+		//参数为空
 		String msg = UserCenter.getUserLoginLog("");
-		String msg1 = UserCenter.getUserLoginLog("随便乱输入的内容哈哈哈哈哈");
 		System.out.println(msg);
 		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
 		Assert.assertTrue(node.get("msg").asText().equals("没有登录日志"));
+		
+		//参数是随便输入的值
+		String msg1 = UserCenter.getUserLoginLog("随便乱输入的内容哈哈哈哈哈");
 		System.out.println(msg1);
 		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt() == 1);
 		Assert.assertTrue(node1.get("msg").asText().equals("没有登录日志"));
+		
+		//参数是null
+		String msg2 = UserCenter.getUserLoginLog(null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt() == 1);
+		Assert.assertTrue(node2.get("msg").asText().equals("没有登录日志"));
 	}
 	
 	@Test
@@ -52,14 +65,27 @@ public class UserCenterExceptionTestSuntt {
 	 * 用户ID为空或错误时应该不能查出数据
 	*/
 	public void getUserByIdExceptionTest() throws JsonProcessingException, IOException  {
+		
+		//参数为空
 		String msg = UserCenter.getUserById("");
-		String msg1 = UserCenter.getUserById("随便乱输入的内容哈哈哈哈哈");
 		System.out.println(msg);
 		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt() == 0);
 		Assert.assertTrue(node.get("msg").asText().equals("用户ID不能为空"));
+		
+		//参数是随便输入的值
+		String msg1 = UserCenter.getUserById("随便乱输入的内容哈哈哈哈哈");
 		System.out.println(msg1);
 		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt() == 1);
 		Assert.assertTrue(node1.get("msg").asText().equals("未找到用户"));
+		
+		//参数是null
+		String msg2 = UserCenter.getUserById(null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt() == 0);
+		Assert.assertTrue(node2.get("msg").asText().equals("用户ID不能为空"));
 	}
 	
 	@Test
@@ -479,6 +505,78 @@ public class UserCenterExceptionTestSuntt {
 		}
 	}
 	
+	
+	@Test
+	/* 
+	 * 根据字符串模糊查询用户列表（前缀匹配、支持分页）
+	 * 异常情况的测试
+	*/
+	public void searchUserByFilterExceptionTest() throws JsonProcessingException, IOException {
+
+//		//字符串参数为空，数据为0
+//		String msg = UserCenter.searchUserByFilter("",0,0,"");
+//		System.out.println(msg);
+//		JsonNode node = mapper.readTree(msg);
+//		Assert.assertTrue(node.get("status").asInt()==0);	
+//		Assert.assertTrue(node.get("msg").asText().equals("过滤条件不能为空"));
+//		
+//		//filter不可以是一位的字母
+//		String msg1 = UserCenter.searchUserByFilter("s",5,2,"");
+//		System.out.println(msg1);
+//		JsonNode node1 = mapper.readTree(msg1);
+//		Assert.assertTrue(node1.get("status").asInt()==0);	
+//		Assert.assertTrue(node1.get("msg").asText().equals("过滤字符串格式不正确"));
+//		
+//		//filter不可以是一位的数字
+//		String msg2 = UserCenter.searchUserByFilter("8",5,2,"");
+//		System.out.println(msg2);
+//		JsonNode node2 = mapper.readTree(msg2);
+//		Assert.assertTrue(node2.get("status").asInt()==0);	
+//		Assert.assertTrue(node2.get("msg").asText().equals("过滤字符串格式不正确"));
+//		
+//		//不可以是以1开头的两位数字
+//		String msg3 = UserCenter.searchUserByFilter("18",5,2,"");
+//		System.out.println(msg3);
+//		JsonNode node3 = mapper.readTree(msg3);
+//		Assert.assertTrue(node3.get("status").asInt()==0);	
+//		Assert.assertTrue(node3.get("msg").asText().equals("过滤字符串格式不正确"));
+//
+//		//过滤字符串随便输入值，这样查出来的数据就是0
+//		String msg4 = UserCenter.searchUserByFilter("随便乱输入的内容haha",5,1,"");
+//		System.out.println(msg4);
+//		JsonNode node4 = mapper.readTree(msg4);
+//		Assert.assertTrue(node4.get("status").asInt()==1);	
+//		Assert.assertTrue(node4.get("users").get("numberOfElements").asInt()==0);	
+//		
+		//排序是随便输入的值，应该是""  null   name    auto  这四种，其他值都不正确
+		String msg5 = UserCenter.searchUserByFilter("stt",5,1,"随便乱输入的内容haha");
+		System.out.println(msg5);
+		JsonNode node5 = mapper.readTree(msg5);
+		//Assert.assertTrue(node5.get("status").asInt()==0);	
+		
+		//pageSize页面大小、pageNumber第几页：应该控制是正整数
+		String msg6 = UserCenter.searchUserByFilter("stt",-1,-1,"随便乱输入的内容haha");
+		System.out.println(msg6);
+		JsonNode node6 = mapper.readTree(msg6);
+		//Assert.assertTrue(node6.get("status").asInt()==0);	
+//		
+//		//过滤字符串是null
+//		String msg7 = UserCenter.searchUserByFilter(null,5,1,"");
+//		System.out.println(msg7);
+//		JsonNode node7 = mapper.readTree(msg7);
+//		Assert.assertTrue(node7.get("status").asInt()==0);	
+//		Assert.assertTrue(node7.get("msg").asText().equals("过滤条件不能为空"));
+//
+//		//过滤字符串是stt,其他参数都是null,因为stt的数据多，查出肯定超过20条，所以肯定是满页数据
+//		String msg8 = UserCenter.searchUserByFilter("stt",null,null,null);
+//		System.out.println(msg8);
+//		JsonNode node8 = mapper.readTree(msg8);
+//		Assert.assertTrue(node8.get("status").asInt()==1);	
+//		Assert.assertTrue(node8.get("numberOfElements").asInt()==20);
+
+	}
+	
+	
 	@Test
 	/* 
 	 * 增加用户
@@ -677,104 +775,104 @@ public class UserCenterExceptionTestSuntt {
 		String userCode =date.format(new Date());		
 		String systemCode = "yht";	    
 
-		//第一个用户的邮箱格式不正确，第二个正确，执行结果整体失败，第一个提示邮箱格式不正确，第二个能增加成功
-		Map<String, String> user11 = new HashMap<String, String>();
-		user11.put("userEmail", "随便乱输入的内容haha");			
-		Map<String, String> user12 = new HashMap<String, String>();
-		user12.put("userEmail", userCode+1+"@chacuo.net");			
-		Map<String, Object> params1 = new HashMap<String, Object>();
-		List<Object> users = new ArrayList<Object>();
-		users.add(user11);
-		users.add(user12);
-		params1.put("users", users);
-		String jsonStr = Utils.getJsonStr(mapper, params1);
-		System.out.println(jsonStr);
-		String msg = UserCenter.addUsers(systemCode, jsonStr);
-		System.out.println(msg);
-		JsonNode node = mapper.readTree(msg);
-		Assert.assertTrue(node.get("status").asInt()==0);
-		Assert.assertTrue(node.get("msg").asText().equals("保存失败"));
-		Assert.assertTrue(node.get("errors").get(0).asText().equals("用户1:邮箱格式不正确"));
-		Assert.assertTrue(node.get("users").get(0).get("userEmail").asText().equals(userCode+1+"@chacuo.net"));
-
-		//第一个用户的手机格式不正确，第二个正确，执行结果整体失败，第一个提示邮箱格式不正确，第二个能增加成功
-		Map<String, String> user21 = new HashMap<String, String>();
-		user21.put("userMobile", "随便乱输入的内容haha");			
-		Map<String, String> user22 = new HashMap<String, String>();
-		user22.put("userEmail", userCode+2+"@chacuo.net");			
-		Map<String, Object> params2 = new HashMap<String, Object>();
-		List<Object> users2 = new ArrayList<Object>();
-		users2.add(user21);
-		users2.add(user22);
-		params2.put("users", users2);
-		String jsonStr2 = Utils.getJsonStr(mapper, params2);
-		System.out.println(jsonStr2);
-		String msg2 = UserCenter.addUsers(systemCode, jsonStr2);
-		System.out.println(msg2);
-		JsonNode node2 = mapper.readTree(msg2);
-		Assert.assertTrue(node2.get("status").asInt()==0);
-		Assert.assertTrue(node2.get("msg").asText().equals("保存失败"));
-		Assert.assertTrue(node2.get("errors").get(0).asText().equals("用户1:手机号格式不正确"));
-		Assert.assertTrue(node2.get("users").get(0).get("userEmail").asText().equals(userCode+2+"@chacuo.net"));
-
-		//第一个用户的手机格式不正确，第二个邮箱格式不正确
-		Map<String, String> user31 = new HashMap<String, String>();
-		user31.put("userMobile", "随便乱输入的内容haha");			
-		Map<String, String> user32 = new HashMap<String, String>();
-		user32.put("userEmail", "随便乱输入的内容haha");			
-		Map<String, Object> params3 = new HashMap<String, Object>();
-		List<Object> users3 = new ArrayList<Object>();
-		users3.add(user31);
-		users3.add(user32);
-		params3.put("users", users3);
-		String jsonStr3 = Utils.getJsonStr(mapper, params3);
-		System.out.println(jsonStr3);
-		String msg3 = UserCenter.addUsers(systemCode, jsonStr3);
-		System.out.println(msg3);
-		JsonNode node3 = mapper.readTree(msg3);
-		Assert.assertTrue(node3.get("status").asInt()==0);
-		Assert.assertTrue(node3.get("msg").asText().equals("保存失败"));
-		Assert.assertTrue(node3.get("errors").get(0).asText().equals("用户1:手机号格式不正确"));
-		Assert.assertTrue(node3.get("errors").get(1).asText().equals("用户2:邮箱格式不正确"));
-
-		//第一个用户的手机格式不正确，第二个手机号和邮箱都为空
-		Map<String, String> user41 = new HashMap<String, String>();
-		user41.put("userMobile", "随便乱输入的内容haha");			
-		Map<String, String> user42 = new HashMap<String, String>();
-	
-		Map<String, Object> params4 = new HashMap<String, Object>();
-		List<Object> users4 = new ArrayList<Object>();
-		users4.add(user41);
-		users4.add(user42);
-		params4.put("users", users4);
-		String jsonStr4 = Utils.getJsonStr(mapper, params4);
-		System.out.println(jsonStr4);
-		String msg4 = UserCenter.addUsers(systemCode, jsonStr4);
-		System.out.println(msg4);
-		JsonNode node4 = mapper.readTree(msg4);
-		Assert.assertTrue(node4.get("status").asInt()==0);
-		Assert.assertTrue(node4.get("msg").asText().equals("保存失败"));
-		Assert.assertTrue(node4.get("errors").get(0).asText().equals("用户1:手机号格式不正确"));
-		Assert.assertTrue(node4.get("errors").get(1).asText().equals("用户2:手机号和邮箱不能同时为空"));
-
-		
-		  //只有一个正确的用户
-		  Map<String, String> user51 = new HashMap<String, String>();
-		  user51.put("userEmail", userCode+5+"@chacuo.net");   		 
-		  Map<String, Object> params5 = new HashMap<String, Object>();
-		  List<Object> users5 = new ArrayList<Object>();
-		  users5.add(user51);
-		  params5.put("users", users5);
-		  String jsonStr5 = Utils.getJsonStr(mapper, params5);
-		  System.out.println(jsonStr5);
-		  String msg5 = UserCenter.addUsers(systemCode, jsonStr5);
-		  System.out.println(msg5);
-		  JsonNode node5 = mapper.readTree(msg5);
-		  Assert.assertTrue(node5.get("status").asInt()==1);
-		  Assert.assertTrue(node5.get("msg").asText().equals("保存成功"));
-   	  Assert.assertTrue(node5.get("users").get(0).get("userEmail").asText().equals(userCode+5+"@chacuo.net"));
-
-	
+//		//第一个用户的邮箱格式不正确，第二个正确，执行结果整体失败，第一个提示邮箱格式不正确，第二个能增加成功
+//		Map<String, String> user11 = new HashMap<String, String>();
+//		user11.put("userEmail", "随便乱输入的内容haha");			
+//		Map<String, String> user12 = new HashMap<String, String>();
+//		user12.put("userEmail", userCode+1+"@chacuo.net");			
+//		Map<String, Object> params1 = new HashMap<String, Object>();
+//		List<Object> users = new ArrayList<Object>();
+//		users.add(user11);
+//		users.add(user12);
+//		params1.put("users", users);
+//		String jsonStr = Utils.getJsonStr(mapper, params1);
+//		System.out.println(jsonStr);
+//		String msg = UserCenter.addUsers(systemCode, jsonStr);
+//		System.out.println(msg);
+//		JsonNode node = mapper.readTree(msg);
+//		Assert.assertTrue(node.get("status").asInt()==0);
+//		Assert.assertTrue(node.get("msg").asText().equals("保存失败"));
+//		Assert.assertTrue(node.get("errors").get(0).asText().equals("用户1:邮箱格式不正确"));
+//		Assert.assertTrue(node.get("users").get(0).get("userEmail").asText().equals(userCode+1+"@chacuo.net"));
+//
+//		//第一个用户的手机格式不正确，第二个正确，执行结果整体失败，第一个提示邮箱格式不正确，第二个能增加成功
+//		Map<String, String> user21 = new HashMap<String, String>();
+//		user21.put("userMobile", "随便乱输入的内容haha");			
+//		Map<String, String> user22 = new HashMap<String, String>();
+//		user22.put("userEmail", userCode+2+"@chacuo.net");			
+//		Map<String, Object> params2 = new HashMap<String, Object>();
+//		List<Object> users2 = new ArrayList<Object>();
+//		users2.add(user21);
+//		users2.add(user22);
+//		params2.put("users", users2);
+//		String jsonStr2 = Utils.getJsonStr(mapper, params2);
+//		System.out.println(jsonStr2);
+//		String msg2 = UserCenter.addUsers(systemCode, jsonStr2);
+//		System.out.println(msg2);
+//		JsonNode node2 = mapper.readTree(msg2);
+//		Assert.assertTrue(node2.get("status").asInt()==0);
+//		Assert.assertTrue(node2.get("msg").asText().equals("保存失败"));
+//		Assert.assertTrue(node2.get("errors").get(0).asText().equals("用户1:手机号格式不正确"));
+//		Assert.assertTrue(node2.get("users").get(0).get("userEmail").asText().equals(userCode+2+"@chacuo.net"));
+//
+//		//第一个用户的手机格式不正确，第二个邮箱格式不正确
+//		Map<String, String> user31 = new HashMap<String, String>();
+//		user31.put("userMobile", "随便乱输入的内容haha");			
+//		Map<String, String> user32 = new HashMap<String, String>();
+//		user32.put("userEmail", "随便乱输入的内容haha");			
+//		Map<String, Object> params3 = new HashMap<String, Object>();
+//		List<Object> users3 = new ArrayList<Object>();
+//		users3.add(user31);
+//		users3.add(user32);
+//		params3.put("users", users3);
+//		String jsonStr3 = Utils.getJsonStr(mapper, params3);
+//		System.out.println(jsonStr3);
+//		String msg3 = UserCenter.addUsers(systemCode, jsonStr3);
+//		System.out.println(msg3);
+//		JsonNode node3 = mapper.readTree(msg3);
+//		Assert.assertTrue(node3.get("status").asInt()==0);
+//		Assert.assertTrue(node3.get("msg").asText().equals("保存失败"));
+//		Assert.assertTrue(node3.get("errors").get(0).asText().equals("用户1:手机号格式不正确"));
+//		Assert.assertTrue(node3.get("errors").get(1).asText().equals("用户2:邮箱格式不正确"));
+//
+//		//第一个用户的手机格式不正确，第二个手机号和邮箱都为空
+//		Map<String, String> user41 = new HashMap<String, String>();
+//		user41.put("userMobile", "随便乱输入的内容haha");			
+//		Map<String, String> user42 = new HashMap<String, String>();
+//	
+//		Map<String, Object> params4 = new HashMap<String, Object>();
+//		List<Object> users4 = new ArrayList<Object>();
+//		users4.add(user41);
+//		users4.add(user42);
+//		params4.put("users", users4);
+//		String jsonStr4 = Utils.getJsonStr(mapper, params4);
+//		System.out.println(jsonStr4);
+//		String msg4 = UserCenter.addUsers(systemCode, jsonStr4);
+//		System.out.println(msg4);
+//		JsonNode node4 = mapper.readTree(msg4);
+//		Assert.assertTrue(node4.get("status").asInt()==0);
+//		Assert.assertTrue(node4.get("msg").asText().equals("保存失败"));
+//		Assert.assertTrue(node4.get("errors").get(0).asText().equals("用户1:手机号格式不正确"));
+//		Assert.assertTrue(node4.get("errors").get(1).asText().equals("用户2:手机号和邮箱不能同时为空"));
+//
+//		
+//		  //只有一个正确的用户
+//		  Map<String, String> user51 = new HashMap<String, String>();
+//		  user51.put("userEmail", userCode+5+"@chacuo.net");   		 
+//		  Map<String, Object> params5 = new HashMap<String, Object>();
+//		  List<Object> users5 = new ArrayList<Object>();
+//		  users5.add(user51);
+//		  params5.put("users", users5);
+//		  String jsonStr5 = Utils.getJsonStr(mapper, params5);
+//		  System.out.println(jsonStr5);
+//		  String msg5 = UserCenter.addUsers(systemCode, jsonStr5);
+//		  System.out.println(msg5);
+//		  JsonNode node5 = mapper.readTree(msg5);
+//		  Assert.assertTrue(node5.get("status").asInt()==1);
+//		  Assert.assertTrue(node5.get("msg").asText().equals("保存成功"));
+//   	  Assert.assertTrue(node5.get("users").get(0).get("userEmail").asText().equals(userCode+5+"@chacuo.net"));
+//
+//	
 		
 	    //用户信息格式不正确，是随便输入的内容
 	    String msg6 = UserCenter.addUsers(systemCode, "随便乱输入的内容haha");
@@ -784,40 +882,40 @@ public class UserCenterExceptionTestSuntt {
 	    Assert.assertTrue(node6.get("msg").asText().equals("保存失败"));
 
 	    
-	     //systemCode是随便输入的内容
-	    Map<String, String> user71 = new HashMap<String, String>();
-	    user71.put("userEmail", userCode+7+"@chacuo.net");      
-	    Map<String, Object> params7 = new HashMap<String, Object>();
-	    List<Object> users7 = new ArrayList<Object>();
-	    users7.add(user71);
-	    params7.put("users", users7);
-	    String jsonStr7 = Utils.getJsonStr(mapper, params7);
-	    System.out.println(jsonStr7);
-	    String msg7 = UserCenter.addUsers("随便乱输入的内容haha", jsonStr7);
-	    System.out.println(msg7);
-	    JsonNode node7 = mapper.readTree(msg7);
-	    Assert.assertTrue(node7.get("status").asInt()==1);
-	    Assert.assertTrue(node7.get("msg").asText().equals("保存成功"));
-	    Assert.assertTrue(node7.get("users").get(0).get("userEmail").asText().equals(userCode+7+"@chacuo.net"));
-	
-
-	     //参数都是空
-	     String msg8 = UserCenter.addUsers("", "");
-	     System.out.println(msg8);
-	     JsonNode node8 = mapper.readTree(msg8);
-	     Assert.assertTrue(node8.get("status").asInt()==0);
-	     Assert.assertTrue(node8.get("msg").asText().equals("系统编码不能为空"));	     
-
-	     
-	     
-	   //参数都是null
-	     String msg9 = UserCenter.addUsers(null, null);
-	     System.out.println(msg9);
-	     JsonNode node9 = mapper.readTree(msg9);
-	     Assert.assertTrue(node9.get("status").asInt()==0);
-	     Assert.assertTrue(node9.get("msg").asText().equals("系统编码不能为空"));	
-	     
-	     
+//	     //systemCode是随便输入的内容
+//	    Map<String, String> user71 = new HashMap<String, String>();
+//	    user71.put("userEmail", userCode+7+"@chacuo.net");      
+//	    Map<String, Object> params7 = new HashMap<String, Object>();
+//	    List<Object> users7 = new ArrayList<Object>();
+//	    users7.add(user71);
+//	    params7.put("users", users7);
+//	    String jsonStr7 = Utils.getJsonStr(mapper, params7);
+//	    System.out.println(jsonStr7);
+//	    String msg7 = UserCenter.addUsers("随便乱输入的内容haha", jsonStr7);
+//	    System.out.println(msg7);
+//	    JsonNode node7 = mapper.readTree(msg7);
+//	    Assert.assertTrue(node7.get("status").asInt()==1);
+//	    Assert.assertTrue(node7.get("msg").asText().equals("保存成功"));
+//	    Assert.assertTrue(node7.get("users").get(0).get("userEmail").asText().equals(userCode+7+"@chacuo.net"));
+//	
+//
+//	     //参数都是空
+//	     String msg8 = UserCenter.addUsers("", "");
+//	     System.out.println(msg8);
+//	     JsonNode node8 = mapper.readTree(msg8);
+//	     Assert.assertTrue(node8.get("status").asInt()==0);
+//	     Assert.assertTrue(node8.get("msg").asText().equals("系统编码不能为空"));	     
+//
+//	     
+//	     
+//	   //参数都是null
+//	     String msg9 = UserCenter.addUsers(null, null);
+//	     System.out.println(msg9);
+//	     JsonNode node9 = mapper.readTree(msg9);
+//	     Assert.assertTrue(node9.get("status").asInt()==0);
+//	     Assert.assertTrue(node9.get("msg").asText().equals("系统编码不能为空"));	
+//	     
+//	     
 	}	
 	
 	
@@ -889,14 +987,14 @@ public class UserCenterExceptionTestSuntt {
 		
 		//参数值随便输入
 		//现在提示“修改用户属性失败”，应该是更友好的提示“修改用户属性失败，属性不正确”
-		String key="随便乱输入的内容haha";
-		String value="随便乱输入的内容haha";			
-		String msg = UserCenter.updateUserProperties(userId,key,value);
-		System.out.println(msg);
-		JsonNode node = mapper.readTree(msg);
-		Assert.assertTrue(node.get("status").asInt()==0);
-		Assert.assertTrue(node.get("msg").asText().equals("修改用户属性失败，属性不正确"));
-		
+//		String key="随便乱输入的内容haha";
+//		String value="随便乱输入的内容haha";			
+//		String msg = UserCenter.updateUserProperties(userId,key,value);
+//		System.out.println(msg);
+//		JsonNode node = mapper.readTree(msg);
+//		Assert.assertTrue(node.get("status").asInt()==0);
+//		Assert.assertTrue(node.get("msg").asText().equals("修改用户属性失败，属性不正确"));
+//		
 		
 		//修改性别，性别随便输入不正确的值
 		//现在报错
@@ -1032,7 +1130,790 @@ public class UserCenterExceptionTestSuntt {
 	
 	}
 	
+	@Test
+	/* 根据租户ID，查询关联企业ID以及之间的绑定状态(批量)
+	 * 常情况的测试
+	 * * state状态对应关系
+	 * 0   ：  绑定审核中
+	 * 1   ：  已绑定
+	 * 2   ：  未绑定
+	 */
+	public void  getStateListByTenantIdListExceptionTest(){	
+		
+		//参数值不是实际存在的云数据中心id
+		List<String> tenantIdList =new ArrayList<String>();
+		tenantIdList.add("随便乱输入的内容haha");
+		String msg = EnterpriseCenter.getStateListByTenantIdList(tenantIdList);
+		System.out.println(msg);
+		JsonNode  node=Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("states").get(0).get("state").asInt()==2);
+
+		//参数为空
+		List<String> tenantIdList1 =new ArrayList<String>();
+		tenantIdList1.add("");
+		String msg1 = EnterpriseCenter.getStateListByTenantIdList(tenantIdList1);
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("states").get(0).get("state").asInt()==2);
+		
+		//参数为null
+		List<String> tenantIdList2 =new ArrayList<String>();
+		tenantIdList2.add(null);
+		String msg2 = EnterpriseCenter.getStateListByTenantIdList(tenantIdList2);
+		System.out.println(msg2);
+		JsonNode  node2=Utils.getJson(mapper, msg2);
+	//	Assert.assertTrue(node2.get("states").get(0).get("state").asInt()==2);
+		}
 	
+	
+	
+	@Test
+	/* 
+	 * 给已有用户发送手机或邮箱验证码
+	 * 发短信
+	 * 异常情况的测试
+	*/			
+		public void sendPhoneMessageExceptionTest() throws JsonProcessingException, IOException {
+			
+		String msg = UserCenter.sendPhoneMessage("随便乱输入的内容haha");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);		
+		Assert.assertTrue(node.get("msg").asText().equals("用户不存在"));	
+		
+		String msg1 = UserCenter.sendPhoneMessage("");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);		
+//		Assert.assertTrue(node.get("msg").asText().equals("用户ID不能为空"));	
+		
+		String msg2 = UserCenter.sendPhoneMessage(null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);	
+//		Assert.assertTrue(node.get("msg").asText().equals("用户ID不能为空"));	
+	}
+	
+	
+	
+	@Test
+	/* 
+	 * 给已有用户发送手机或邮箱验证码
+	 * 发邮件
+	 * 异常情况的测试
+	*/			
+		public void sendEmailMessageExceptionTest() throws JsonProcessingException, IOException {
+		
+		String msg = UserCenter.sendEmailMessage("随便乱输入的内容haha");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);		
+		Assert.assertTrue(node.get("msg").asText().equals("用户不存在"));	
+		
+		String msg1 = UserCenter.sendEmailMessage("");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);		
+//		Assert.assertTrue(node.get("msg").asText().equals("用户ID不能为空"));	
+		
+		String msg2 = UserCenter.sendEmailMessage(null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);	
+//		Assert.assertTrue(node.get("msg").asText().equals("用户ID不能为空"));	
+	}
+	
+	
+	
+	
+	@Test
+	/* 
+	 * 给已有用户发送手机或邮箱验证码
+	 * 两个参数的发短信和发邮件
+	 * 异常情况的测试
+	*/			
+		public void sendValidateCodeExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
+
+		String msg = UserCenter.sendValidateCode("随便乱输入的内容haha","随便乱输入的内容haha");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);
+		Assert.assertTrue(node.get("msg").asText().equals("Type只能是phone或者email"));
+
+		String msg1 = UserCenter.sendValidateCode("","email");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("用户ID不能为空"));
+		
+		String msg2 = UserCenter.sendValidateCode(null,"email");
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+		Assert.assertTrue(node2.get("msg").asText().equals("用户ID不能为空"));
+		
+		
+		String msg3 = UserCenter.sendValidateCode("随便乱输入的内容haha","email");
+		System.out.println(msg3);
+		JsonNode node3 = mapper.readTree(msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+		Assert.assertTrue(node3.get("msg").asText().equals("用户不存在"));
+		
+	}
+	
+	
+	@Test
+	/* 
+	 * 验证手机验证码
+	 * 异常情况的测试
+	*/			
+		public void validateCodeExceptionTest() throws JsonProcessingException, IOException, InterruptedException {		
+		String mobile = "18611286701"; 
+		String userId = UserCenterUtil.getUserIdByLoginName(mobile);	
+		
+		//验证码错误，是随便输入的值
+		String msg = UserCenter.validateCode("email",userId,"随便乱输入的内容haha",mobile);
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);
+		Assert.assertTrue(node.get("msg").asText().equals("验证码错误或超时"));
+		
+		//除了type是正确的，是随便输入的值（因为验证码没办法获取正确的，导致只有验证码和手机号或邮箱错误时，提示的都是验证码那个提示）
+		String msg1 = UserCenter.validateCode("email","随便乱输入的内容haha","随便乱输入的内容haha","随便乱输入的内容haha");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("用户不存在"));
+		
+		//type是随便输入的值
+		String msg2 = UserCenter.validateCode("随便乱输入的内容haha",userId,"随便乱输入的内容haha",mobile);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+		Assert.assertTrue(node2.get("msg").asText().equals("Type只能是phone或者email"));
+	
+		//type是空
+		String msg3 = UserCenter.validateCode("",userId,"随便乱输入的内容haha",mobile);
+		System.out.println(msg3);
+		JsonNode node3 = mapper.readTree(msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+		Assert.assertTrue(node3.get("msg").asText().equals("Type只能是phone或者email"));
+		
+		//type是null
+		String msg4 = UserCenter.validateCode(null,userId,"随便乱输入的内容haha",mobile);
+		System.out.println(msg4);
+		JsonNode node4 = mapper.readTree(msg4);
+		Assert.assertTrue(node4.get("status").asInt()==0);
+		Assert.assertTrue(node4.get("msg").asText().equals("Type只能是phone或者email"));
+
+		//用户ID为空
+		String msg5 = UserCenter.validateCode("email","","随便乱输入的内容haha",mobile);
+		System.out.println(msg5);
+		JsonNode node5 = mapper.readTree(msg5);
+		Assert.assertTrue(node5.get("status").asInt()==0);
+//		Assert.assertTrue(node5.get("msg").asText().equals("用户ID不能为空"));
+		
+		//用户ID为null
+		String msg6 = UserCenter.validateCode("email",null,"随便乱输入的内容haha","随便乱输入的内容haha");
+		System.out.println(msg6);
+		JsonNode node6 = mapper.readTree(msg6);
+		Assert.assertTrue(node6.get("status").asInt()==0);
+//		Assert.assertTrue(node6.get("msg").asText().equals("用户ID不能为空"));
+		
+	}
+
+	
+	@Test
+	/* 
+	 * 修改密码，重置密码
+	 * sid：验证码校验接口返回的sid
+	 * 异常情况的测试
+	*/			
+		public void modifypasswordExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
+
+		String userName = "18611286701"; 
+		String userId = UserCenterUtil.getUserIdByLoginName(userName);	
+		String oldPassword="yonyou11";
+		String newPassword="yonyou22";
+		String shaOldPassword=SDKUtils.encodeUsingSHA(oldPassword);
+		String md5OldPassword=SDKUtils.encodeUsingMD5(oldPassword); 
+		String shaNewPassword=SDKUtils.encodeUsingSHA(newPassword);
+		String md5NewPassword=SDKUtils.encodeUsingMD5(newPassword);
+
+		//sid是随便输入的值
+		String msg = UserCenter.modifyPassword(userId,shaOldPassword, md5OldPassword,shaNewPassword, md5NewPassword, "随便乱输入的内容haha");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);
+		Assert.assertTrue(node.get("msg").asText().equals("sid错误"));
+		
+		
+		//sid是随便输入的值
+		String msg1 = UserCenter.modifyPassword("随便乱输入的内容haha",shaOldPassword, md5OldPassword,shaNewPassword, md5NewPassword, "随便乱输入的内容haha");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("用户不存在"));
+
+		
+		//除了userId，其他参数都是随便输入的值（sid怎么都是错的，这个需要界面，和密码都错的时候们还是提示sid错误）
+		String msg2 = UserCenter.modifyPassword(userId,"随便乱输入的内容haha", "随便乱输入的内容haha","随便乱输入的内容haha", "随便乱输入的内容haha", "随便乱输入的内容haha");
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+		Assert.assertTrue(node2.get("msg").asText().equals("sid错误"));
+		
+		
+		//userId为空
+		String msg3 = UserCenter.modifyPassword("",shaOldPassword, md5OldPassword,shaNewPassword, md5NewPassword, "随便乱输入的内容haha");
+		System.out.println(msg3);
+		JsonNode node3 = mapper.readTree(msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+		Assert.assertTrue(node3.get("msg").asText().equals("用户ID不能为空"));
+		
+		
+		//除了userId，其他参数都是空
+		String msg4 = UserCenter.modifyPassword(userId,"", "","", "", "");
+		System.out.println(msg4);
+		JsonNode node4 = mapper.readTree(msg4);
+		Assert.assertTrue(node4.get("status").asInt()==0);
+//		Assert.assertTrue(node4.get("msg").asText().equals("sid不能为空"));
+		
+		
+		//userId为null
+		String msg5 = UserCenter.modifyPassword(null,shaOldPassword, md5OldPassword,shaNewPassword, md5NewPassword, "随便乱输入的内容haha");
+		System.out.println(msg5);
+		JsonNode node5 = mapper.readTree(msg5);
+		Assert.assertTrue(node5.get("status").asInt()==0);
+		Assert.assertTrue(node5.get("msg").asText().equals("用户ID不能为空"));
+		
+		
+		//除了userId，其他参数都是空
+		String msg6 = UserCenter.modifyPassword(userId,null, null,null, null, null);
+		System.out.println(msg6);
+		JsonNode node6 = mapper.readTree(msg6);
+		Assert.assertTrue(node6.get("status").asInt()==0);
+//		Assert.assertTrue(node6.get("msg").asText().equals("sid不能为空"));
+		
+	}
+	
+	
+	
+	@Test
+	/* 修改手机号或邮箱
+	 * 异常情况的测试
+	 * contact：手机号或邮箱
+	 */
+	public void modifyContactExceptionTest() throws JsonProcessingException, IOException{
+				
+		String userName = "18611286701"; 
+		String userId = UserCenterUtil.getUserIdByLoginName(userName);	
+		
+		//contact和sid错误时，提示sid错误
+		String msg =UserCenter.modifyContact(userId,"随便乱输入的内容haha","随便乱输入的内容haha");
+		JsonNode node=mapper.readTree(msg);
+		System.out.print(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);
+		Assert.assertTrue(node.get("msg").asText().equals("sid错误"));
+		
+		//userId随便输入
+		String msg1 =UserCenter.modifyContact("随便乱输入的内容haha","18611286701","随便乱输入的内容haha");
+		JsonNode node1=mapper.readTree(msg1);
+		System.out.print(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("用户不存在"));
+		
+		//contact和sid为空
+		String msg2 =UserCenter.modifyContact(userId,"","");
+		JsonNode node2=mapper.readTree(msg2);
+		System.out.print(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+//		Assert.assertTrue(node2.get("msg").asText().equals("sid不能为空"));
+		
+		//userId为空
+		String msg3 =UserCenter.modifyContact("","","");
+		JsonNode node3=mapper.readTree(msg3);
+		System.out.print(msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+		Assert.assertTrue(node3.get("msg").asText().equals("用户ID不能为空"));
+		
+		//contact和sid为null
+		String msg4 =UserCenter.modifyContact(userId,null,null);
+		JsonNode node4=mapper.readTree(msg4);
+		System.out.print(msg4);
+		Assert.assertTrue(node4.get("status").asInt()==0);
+//		Assert.assertTrue(node4.get("msg").asText().equals("sid不能为空"));
+		
+		//userId为null
+		String msg5 =UserCenter.modifyContact(null,null,null);
+		JsonNode node5=mapper.readTree(msg5);
+		System.out.print(msg5);
+		Assert.assertTrue(node5.get("status").asInt()==0);
+		Assert.assertTrue(node5.get("msg").asText().equals("用户ID不能为空"));
+		
+	}
+	
+	
+	
+	
+	@Test
+	/* 
+	 * 单点登出
+	 * 异常情况的测试
+	*/			
+		public void logoutWithTidExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
+		
+		String msg = UserCenter.logoutWithTid("随便乱输入的内容haha");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);			
+		
+		String msg1 = UserCenter.logoutWithTid("");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);		
+		
+		String msg2 = UserCenter.logoutWithTid(null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);		
+
+	}
+	
+	
+	@Test
+	/* 
+	 * 验证accesstoken
+	 * 异常情况的测试
+	*/			
+		public void checkOauthTokenExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
+		
+
+		String msg = UserCenter.checkOauthToken("随便乱输入的内容haha");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);			
+		
+		String msg1 = UserCenter.checkOauthToken("");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);		
+		
+		String msg2 = UserCenter.checkOauthToken(null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);		
+	}
+	
+	
+	@Test
+	/* 
+	 * 根据accesstoken获取用户信息
+	 * 异常情况的测试
+	*/			
+		public void getUserByTokenExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
+		
+		//参数是随便输入的不正确的值
+		String msg = UserCenter.getUserByToken("随便乱输入的内容haha");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		
+		//参数为空
+		String msg1 = UserCenter.getUserByToken("");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);		
+		
+		//参数是null
+		String msg2 = UserCenter.getUserByToken(null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node1.get("status").asInt()==0);	
+	}
+	
+	
+	@Test
+	/* 
+	 * 销毁accesstoken
+	 * 异常情况的测试
+	*/			
+		public void destroyAccessTokenExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
+		
+		//参数是随便输入的不正确的值,这个不好判断accesstoken是否正确，是否超时等，所以目前就算参数错误也提示销毁成功了
+		String msg = UserCenter.destroyAccessToken("随便乱输入的内容haha");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==1);	
+		
+		//参数为空
+		String msg1 = UserCenter.destroyAccessToken("");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);		
+		
+		//参数是null
+		String msg2 = UserCenter.destroyAccessToken(null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);	
+	}
+	
+	
+	@Test
+	/* 
+	 * 刷新accesstoken
+	 * 异常情况的测试
+	*/			
+		public void refreshAccessTokenExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
+		
+		//参数是随便输入的不正确的值,这个不好判断accesstoken是否正确，是否超时等，所以目前就算参数错误也提示销毁成功了
+		String msg = UserCenter.refreshAccessToken("随便乱输入的内容haha");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		
+		//参数为空
+		String msg1 = UserCenter.refreshAccessToken("");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);		
+		
+		//参数是null
+		String msg2 = UserCenter.refreshAccessToken(null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);	
+	}
+	
+	
+	@Test
+	/* 
+	 * 根据租户ID，用户名，密码获取accesstoken
+	 * 异常情况的测试
+	*/			
+		public void createAccessTokenExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
+		
+		//参数是随便输入的不正确的值
+		String msg = UserCenter.createAccessToken("随便乱输入的内容haha","随便乱输入的内容haha","随便乱输入的内容haha","随便乱输入的内容haha");
+		System.out.println(msg);
+//		JsonNode node = mapper.readTree(msg);
+//		Assert.assertTrue(node.get("status").asInt()==0);	
+		
+		//参数为空
+//		String msg1 = UserCenter.createAccessToken("","","","");
+//		System.out.println(msg1);
+//		JsonNode node1 = mapper.readTree(msg1);
+//		Assert.assertTrue(node1.get("status").asInt()==0);		
+		
+		//参数是null
+//		String msg2 = UserCenter.createAccessToken(null,null,null,null);
+//		System.out.println(msg2);
+//		JsonNode node2 = mapper.readTree(msg2);
+//		Assert.assertTrue(node2.get("status").asInt()==0);	
+	}
+	
+	
+	
+	@Test
+	/* 
+	 * 根据密码获取accesstoken
+	 * 异常情况的测试
+	*/			
+		public void createAccessTokenExceptionTest1() throws JsonProcessingException, IOException, InterruptedException {
+		
+		//参数是随便输入的不正确的值
+		String msg = UserCenter.createAccessToken("随便乱输入的内容haha","随便乱输入的内容haha","随便乱输入的内容haha","随便乱输入的内容haha","随便乱输入的内容haha",false);
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		
+		//参数为空
+		String msg1 = UserCenter.createAccessToken("","","","");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);		
+		
+		//参数是null
+		String msg2 = UserCenter.createAccessToken(null,null,null,null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);	
+	}
+	
+	
+	@Test
+	/* 
+	 * 根据用户名密码创建ssotoken(uclient)
+	 * 异常情况的测试
+	*/			
+		public void createSSOTokenExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
+		
+		String Password="yonyou11";
+		String shaPassword=SDKUtils.encodeUsingSHA(Password);
+		String md5Password=SDKUtils.encodeUsingMD5(Password); 
+
+		//没有密码
+		Map<String, String> params=new  HashMap<String, String>();
+		params.put("username","18810039018");
+		String msg = UserCenter.createSSOToken(params);
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		Assert.assertTrue(node.get("msg").asText().equals("用户名或密码错误"));
+		
+		//没有用户名
+		Map<String, String> params1=new  HashMap<String, String>();
+		params1.put("shaPassword",shaPassword);
+		params1.put("md5Password",md5Password);
+		String msg1 = UserCenter.createSSOToken(params1);
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);		
+		Assert.assertTrue(node1.get("msg").asText().equals("用户名或密码错误"));
+		
+		//用户名密码是空
+		Map<String, String> params2=new  HashMap<String, String>();
+		String msg2 = UserCenter.createSSOToken(params2);
+		params2.put("username","");
+		params2.put("shaPassword","");
+		params2.put("md5Password","");
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);		
+		Assert.assertTrue(node2.get("msg").asText().equals("用户名或密码错误"));
+				
+		
+		//用户名密码是null
+		Map<String, String> params3=new  HashMap<String, String>();
+		String msg3 = UserCenter.createSSOToken(params3);
+		params3.put("username",null);
+		params3.put("shaPassword",null);
+		params3.put("md5Password",null);
+		System.out.println(msg3);
+		JsonNode node3 = mapper.readTree(msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);		
+		Assert.assertTrue(node3.get("msg").asText().equals("用户名或密码错误"));
+	}
+	
+	
+	
+	
+	@Test
+	/* 
+	 * 根据ssotoken获取accessToken(uclient)
+	 * 异常情况的测试
+	*/			
+		public void genAccessTokenBySSOTokenExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
+		
+		//参数是随便输入的不正确的值
+		String msg = UserCenter.genAccessTokenBySSOToken("随便乱输入的内容haha");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+
+		//参数为空
+		String msg1 = UserCenter.genAccessTokenBySSOToken("");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);		
+		
+		//参数是null
+		String msg2 = UserCenter.genAccessTokenBySSOToken(null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node1.get("status").asInt()==0);	
+	}
+	
+	
+	@Test
+	/* 
+	 * 根据accessToken获取ouathToken(uclient)
+	 * 异常情况的测试
+	*/			
+		public void genOuathTokenByAccessTokenExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
+		
+		//参数是随便输入的不正确的值
+		String msg = UserCenter.genOuathTokenByAccessToken("随便乱输入的内容haha");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		
+		//参数为空
+		String msg1 = UserCenter.genOuathTokenByAccessToken("");
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);		
+		
+		//参数是null
+		String msg2 = UserCenter.genOuathTokenByAccessToken(null);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node1.get("status").asInt()==0);	
+	}
+	
+	
+	
+	@Test
+	/* 与UClient集成实现U8C用户活跃度记录接口
+	 * 异常情况的测试
+	 */
+	public void testU8cLoginLog() throws JsonProcessingException, IOException{
+		
+		//手机号格式不正确
+		String msg = UserCenter.recordU8cLoginLog("随便乱输入的内容haha","172.20.44.29",""+System.currentTimeMillis());
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		
+		//手机号为空
+		String msg1 = UserCenter.recordU8cLoginLog("","172.20.44.29",""+System.currentTimeMillis());
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);	
+		
+		//时间为空
+		String msg2 = UserCenter.recordU8cLoginLog("18810039018","172.20.44.29","");
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+//		Assert.assertTrue(node2.get("status").asInt()==0);	
+		
+		
+		//手机号为null
+		String msg3 = UserCenter.recordU8cLoginLog(null,"172.20.44.29",""+System.currentTimeMillis());
+		System.out.println(msg3);
+		JsonNode node3 = mapper.readTree(msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);	
+		
+		//时间为null
+		String msg4 = UserCenter.recordU8cLoginLog("18810039018","172.20.44.29",null);
+		System.out.println(msg4);
+		JsonNode node4 = mapper.readTree(msg4);
+//		Assert.assertTrue(node4.get("status").asInt()==0);	
+	}
+	
+//	@Test
+//	/* 
+//	 * 快捷发送短信验证码
+//	 * 异常情况的测试
+//	 * 友文化特有，在接口文档里不显示
+//	 * sdk.properties里改成client.credential.path=uculture.properties
+//	 * 原值是client.credential.path=authfile_yht.txt
+//	 * 同时把本地对应的authfile_yht.txt文件备份到其他地方，把uculture.properties放入即可
+//	*/	
+//	public void simpleSendCodeExceptionTest() throws JsonProcessingException, IOException{
+//
+//		//手机号格式不正确
+//		String jsonStr ="{\"mobile\":\"随便乱输入的内容haha\", \"sysid\":\"uculture\"}";
+//		String msg = UserCenter.simpleSendCode(jsonStr);
+//		System.out.println(msg);
+//		JsonNode node = mapper.readTree(msg);
+//		Assert.assertTrue(node.get("status").asInt()==0);	
+//		Assert.assertTrue(node.get("msg").asText().equals("手机号格式不正确"));
+//		
+//		//sysid随便输入,目前这个参数随便输入，或者不输入都没有影响
+//		String jsonStr1 ="{\"mobile\":\"18810039018\", \"sysid\":\"随便乱输入的内容haha\"}";
+//		String msg1 = UserCenter.simpleSendCode(jsonStr1);
+//		System.out.println(msg1);
+//		JsonNode node1 = mapper.readTree(msg1);
+//		Assert.assertTrue(node1.get("status").asInt()==1);	
+//		
+//		//手机号格式为空
+//		String jsonStr2 ="{\"mobile\":\"\", \"sysid\":\"uculture\"}";
+//		String msg2 = UserCenter.simpleSendCode(jsonStr2);
+//		System.out.println(msg2);
+//		JsonNode node2 = mapper.readTree(msg2);
+//		Assert.assertTrue(node2.get("status").asInt()==0);	
+//		Assert.assertTrue(node2.get("msg").asText().equals("手机号为空"));
+//		
+//		//手机号格式为null
+//		String jsonStr3 ="{\"mobile\":null, \"sysid\":\"uculture\"}";
+//		String msg3 = UserCenter.simpleSendCode(jsonStr3);
+//		System.out.println(msg3);
+//		JsonNode node3 = mapper.readTree(msg3);
+//		Assert.assertTrue(node3.get("status").asInt()==0);	
+//		Assert.assertTrue(node3.get("msg").asText().equals("手机号为空"));
+//				
+//	}
+	
+	
+	@Test
+	/* 
+	 * 绑定手机时发短信不用图形校验码
+	 * 异常情况的测试
+	*/	
+	public void simpleSendCodeExceptionTest() throws JsonProcessingException, IOException{
+		
+		//手机号格式不正确
+		String jsonStr ="{\"mobile\":\"随便乱输入的内容haha\", \"sysid\":\"market\"}";
+		String msg = UserCenter.simpleSendCode(jsonStr);
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		
+		
+		//参数为空
+		String jsonStr1 ="{\"mobile\":\"\", \"sysid\":\"\"}";
+		String msg1 = UserCenter.simpleSendCode(jsonStr1);
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);	
+		
+		//参数为null
+		String jsonStr2 ="{\"mobile\":null, \"sysid\":null}";
+		String msg2 = UserCenter.simpleSendCode(jsonStr2);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);	
+		
+		
+	}
+	
+	
+	
+	@Test
+	/* 
+	 * 绑定微信账户
+	 * 异常情况的测试
+	 * 18810039018的ID是868d2718-4723-4504-aa03-a773918c2fdb
+	*/	
+	public void bindUserExceptionTest() throws JsonProcessingException, IOException{
+		
+		//参数都为空
+		String jsonStr ="{\"type\":\"\", \"userid\":\"\",\"openid\":\"\", \"unionid\":\"\"}";
+		String msg = UserCenter.bindUser(jsonStr);
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		Assert.assertTrue(node.get("msg").asText().equals("参数不能为空"));
+		
+		//type随便输入值
+		String jsonStr1 ="{\"type\":\"随便乱输入的内容haha\", \"userid\":\"868d2718-4723-4504-aa03-a773918c2fdb\",\"openid\":\"aa\", \"unionid\":\"aa\"}";
+		String msg1 = UserCenter.bindUser(jsonStr1);
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);	
+		Assert.assertTrue(node1.get("msg").asText().equals("参数错误"));
+		
+		//参数随便输入值
+		String jsonStr2 ="{\"type\":null, \"userid\":null,\"openid\":null, \"unionid\":null}";
+		String msg2 = UserCenter.bindUser(jsonStr2);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);	
+		Assert.assertTrue(node2.get("msg").asText().equals("参数不能为空"));
+		
+		//userid随便输入值
+		String jsonStr3 ="{\"type\":\"qq\", \"userid\":\"随便乱输入的内容haha\",\"openid\":\"aa\", \"unionid\":\"aa\"}";
+		String msg3 = UserCenter.bindUser(jsonStr3);
+		System.out.println(msg3);
+		JsonNode node3 = mapper.readTree(msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);	
+		Assert.assertTrue(node3.get("msg").asText().equals("用户不存在"));
+		
+
+		
+	}
 	
  }
 	

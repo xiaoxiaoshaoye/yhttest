@@ -27,7 +27,6 @@ import com.yonyou.yht.entity.UserInfo;
 // daixd@yonyou.com 906c8e75-2da4-473f-b14d-4ed8acaaab4f
 
 public class UserCenterTestSuntt {
-
 	ObjectMapper mapper;
 	
 	@Before
@@ -38,30 +37,34 @@ public class UserCenterTestSuntt {
 
 
 	@Test  
-	/*根据用户ID获取用户信息
-	 * 正常流程测试
+	/* 获取用户登录信息
+	 * 正常情况的测试
 	*/
 	
-	public void getUserLoginLogTest() {
-		String userName = "18810039018"; 
+	public void getUserLoginLogTest() throws JsonProcessingException, IOException {
+		//String userName = "18810039018"; 
+		String userName = "stt2017102501@chacuo.net"; 
 		String userId = UserCenterUtil.getUserIdByLoginName(userName);
 		String msg = UserCenter.getUserLoginLog(userId);
 		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
 	}
 	
 	
 	@Test
+	/* 根据用户ID获取用户信息
+	 * 正常流程测试
+	 * 18810039018的ID是868d2718-4723-4504-aa03-a773918c2fdb
+	*/
 	public void getUserByIdTest() throws JsonProcessingException, IOException{
-		String userName="stt2017080201@chacuo.net";
-		String userCode="YHT-stt2017080201code";
-		String userId=UserCenterUtil.getUserIdByLoginName(userName);
-		String msg=UserCenter.getUserById(userId);
+
+		String msg=UserCenter.getUserById("868d2718-4723-4504-aa03-a773918c2fdb");
 		System.out.println(msg);
 		JsonNode node = mapper.readTree(msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
-		JsonNode user = node.get("user");
-		Assert.assertNotNull(user.get("userCode"));
-		Assert.assertTrue(user.get("userCode").asText().equals(userCode));
+		Assert.assertTrue(node.get("user").get("userCode").asText().equals("YHT-18810039018"));
+
 	}
 
 	
@@ -75,7 +78,8 @@ public class UserCenterTestSuntt {
 	*/
 	public void getUserByPksTest() {
 		String user1="suntt@yonyou.com";
-		String user2="jlccstt@163.com";
+		//String user2="jlccstt@163.com";
+		String user2 = "stt2017102501@chacuo.net"; 
 		String userId1=UserCenterUtil.getUserIdByLoginName(user1);
 		String userId2=UserCenterUtil.getUserIdByLoginName(user2);
 		String [] userId = new String[] {userId1, userId2};
@@ -505,6 +509,49 @@ public class UserCenterTestSuntt {
 		}
 		
 		
+		@Test
+		/* 
+		 * 根据字符串模糊查询用户列表（前缀匹配、支持分页）
+		 * 正常情况的测试
+		*/
+		public void searchUserByFilterTest() throws JsonProcessingException, IOException {
+
+			//默认是第一页，一页20条，因为数据多，肯定不是第一页，肯定是满页20条
+			String msg = UserCenter.searchUserByFilter("stt");
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			Assert.assertTrue(node.get("status").asInt()==1);		
+			Assert.assertTrue(node.get("users").get("first").asBoolean());
+			Assert.assertTrue(node.get("users").get("firstPage").asBoolean());
+			Assert.assertFalse(node.get("users").get("lastPage").asBoolean());
+			Assert.assertTrue(node.get("users").get("numberOfElements").asInt() == 20);			
+			Assert.assertTrue(node.get("users").get("size").asInt() == 20);
+
+			
+			//每页显示5条数据，显示第二页，按userName排序
+			String msg1 =UserCenter.searchUserByFilter("stt", 5, 2, "name");
+			System.out.println(msg1);
+			JsonNode node1 = mapper.readTree(msg1);
+			Assert.assertTrue(node1.get("status").asInt()==1);		
+			Assert.assertFalse(node1.get("users").get("first").asBoolean());
+			Assert.assertFalse(node1.get("users").get("firstPage").asBoolean());
+			Assert.assertFalse(node1.get("users").get("lastPage").asBoolean());
+			Assert.assertTrue(node1.get("users").get("numberOfElements").asInt() == 5);			
+			Assert.assertTrue(node1.get("users").get("size").asInt() == 5);
+			
+			//每页显示5条数据，显示第二页，默认排序，即按userCode排序
+			String msg2 =UserCenter.searchUserByFilter("stt", 5, 2, "auto");
+			System.out.println(msg2);
+			JsonNode node2 = mapper.readTree(msg2);
+			Assert.assertTrue(node2.get("status").asInt()==1);		
+			Assert.assertFalse(node2.get("users").get("first").asBoolean());
+			Assert.assertFalse(node2.get("users").get("firstPage").asBoolean());
+			Assert.assertFalse(node2.get("users").get("lastPage").asBoolean());
+			Assert.assertTrue(node2.get("users").get("numberOfElements").asInt() == 5);			
+			Assert.assertTrue(node2.get("users").get("size").asInt() == 5);
+		}
+		
+		
 		
 		@Test
 		/* 
@@ -603,47 +650,16 @@ public class UserCenterTestSuntt {
 			System.out.println(msg);
 			JsonNode node = mapper.readTree(msg);
 			Assert.assertTrue(node.get("status").asInt()==1);
-			Assert.assertTrue(node.get("msg").asText().equals("保存成功"));
+			Assert.assertTrue(node.get("first").asText().equals("保存成功"));
+			Assert.assertTrue(node.get("msg").asText().equals("修改用户属性成功"));
+			Assert.assertTrue(node.get("msg").asText().equals("修改用户属性成功"));
+			Assert.assertTrue(node.get("msg").asText().equals("修改用户属性成功"));
+			Assert.assertTrue(node.get("msg").asText().equals("修改用户属性成功"));
+			Assert.assertTrue(node.get("msg").asText().equals("修改用户属性成功"));
 		}	
 		
 		
-		
-		@Test
-		/* 
-		 * 批量导入用户
-		 * 正常情况的测试
-		 * 这个接口不用了，调用应该代码就报错了
-		*/
-		public void addAppUsersTest()  {
-			
-			SimpleDateFormat date =new SimpleDateFormat("yyyyMMddHHmmssSSS");
-			String userCode =date.format(new Date());
-			
-			String systemCode = "yht";
-			int i=1;
-			Map<String, String> user1 = new HashMap<String, String>();
-			user1.put("userCode", userCode+"code");
-			user1.put("userName", userCode+"name");
-			user1.put("userEmail", userCode+"@chacuo.net");	
 
-			
-			Map<String, String> user2 = new HashMap<String, String>();
-			user2.put("userCode", userCode+i+"code");
-			user2.put("userName", userCode+i+"name");
-			user2.put("userEmail", userCode+i+"@chacuo.net");	
-
-			
-			Map<String, Object> params = new HashMap<String, Object>();
-			List<Object> users = new ArrayList<Object>();
-			users.add(user1);
-			users.add(user2);
-			params.put("users", users);
-			String jsonStr = Utils.getJsonStr(mapper, params);
-			System.out.println(jsonStr);
-			String msg = UserCenter.addAppUsers(systemCode, jsonStr);
-			System.out.println(msg);
-		
-		}	
 				
 		
 		@Test
@@ -727,7 +743,7 @@ public class UserCenterTestSuntt {
 	
 			params.put("userName", d+"name");
 			params.put("sex", "0");
-			params.put("address", "1-11-2-哈哈w");
+			params.put("address", "1-11-2-1");
 			params.put("birthday", "2010年9月6日");
 			params.put("userCode", d+"code");
 			
@@ -740,6 +756,502 @@ public class UserCenterTestSuntt {
 			Assert.assertTrue(node.get("successmsg").get(2).asText().equals("'userName'属性修改成功"));
 			Assert.assertTrue(node.get("successmsg").get(3).asText().equals("'userCode'属性修改成功"));
 		
+		}
+		
+		
+		@Test
+		/* 
+		 * 非用户发送手机或邮箱验证码
+		 * 正常情况的测试
+		*/			
+			public void sendcodeTest() throws JsonProcessingException, IOException {
+
+			String contact="stt2017100902@chacuo.net";
+			String type="email";
+			String key="123389";
+			String code="1495615240000";
+						
+			String msg = UserCenter.sendcode(contact,type,key,code);
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+//			Assert.assertTrue(node.get("status").asInt()==1);
+		}
+		
+		
+		
+		@Test
+		/* 
+		 * 给已有用户发送手机或邮箱验证码
+		 * 发短信
+		 * 正常情况的测试
+		*/			
+			public void sendPhoneMessageTest() throws JsonProcessingException, IOException, InterruptedException {
+
+			//等待一分钟，因为上两个方法执行完，就执行了发短信、发邮件，一分钟内只能发一次
+			Thread.sleep(60000);
+			
+			String userName = "18810039018"; 
+			String userId = UserCenterUtil.getUserIdByLoginName(userName);					
+			String msg = UserCenter.sendPhoneMessage(userId);
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			Assert.assertTrue(node.get("status").asInt()==1);
+			Assert.assertTrue(node.get("msg").asText().equals("短信发送成功"));			
+		}
+		
+		
+		@Test
+		/* 
+		 * 给已有用户发送手机或邮箱验证码
+		 * 发邮件
+		 * 正常情况的测试
+		*/			
+			public void sendEmailMessageTest() throws JsonProcessingException, IOException, InterruptedException {
+
+			//等待一分钟，因为上两个方法执行完，就执行了发短信、发邮件，一分钟内只能发一次
+			Thread.sleep(60000);
+			
+			String userName = "18810039018"; 
+			String userId = UserCenterUtil.getUserIdByLoginName(userName);		
+			String msg = UserCenter.sendEmailMessage(userId);
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			Assert.assertTrue(node.get("status").asInt()==1);	
+			Assert.assertTrue(node.get("msg").asText().equals("邮件发送成功"));
+		}
+		
+		@Test
+		/* 
+		 * 给已有用户发送手机或邮箱验证码
+		 * 两个参数的发短信和发邮件
+		 * 正常情况的测试
+		*/			
+			public void sendValidateCodeTest() throws JsonProcessingException, IOException, InterruptedException {
+
+			String userName = "18810039018"; 
+			String userId = UserCenterUtil.getUserIdByLoginName(userName);		
+
+			//等待一分钟，因为上两个方法执行完，就执行了发短信、发邮件，一分钟内只能发一次
+			Thread.sleep(60000);
+
+			//发邮件
+			String msg1 = UserCenter.sendValidateCode(userId,"email");
+			System.out.println(msg1);
+			JsonNode node1 = mapper.readTree(msg1);
+			Assert.assertTrue(node1.get("status").asInt()==1);
+			Assert.assertTrue(node1.get("msg").asText().equals("邮件发送成功"));
+			
+			//发短信
+			String msg2 = UserCenter.sendValidateCode(userId,"mobile");
+			System.out.println(msg2);
+			JsonNode node2 = mapper.readTree(msg2);
+			Assert.assertTrue(node2.get("status").asInt()==1);
+			Assert.assertTrue(node2.get("msg").asText().equals("短信发送成功"));
+			
+		}		
+		
+		
+
+		
+		@Test
+		/* 
+		 * 单点登出
+		 * 正常情况的测试
+		 * tip的值yht-manager_是固定的，后门的ST-36-9qIaHTUkU4tg7kEgK5fU-cas01.example.org是用F12获取的
+		 * 开发在应用配置里系统名称“yht-manager”,其他信息是selfendpoint=true
+		 * 使用idtest的后台管理的地址http://172.20.14.138:8880/yht-manager/    登录
+		 * 用F12，在network里，queryRole.do -->  XHR  -->  Cookies-->
+		 * Name是yht_username对应的Value的值，复制出来，只要前面.org部分  
+		*/			
+			public void logoutWithTidTest() throws JsonProcessingException, IOException, InterruptedException {
+			
+			String tid = "yht-manager_ST-36-9qIaHTUkU4tg7kEgK5fU-cas01.example.org";
+			String msg1 = UserCenter.logoutWithTid(tid);
+			System.out.println(msg1);
+			JsonNode node1 = mapper.readTree(msg1);
+//			Assert.assertTrue(node1.get("status").asInt()==1);			
+		}
+		
+		
+		@Test
+		/* 
+		 * 验证accesstoken
+		 * 正常情况的测试
+		*/			
+			public void checkOauthTokenTest() throws JsonProcessingException, IOException, InterruptedException {
+			
+			//获取ssotoken--本测试方法需要
+			String Password="yonyou11";
+			String shaPassword=SDKUtils.encodeUsingSHA(Password);
+			String md5Password=SDKUtils.encodeUsingMD5(Password); 
+
+			Map<String, String> params=new  HashMap<String, String>();
+			params.put("username","18810039018");
+			params.put("shaPassword",shaPassword);
+			params.put("md5Password",md5Password);
+						
+			String msg = UserCenter.createSSOToken(params);
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			String ssotoken=node.get("data").asText();
+			
+			//本获取accesstoken--本测试方法需要这个参数
+			String msg1 = UserCenter.genAccessTokenBySSOToken(ssotoken);
+			System.out.println(msg1);
+			JsonNode node1 = mapper.readTree(msg1);			
+			String accesstoken= node1.get("accesstoken").asText();
+			
+			//本方法的测试开始，验证accesstoken
+			String msg2 = UserCenter.checkOauthToken(accesstoken);		
+			System.out.println(msg2);
+			JsonNode node2 = mapper.readTree(msg2);	
+			Assert.assertTrue(node1.get("status").asInt()==1);		
+			
+			
+			
+		}
+		
+		
+		
+		@Test
+		/* 
+		 * 根据accesstoken获取用户信息
+		 * 正常情况的测试
+		*/			
+			public void getUserByTokenTest() throws JsonProcessingException, IOException, InterruptedException {
+			
+			//获取ssotoken
+			String Password="yonyou11";
+			String shaPassword=SDKUtils.encodeUsingSHA(Password);
+			String md5Password=SDKUtils.encodeUsingMD5(Password); 
+
+			Map<String, String> params=new  HashMap<String, String>();
+			params.put("username","18810039018");
+			params.put("shaPassword",shaPassword);
+			params.put("md5Password",md5Password);
+						
+			String msg = UserCenter.createSSOToken(params);
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			String ssotoken=node.get("data").asText();
+			
+			//获取accesstoken--本测试方法需要这个参数
+			String msg1 = UserCenter.genAccessTokenBySSOToken(ssotoken);
+			System.out.println(msg1);
+			JsonNode node1 = mapper.readTree(msg1);
+			String accessToken=node1.get("accesstoken").asText();
+			
+			//本测试方法的代码
+			String msg2 = UserCenter.getUserByToken(accessToken);
+			System.out.println(msg2);
+			JsonNode node2 = mapper.readTree(msg2);
+			Assert.assertTrue(node2.get("status").asInt()==1);			
+		}
+		
+		
+		@Test
+		/* 
+		 * 销毁accesstoken
+		 * 正常情况的测试
+		*/			
+			public void destroyAccessTokenTest() throws JsonProcessingException, IOException, InterruptedException {
+			
+			//获取ssotoken
+			String Password="yonyou11";
+			String shaPassword=SDKUtils.encodeUsingSHA(Password);
+			String md5Password=SDKUtils.encodeUsingMD5(Password); 
+
+			Map<String, String> params=new  HashMap<String, String>();
+			params.put("username","stt2017101701@chacuo.net");
+			params.put("shaPassword",shaPassword);
+			params.put("md5Password",md5Password);
+						
+			String msg = UserCenter.createSSOToken(params);
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			String ssotoken=node.get("data").asText();
+			
+			//获取accesstoken--本测试方法需要这个参数
+			String msg1 = UserCenter.genAccessTokenBySSOToken(ssotoken);
+			System.out.println(msg1);
+			JsonNode node1 = mapper.readTree(msg1);
+			String accessToken=node1.get("accesstoken").asText();
+			
+			//销毁前，可以获取用户信息
+			String msg2 = UserCenter.getUserByToken(accessToken);
+			System.out.println(msg2);
+			JsonNode node2 = mapper.readTree(msg2);
+			Assert.assertTrue(node2.get("status").asInt()==1);	
+			
+			//本测试方法的代码，销毁
+			String msg3 = UserCenter.destroyAccessToken(accessToken);
+			System.out.println(msg3);
+			JsonNode node3 = mapper.readTree(msg3);
+			Assert.assertTrue(node2.get("status").asInt()==1);			
+			
+			//销毁后，再获取用户信息应该获取不到
+			String msg4 = UserCenter.getUserByToken(accessToken);
+			System.out.println(msg4);
+			JsonNode node4 = mapper.readTree(msg4);
+			Assert.assertTrue(node4.get("status").asInt()==0);		
+			
+		}
+		
+		
+		
+		@Test
+		/* 
+		 * 刷新accesstoken
+		 * 正常情况的测试
+		 * access_token一分钟失效、refresh_token三分钟失效
+		*/			
+			public void refreshAccessTokenTest() throws JsonProcessingException, IOException, InterruptedException {
+			
+			//获取access_token、refresh_token
+			String msg1=UserCenter.generateAccessToken("stt2017101701@chacuo.net", "yonyou11", false);
+			System.out.println("获取access_token、refresh_token:"+msg1);
+			JsonNode node1 = mapper.readTree(msg1);
+			Assert.assertTrue(node1.get("status").asInt()==1);	
+			String accessToken=node1.get("data").get("access_token").asText();
+			String refreshToken=node1.get("data").get("refresh_token").asText();
+			
+			//获取用户信息
+			String msg2 = UserCenter.getUserByToken(accessToken);
+			System.out.println("第一次获取用户信息："+msg2);
+			JsonNode node2 = mapper.readTree(msg2);
+			Assert.assertTrue(node2.get("status").asInt()==1);	
+			
+			//access_token没有失效，此时刷新应该报错
+			String msg3 = UserCenter.refreshAccessToken(refreshToken);
+			System.out.println("access_token没有失效，此时刷新不成功："+msg3);
+			JsonNode node3 = mapper.readTree(msg3);
+			Assert.assertTrue(node3.get("status").asInt()==5);	
+			Assert.assertTrue(node3.get("msg").asText().equals("Access Token  does not Timeout"));	
+			
+			//获取用户信息
+			String msg4 = UserCenter.getUserByToken(accessToken);
+			System.out.println("第二次获取用户信息："+msg4);
+			JsonNode node4 = mapper.readTree(msg4);
+			Assert.assertTrue(node4.get("status").asInt()==1);	
+			
+			//等1分钟，此时access_token失效
+			Thread.sleep(60000);
+			
+			//access_token已失效，此时刷新应该成功
+			String msg5 = UserCenter.refreshAccessToken(refreshToken);
+			System.out.println("access_token已失效，此时刷新应该成功:"+msg5);
+			JsonNode node5 = mapper.readTree(msg5);
+			Assert.assertTrue(node5.get("status").asInt()==1);	
+			
+			//刷新后获取新的access_token
+			String accessTokenNew=node5.get("data").get("access_token").asText();
+			String refreshTokenNew=node5.get("data").get("refresh_token").asText();
+			
+			//access_token已失效，此时还用这个值获取用户信息失败
+			String msg6 = UserCenter.getUserByToken(accessToken);
+			System.out.println("access_token已失效，此时还用这个值获取用户信息失败："+msg6);
+			JsonNode node6 = mapper.readTree(msg6);
+			Assert.assertTrue(node6.get("status").asInt()==0);	
+			Assert.assertTrue(node6.get("msg").asText().equals("can not find user by accesstoken "));	
+			
+			//使用刷新后新获取的access_token，可以获取用户信息
+			String  msg7 = UserCenter.getUserByToken(accessTokenNew);
+			System.out.println(msg7);
+			JsonNode node7 = mapper.readTree(msg7);
+			Assert.assertTrue(node7.get("status").asInt()==1);	
+			
+			//等2分钟，即一共等了3分钟，此时refreshToken失效
+			Thread.sleep(120000);
+			
+			//第一次获取的refresh_Token失效，此时刷新失败
+			String msg8 = UserCenter.refreshAccessToken(refreshToken);
+			System.out.println("refresh_Token失效，此时刷新失败："+msg8);
+			JsonNode node8 = mapper.readTree(msg8);
+			Assert.assertTrue(node8.get("status").asInt()==0);	
+			Assert.assertTrue(node8.get("msg").asText().equals("refresh accesstoken error,can not find accesstoken from refreshtoken,may be refresh token have used already"));	
+			
+			//第二次获取的refresh_Token有效，此时刷新成功
+			String msg9 = UserCenter.refreshAccessToken(refreshTokenNew);
+			System.out.println("第二次获取的refresh_Token有效，此时刷新成功："+msg9);
+			JsonNode node9 = mapper.readTree(msg9);
+			Assert.assertTrue(node9.get("status").asInt()==1);	
+			
+		}
+		
+		
+		@Test
+		/* 
+		 * 根据用户名密码创建ssotoken(uclient)
+		 * 正常情况的测试
+		*/			
+			public void createSSOTokenTest() throws JsonProcessingException, IOException, InterruptedException {
+			
+			String Password="yonyou11";
+			String shaPassword=SDKUtils.encodeUsingSHA(Password);
+			String md5Password=SDKUtils.encodeUsingMD5(Password); 
+
+			Map<String, String> params=new  HashMap<String, String>();
+			params.put("username","18810039018");
+			params.put("shaPassword",shaPassword);
+			params.put("md5Password",md5Password);
+			
+
+			String msg1 = UserCenter.createSSOToken(params);
+			System.out.println(msg1);
+			JsonNode node1 = mapper.readTree(msg1);
+			Assert.assertTrue(node1.get("status").asInt()==1);			
+		}
+		
+		
+		@Test
+		/* 
+		 * 根据ssotoken获取accessToken(uclient)
+		 * 正常情况的测试
+		*/			
+			public void genAccessTokenBySSOTokenTest() throws JsonProcessingException, IOException, InterruptedException {
+			
+			//获取ssotoken--本测试方法需要这个参数
+			String Password="yonyou11";
+			String shaPassword=SDKUtils.encodeUsingSHA(Password);
+			String md5Password=SDKUtils.encodeUsingMD5(Password); 
+
+			Map<String, String> params=new  HashMap<String, String>();
+			params.put("username","18810039018");
+			params.put("shaPassword",shaPassword);
+			params.put("md5Password",md5Password);
+						
+			String msg = UserCenter.createSSOToken(params);
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			String ssotoken=node.get("data").asText();
+			
+			//本测试方法的代码
+			String msg1 = UserCenter.genAccessTokenBySSOToken(ssotoken);
+			System.out.println(msg1);
+			JsonNode node1 = mapper.readTree(msg1);
+			Assert.assertTrue(node1.get("status").asInt()==1);			
+		}
+		
+		
+		@Test
+		/* 
+		 * 根据accessToken获取ouathToken(uclient)
+		 * 正常情况的测试
+		*/			
+			public void genOuathTokenByAccessTokenTest() throws JsonProcessingException, IOException, InterruptedException {
+			
+			//获取ssotoken
+			String Password="yonyou11";
+			String shaPassword=SDKUtils.encodeUsingSHA(Password);
+			String md5Password=SDKUtils.encodeUsingMD5(Password); 
+
+			Map<String, String> params=new  HashMap<String, String>();
+			params.put("username","18810039018");
+			params.put("shaPassword",shaPassword);
+			params.put("md5Password",md5Password);
+						
+			String msg = UserCenter.createSSOToken(params);
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			String ssotoken=node.get("data").asText();
+			
+			//获取accesstoken--本测试方法需要这个参数
+			String msg1 = UserCenter.genAccessTokenBySSOToken(ssotoken);
+			System.out.println(msg1);
+			JsonNode node1 = mapper.readTree(msg1);
+			String accessToken=node1.get("accesstoken").asText();
+			
+			//本测试方法的代码
+			String msg2 = UserCenter.genOuathTokenByAccessToken(accessToken);
+			System.out.println(msg2);
+			JsonNode node2 = mapper.readTree(msg2);
+			Assert.assertTrue(node2.get("status").asInt()==1);			
+		}
+		
+		
+		
+		@Test
+		/* 
+		 * 与UClient集成实现U8C用户活跃度记录接口
+		 * 正常情况的测试
+		*/	
+		public void testU8cLoginLog() throws JsonProcessingException, IOException{
+			String msg = UserCenter.recordU8cLoginLog("18810039018","172.20.44.29",""+System.currentTimeMillis());
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			Assert.assertTrue(node.get("status").asInt()==1);		
+		}
+		
+		
+		
+//		@Test
+//		/* 
+//		 * 快捷发送短信验证码
+//		 * 正常情况的测试
+//		 * 友文化特有，在接口文档里不显示
+//		 * sdk.properties里改成client.credential.path=uculture.properties
+//		 * 原值是client.credential.path=authfile_yht.txt
+//		 * 同时把本地对应的authfile_yht.txt文件备份到其他地方，把uculture.properties放入即可
+//		*/	
+//		public void simpleSendCodeTest1() throws JsonProcessingException, IOException{
+//
+//			String jsonStr ="{\"mobile\":\"18810039018\", \"sysid\":\"uculture\"}";
+//			String msg = UserCenter.simpleSendCode(jsonStr);
+//			System.out.println(msg);
+//			JsonNode node = mapper.readTree(msg);
+//			Assert.assertTrue(node.get("status").asInt()==1);		
+//		}
+
+		
+		
+		
+		@Test
+		/* 
+		 * 绑定手机时发短信不用图形校验码
+		 * 正常情况的测试
+		 * 友文化特有，在接口文档里不显示
+		 * sdk.properties里改成client.credential.path=uculture.properties
+		 * 原值是client.credential.path=authfile_yht.txt
+		 * 同时把本地对应的authfile_yht.txt文件备份到其他地方，把uculture.properties放入即可
+		*/	
+		public void simpleSendCodeTest() throws JsonProcessingException, IOException{
+			String jsonStr ="{\"mobile\":\"18810039018\", \"sysid\":\"uculture\"}";
+			String msg = UserCenter.simpleSendCode(jsonStr);
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			Assert.assertTrue(node.get("status").asInt()==1);		
+		}
+		
+		
+		
+		
+		@Test
+		/* 
+		 * 绑定微信账户
+		 * 正常情况的测试
+		 * 18810039018的ID是868d2718-4723-4504-aa03-a773918c2fdb
+		 * openid、unionid随便输入，目前我们不能校验
+		 * 友文化特有，在接口文档里不显示
+		 * sdk.properties里改成client.credential.path=uculture.properties
+		 * 原值是client.credential.path=authfile_yht.txt
+		 * 同时把本地对应的authfile_yht.txt文件备份到其他地方，把uculture.properties放入即可
+		*/	
+		public void bindUserTest() throws JsonProcessingException, IOException{
+			//绑定qq
+			String jsonStr ="{\"type\":\"qq\", \"userid\":\"868d2718-4723-4504-aa03-a773918c2fdb\",\"openid\":\"aa\", \"unionid\":\"aa\"}";
+			String msg = UserCenter.bindUser(jsonStr);
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			Assert.assertTrue(node.get("status").asInt()==1);		
+
+			
+			//绑定微信
+			String jsonStr1 ="{\"type\":\"wechat\", \"userid\":\"868d2718-4723-4504-aa03-a773918c2fdb\",\"openid\":\"aa\", \"unionid\":\"aa\"}";
+			String msg1 = UserCenter.bindUser(jsonStr1);
+			System.out.println(msg1);
+			JsonNode node1 = mapper.readTree(msg1);
+			Assert.assertTrue(node1.get("status").asInt()==1);	
+
 		}
 		
 		

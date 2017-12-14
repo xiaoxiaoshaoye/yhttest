@@ -54,31 +54,19 @@ public class EnterpriseCenterTestSuntt {
 //		JsonNode  node=Utils.getJson(mapper, msg);
 //		Assert.assertTrue(node.get("status").asInt()==1);
 //		
-		//必输值加创建人，方便在页面上查看
-		Map<String ,String> params1=new HashMap<String,String>(); 		
-		params1.put("name", "stt"+t+"1");
-		params1.put("contactName", "stt-name");
-		params1.put("contactMobile", "18800001010");
-		params1.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
-		String msg1 = EnterpriseCenter.addEnter(params1);
-		System.out.println(msg1);
-		JsonNode  node1=Utils.getJson(mapper, msg1);
-		Assert.assertTrue(node1.get("status").asInt()==1);
-		
 //		//必输值加创建人，方便在页面上查看
-//		Map<String ,String> params1=new HashMap<String,String>(); 	
-//		for(int i=0;i<2;i++){			
-//		params1.put("name", "stt"+t+i);
+//		Map<String ,String> params1=new HashMap<String,String>(); 		
+//		params1.put("name", "stt"+t+"1");
 //		params1.put("contactName", "stt-name");
 //		params1.put("contactMobile", "18800001010");
-////		params1.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
-//		params1.put("creater", "4bf3e04d-a4bb-4bdf-a9df-68005ea5ea2b");
+//		params1.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
 //		String msg1 = EnterpriseCenter.addEnter(params1);
 //		System.out.println(msg1);
 //		JsonNode  node1=Utils.getJson(mapper, msg1);
 //		Assert.assertTrue(node1.get("status").asInt()==1);
-//		}
-
+//		
+//
+//
 //		
 //		
 //		//接口文档里有的字段，能填的字段都输入值
@@ -112,19 +100,31 @@ public class EnterpriseCenterTestSuntt {
 //		System.out.println(msg3);
 //		JsonNode  node3=Utils.getJson(mapper, msg3);
 //		Assert.assertTrue(node3.get("status").asInt()==1);
-		
-		////只能执行一次，增加实际的公司，能把部分信息带出来
-		//Map<String ,String> params4=new HashMap<String,String>(); 
-		//params4.put("name", "广州统一企业有限公司");
-		//params4.put("contactName", "stt-name");
-		//params4.put("contactMobile", "18800001010");
-		//params4.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
-		//String msg4 = EnterpriseCenter.addEnter(params4);
-		//System.out.println(msg4);
-		//JsonNode  node4=Utils.getJson(mapper, msg4);
-		//Assert.assertTrue(node4.get("status").asInt()==1);
-		
-		
+//		
+//		//只能执行一次，增加实际的公司，能把部分信息带出来
+//		Map<String ,String> params4=new HashMap<String,String>(); 
+//		params4.put("name", "广州统一企业有限公司");
+//		params4.put("contactName", "stt-name");
+//		params4.put("contactMobile", "18800001010");
+//		params4.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
+//		String msg4 = EnterpriseCenter.addEnter(params4);
+//		System.out.println(msg4);
+//		JsonNode  node4=Utils.getJson(mapper, msg4);
+//		Assert.assertTrue(node4.get("status").asInt()==1);
+//		
+		//必输值加创建人，方便在页面上查看
+		Map<String ,String> params5=new HashMap<String,String>(); 	
+		for(int i=0;i<2;i++){			
+		params5.put("name", "stt"+t+i);
+		params5.put("contactName", "stt-name");
+		params5.put("contactMobile", "18800001010");
+		params5.put("creater", "1de8af53-89b7-4c74-8758-79b30b103427");
+//		params5.put("creater", "4bf3e04d-a4bb-4bdf-a9df-68005ea5ea2b");
+		String msg5 = EnterpriseCenter.addEnter(params5);
+		System.out.println(msg5);
+		JsonNode  node5=Utils.getJson(mapper, msg5);
+		Assert.assertTrue(node5.get("status").asInt()==1);
+		}
 	}
 	
 	
@@ -145,7 +145,7 @@ public class EnterpriseCenterTestSuntt {
 		Assert.assertTrue(node.get("eninfo").get("scale").asText().equals("100-500人"));
 		Assert.assertTrue(node.get("eninfo").get("yonyouMember").asBoolean());
 		Assert.assertTrue(node.get("eninfo").get("businessTax").asText().equals("000000000000000"));
-//		Assert.assertTrue(node.get("eninfo").get("type").asText().equals("个人企业"));
+		Assert.assertTrue(node.get("eninfo").get("type").asText().equals("个人企业"));
 		Assert.assertTrue(node.get("eninfo").get("integrationCode").asText().equals("111111111111111111"));
 		Assert.assertTrue(node.get("eninfo").get("legalPerson").asText().equals("aa"));
 		Assert.assertTrue(node.get("eninfo").get("invoiceType").asText().equals("businessTax"));
@@ -166,21 +166,18 @@ public class EnterpriseCenterTestSuntt {
 	 * 正常情况的测试
 	*/
 	public void  searchEnterByNameTest(){
-		//已认证企业
-		String enterpriseName="a11";
+
+		String enterpriseName="接口测试数据-查询";
 		String msg = EnterpriseCenter.searchEnterByName(enterpriseName);
 		System.out.println(msg);
 		JsonNode  node=Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt()==1);
 		Assert.assertTrue(node.get("msg").asText().equals("获取企业信息成功"));
-		
-		//未认证企业
-		String enterpriseName1="stt20171026aaa";
-		String msg1 = EnterpriseCenter.searchEnterByName(enterpriseName1);
-		System.out.println(msg1);
-		JsonNode  node1=Utils.getJson(mapper, msg);
-		Assert.assertTrue(node1.get("status").asInt()==1);
-		Assert.assertTrue(node1.get("msg").asText().equals("获取企业信息成功"));
+		Assert.assertTrue(node.get("enterprises").get(0).get("name").asText().equals("接口测试数据-查询-认证不通过"));
+		Assert.assertTrue(node.get("enterprises").get(1).get("name").asText().equals("接口测试数据-查询-申请中"));
+		Assert.assertTrue(node.get("enterprises").get(2).get("name").asText().equals("接口测试数据-查询-已认证"));
+		Assert.assertTrue(node.get("enterprises").get(3).get("name").asText().equals("接口测试数据-查询-未认证"));
+
 	}
 	
 	
@@ -301,4 +298,25 @@ public class EnterpriseCenterTestSuntt {
 		Assert.assertTrue(node.get("states").get(2).get("enterId").asText().equals("d0a36d86-acac-4115-b729-291223eaea81"));
 	}
 	
+	
+	
+	@Test
+	/* 搜索企业内用户（关键字范围:用户名、账号、手机号、邮箱）
+	 * 正常情况的测试
+	 * 用户18810039018的企业“stt”的ID是f2b4f8b3-a27d-4010-91cb-4d7552ef5abb
+	 */
+	public void  searchEnterUserTest(){	
+		
+		String enterId="f2b4f8b3-a27d-4010-91cb-4d7552ef5abb";
+		String keyWord="stt";
+		int pageNum=1;
+		int pageSize=30;
+		String sortProperty="user_name ";
+		String sortDirection="ASC";
+		String msg = EnterpriseCenter.searchEnterUser(enterId,keyWord,pageNum,pageSize,sortProperty,sortDirection);
+		System.out.println(msg);
+		JsonNode  node=Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("totalNumber").asInt()==20);
+		Assert.assertTrue(node.get("status").asInt()==1);
+	}
 }

@@ -42,163 +42,163 @@ public class EnterpriseCenterExceptionTestSuntt {
 		SimpleDateFormat date =new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		String t =date.format(new Date());
 		
-//		//name企业名称,必输字段的值是空
-//		Map<String ,String> params=new HashMap<String,String>(); 
-//		params.put("name", "");
-//		params.put("contactName", "stt-name");
-//		params.put("contactMobile", "18800001010");
-//		String msg = EnterpriseCenter.addEnter(params);
-//		System.out.println(msg);	
-//		JsonNode  node=Utils.getJson(mapper, msg);
-//		Assert.assertTrue(node.get("status").asInt()==0);
-//		Assert.assertTrue(node.get("msg").asText().equals("企业名称不能为空"));
-//				
-//		//name企业名称,必输字段的值是null
-//		Map<String ,String> params1=new HashMap<String,String>(); 
-//		params1.put("name",null);
-//		params1.put("contactName","stt-name");
-//		params1.put("contactMobile","18800001010");
-//		String msg1 = EnterpriseCenter.addEnter(params1);
-//		System.out.println(msg1);	
-//		JsonNode  node1=Utils.getJson(mapper, msg1);
-//		Assert.assertTrue(node1.get("status").asInt()==0);
-//		Assert.assertTrue(node1.get("msg").asText().equals("企业名称不能为空"));
-//
-//		
-//		//contactName联系人姓名,必输字段的值是空
-//	    Map<String ,String> params2=new HashMap<String,String>(); 
-//	    params2.put("name","stt"+t);
-//	    params2.put("contactName","");
-//	    params2.put("contactMobile","18800002020");
-//	    String msg2 = EnterpriseCenter.addEnter(params2);
-//	    System.out.println(msg2); 
-//	    JsonNode  node2=Utils.getJson(mapper, msg2);
-//	    Assert.assertTrue(node2.get("status").asInt()==0);
-//	    Assert.assertTrue(node2.get("msg").asText().equals("企业联系人姓名不能为空")); 
-//		
-//		
-//	    //contactName联系人姓名,必输字段的值是null
-//	     Map<String ,String> params3=new HashMap<String,String>(); 
-//	     params3.put("name","stt"+t);
-//	     params3.put("contactName",null);
-//	     params3.put("contactMobile","18800003030");
-//	     String msg3 = EnterpriseCenter.addEnter(params3);
-//	     System.out.println(msg3); 
-//	     JsonNode  node3=Utils.getJson(mapper, msg3);
-//	     Assert.assertTrue(node3.get("status").asInt()==0);
-//	     Assert.assertTrue(node3.get("msg").asText().equals("企业联系人姓名不能为空")); 
-//		
-//		
-//       //contactMobile联系电话,必输字段的值是空
-//        Map<String ,String> params4=new HashMap<String,String>(); 
-//        params4.put("name","stt"+t);
-//        params4.put("contactName","stt-name");
-//        params4.put("contactMobile","");
-//        String msg4 = EnterpriseCenter.addEnter(params4);
-//        System.out.println(msg4); 
-//        JsonNode  node4=Utils.getJson(mapper, msg4);
-//        Assert.assertTrue(node4.get("status").asInt()==0);
-//        Assert.assertTrue(node4.get("msg").asText().equals("企业联系人手机号不能为空"));
-//	   
-//	   
-//       //contactMobile联系电话,必输字段的值是null
-//        Map<String ,String> params5=new HashMap<String,String>(); 
-//        params5.put("name","stt"+t);
-//        params5.put("contactName","stt-name");
-//        params5.put("contactMobile",null);
-//        String msg5 = EnterpriseCenter.addEnter(params5);
-//        System.out.println(msg5); 
-//        JsonNode  node5=Utils.getJson(mapper, msg5);
-//        Assert.assertTrue(node5.get("status").asInt()==0);
-//        Assert.assertTrue(node5.get("msg").asText().equals("企业联系人手机号不能为空"));
-//		
-//		
-//	    //contactMobile（联系电话）格式不正确
-//	    Map<String ,String> params6=new HashMap<String,String>(); 
-//	    params6.put("name","stt"+t);
-//	    params6.put("contactName","stt-name");
-//	    params6.put("contactMobile","随便乱输入的内容haha");
-//	    String msg6 = EnterpriseCenter.addEnter(params6);
-//	    System.out.println(msg6); 
-//	    JsonNode  node6=Utils.getJson(mapper, msg6);
-//	    Assert.assertTrue(node6.get("status").asInt()==0);
-//	    Assert.assertTrue(node6.get("msg").asText().equals("企业联系人手机号格式不正确"));
-//		
-//		
-//	    //type企业类型,格式不正确
-//	    Map<String ,String> params7=new HashMap<String,String>(); 
-//	    params7.put("name", "stt"+t);
-//	    params7.put("contactName", "stt-name");
-//	    params7.put("contactMobile", "18800007070");
-//	    params7.put("type", "随便乱输入的内容haha");
-//	    String msg7 = EnterpriseCenter.addEnter(params7);
-//	    System.out.println(msg7);
-//	    JsonNode  node7=Utils.getJson(mapper, msg7);
-//	    Assert.assertTrue(node7.get("status").asInt()==0);
-//	    Assert.assertTrue(node7.get("msg").asText().equals("企业类型格式不正确"));
-//		
-//	     //address企业地址,格式不正确
-//	     Map<String ,String> params8=new HashMap<String,String>(); 
-//	     params8.put("name", "stt"+t);
-//	     params8.put("contactName", "stt-name");
-//	     params8.put("contactMobile", "18800008080");
-//	     params8.put("address", "随便乱输入的内容haha");
-//	     String msg8 = EnterpriseCenter.addEnter(params8);
-//	     System.out.println(msg8);
-//	     JsonNode  node8=Utils.getJson(mapper, msg8);
-//	     Assert.assertTrue(node8.get("status").asInt()==0);
-//	     Assert.assertTrue(node8.get("msg").asText().equals("企业地址格式不正确"));
-//		
-//
-//	      //trades所属行业,格式不正确
-//	      Map<String ,String> params9=new HashMap<String,String>(); 
-//	      params9.put("name", "stt"+t);
-//	      params9.put("contactName", "stt-name");
-//	      params9.put("contactMobile", "18800009090");
-//	      params9.put("trades", "随便乱输入的内容haha");
-//	      String msg9 = EnterpriseCenter.addEnter(params9);
-//	      System.out.println(msg9);
-//	      JsonNode  node9=Utils.getJson(mapper, msg9);
-//	      Assert.assertTrue(node9.get("status").asInt()==0);
-//	      Assert.assertTrue(node9.get("msg").asText().equals("企业所属行业格式不正确"));
-//	     
-//	      //scale企业规模,格式不正确
-//	      Map<String ,String> params10=new HashMap<String,String>(); 
-//	      params10.put("name", "stt"+t);
-//	      params10.put("contactName", "stt-name");
-//	      params10.put("contactMobile", "18800009090");
-//	      params10.put("scale", "随便乱输入的内容haha");
-//	      String msg10 = EnterpriseCenter.addEnter(params10);
-//	      System.out.println(msg10);
-//	      JsonNode  node10=Utils.getJson(mapper, msg10);
-//	      Assert.assertTrue(node10.get("status").asInt()==0);
-//	      Assert.assertTrue(node10.get("msg").asText().equals("企业规模格式不正确"));
-//	      
-//	      //invoiceType开票类型,格式不正确
-//	      Map<String ,String> params11=new HashMap<String,String>(); 
-//	      params11.put("name", "stt"+t);
-//	      params11.put("contactName", "stt-name");
-//	      params11.put("contactMobile", "18800009090");
-//	      params11.put("invoiceType", "随便乱输入的内容haha");
-//	      String msg11 = EnterpriseCenter.addEnter(params11);
-//	      System.out.println(msg11);
-//	      JsonNode  node11=Utils.getJson(mapper, msg11);
-//	      Assert.assertTrue(node11.get("status").asInt()==0);
-//	      Assert.assertTrue(node11.get("msg").asText().equals("企业开票类型格式不正确"));
-//
-//	      //businessTax税号,格式不正确
-//	      Map<String ,String> params12=new HashMap<String,String>(); 
-//	      params12.put("name", "stt"+t);
-//	      params12.put("contactName", "stt-name");
-//	      params12.put("contactMobile", "18800009090");
-//	      params12.put("businessTax", "随便乱输入的内容haha");
-//	      String msg12 = EnterpriseCenter.addEnter(params12);
-//	      System.out.println(msg12);
-//	      JsonNode  node12=Utils.getJson(mapper, msg12);
-//	      Assert.assertTrue(node12.get("status").asInt()==0);
-//	      Assert.assertTrue(node12.get("msg").asText().equals("企业税号格式不正确"));
-//
-//	      
+		//name企业名称,必输字段的值是空
+		Map<String ,String> params=new HashMap<String,String>(); 
+		params.put("name", "");
+		params.put("contactName", "stt-name");
+		params.put("contactMobile", "18800001010");
+		String msg = EnterpriseCenter.addEnter(params);
+		System.out.println(msg);	
+		JsonNode  node=Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt()==0);
+		Assert.assertTrue(node.get("msg").asText().equals("企业名称不能为空"));
+				
+		//name企业名称,必输字段的值是null
+		Map<String ,String> params1=new HashMap<String,String>(); 
+		params1.put("name",null);
+		params1.put("contactName","stt-name");
+		params1.put("contactMobile","18800001010");
+		String msg1 = EnterpriseCenter.addEnter(params1);
+		System.out.println(msg1);	
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("企业名称不能为空"));
+
+		
+		//contactName联系人姓名,必输字段的值是空
+	    Map<String ,String> params2=new HashMap<String,String>(); 
+	    params2.put("name","stt"+t);
+	    params2.put("contactName","");
+	    params2.put("contactMobile","18800002020");
+	    String msg2 = EnterpriseCenter.addEnter(params2);
+	    System.out.println(msg2); 
+	    JsonNode  node2=Utils.getJson(mapper, msg2);
+	    Assert.assertTrue(node2.get("status").asInt()==0);
+	    Assert.assertTrue(node2.get("msg").asText().equals("企业联系人姓名不能为空")); 
+		
+		
+	    //contactName联系人姓名,必输字段的值是null
+	     Map<String ,String> params3=new HashMap<String,String>(); 
+	     params3.put("name","stt"+t);
+	     params3.put("contactName",null);
+	     params3.put("contactMobile","18800003030");
+	     String msg3 = EnterpriseCenter.addEnter(params3);
+	     System.out.println(msg3); 
+	     JsonNode  node3=Utils.getJson(mapper, msg3);
+	     Assert.assertTrue(node3.get("status").asInt()==0);
+	     Assert.assertTrue(node3.get("msg").asText().equals("企业联系人姓名不能为空")); 
+		
+		
+       //contactMobile联系电话,必输字段的值是空
+        Map<String ,String> params4=new HashMap<String,String>(); 
+        params4.put("name","stt"+t);
+        params4.put("contactName","stt-name");
+        params4.put("contactMobile","");
+        String msg4 = EnterpriseCenter.addEnter(params4);
+        System.out.println(msg4); 
+        JsonNode  node4=Utils.getJson(mapper, msg4);
+        Assert.assertTrue(node4.get("status").asInt()==0);
+        Assert.assertTrue(node4.get("msg").asText().equals("企业联系人手机号不能为空"));
+	   
+	   
+       //contactMobile联系电话,必输字段的值是null
+        Map<String ,String> params5=new HashMap<String,String>(); 
+        params5.put("name","stt"+t);
+        params5.put("contactName","stt-name");
+        params5.put("contactMobile",null);
+        String msg5 = EnterpriseCenter.addEnter(params5);
+        System.out.println(msg5); 
+        JsonNode  node5=Utils.getJson(mapper, msg5);
+        Assert.assertTrue(node5.get("status").asInt()==0);
+        Assert.assertTrue(node5.get("msg").asText().equals("企业联系人手机号不能为空"));
+		
+		
+	    //contactMobile（联系电话）格式不正确
+	    Map<String ,String> params6=new HashMap<String,String>(); 
+	    params6.put("name","stt"+t);
+	    params6.put("contactName","stt-name");
+	    params6.put("contactMobile","随便乱输入的内容haha");
+	    String msg6 = EnterpriseCenter.addEnter(params6);
+	    System.out.println(msg6); 
+	    JsonNode  node6=Utils.getJson(mapper, msg6);
+	    Assert.assertTrue(node6.get("status").asInt()==0);
+	    Assert.assertTrue(node6.get("msg").asText().equals("企业联系人手机号格式不正确"));
+		
+		
+	    //type企业类型,格式不正确
+	    Map<String ,String> params7=new HashMap<String,String>(); 
+	    params7.put("name", "stt"+t);
+	    params7.put("contactName", "stt-name");
+	    params7.put("contactMobile", "18800007070");
+	    params7.put("type", "随便乱输入的内容haha");
+	    String msg7 = EnterpriseCenter.addEnter(params7);
+	    System.out.println(msg7);
+	    JsonNode  node7=Utils.getJson(mapper, msg7);
+	    Assert.assertTrue(node7.get("status").asInt()==0);
+	    Assert.assertTrue(node7.get("msg").asText().equals("企业类型格式不正确"));
+		
+	     //address企业地址,格式不正确
+	     Map<String ,String> params8=new HashMap<String,String>(); 
+	     params8.put("name", "stt"+t);
+	     params8.put("contactName", "stt-name");
+	     params8.put("contactMobile", "18800008080");
+	     params8.put("address", "随便乱输入的内容haha");
+	     String msg8 = EnterpriseCenter.addEnter(params8);
+	     System.out.println(msg8);
+	     JsonNode  node8=Utils.getJson(mapper, msg8);
+	     Assert.assertTrue(node8.get("status").asInt()==0);
+	     Assert.assertTrue(node8.get("msg").asText().equals("企业地址格式不正确"));
+		
+
+	      //trades所属行业,格式不正确
+	      Map<String ,String> params9=new HashMap<String,String>(); 
+	      params9.put("name", "stt"+t);
+	      params9.put("contactName", "stt-name");
+	      params9.put("contactMobile", "18800009090");
+	      params9.put("trades", "随便乱输入的内容haha");
+	      String msg9 = EnterpriseCenter.addEnter(params9);
+	      System.out.println(msg9);
+	      JsonNode  node9=Utils.getJson(mapper, msg9);
+	      Assert.assertTrue(node9.get("status").asInt()==0);
+	      Assert.assertTrue(node9.get("msg").asText().equals("企业所属行业格式不正确"));
+	     
+	      //scale企业规模,格式不正确
+	      Map<String ,String> params10=new HashMap<String,String>(); 
+	      params10.put("name", "stt"+t);
+	      params10.put("contactName", "stt-name");
+	      params10.put("contactMobile", "18800009090");
+	      params10.put("scale", "随便乱输入的内容haha");
+	      String msg10 = EnterpriseCenter.addEnter(params10);
+	      System.out.println(msg10);
+	      JsonNode  node10=Utils.getJson(mapper, msg10);
+	      Assert.assertTrue(node10.get("status").asInt()==0);
+	      Assert.assertTrue(node10.get("msg").asText().equals("企业规模格式不正确"));
+	      
+	      //invoiceType开票类型,格式不正确
+	      Map<String ,String> params11=new HashMap<String,String>(); 
+	      params11.put("name", "stt"+t);
+	      params11.put("contactName", "stt-name");
+	      params11.put("contactMobile", "18800009090");
+	      params11.put("invoiceType", "随便乱输入的内容haha");
+	      String msg11 = EnterpriseCenter.addEnter(params11);
+	      System.out.println(msg11);
+	      JsonNode  node11=Utils.getJson(mapper, msg11);
+	      Assert.assertTrue(node11.get("status").asInt()==0);
+	      Assert.assertTrue(node11.get("msg").asText().equals("企业开票类型格式不正确"));
+
+	      //businessTax税号,格式不正确
+	      Map<String ,String> params12=new HashMap<String,String>(); 
+	      params12.put("name", "stt"+t);
+	      params12.put("contactName", "stt-name");
+	      params12.put("contactMobile", "18800009090");
+	      params12.put("businessTax", "随便乱输入的内容haha");
+	      String msg12 = EnterpriseCenter.addEnter(params12);
+	      System.out.println(msg12);
+	      JsonNode  node12=Utils.getJson(mapper, msg12);
+	      Assert.assertTrue(node12.get("status").asInt()==0);
+	      Assert.assertTrue(node12.get("msg").asText().equals("企业税号格式不正确"));
+
+	      
 	      //integrationCode统一社会信用代码,格式不正确
 	      Map<String ,String> params13=new HashMap<String,String>(); 
 	      params13.put("name", "stt"+t);
@@ -225,59 +225,59 @@ public class EnterpriseCenterExceptionTestSuntt {
 	      Assert.assertTrue(node14.get("status").asInt()==0);
 	      Assert.assertTrue(node14.get("msg").asText().equals("是否为用友合作伙伴格式不正确"));
 
-//	      //唯一性,当前用户下有111111的企业
-//	      Map<String ,String> params15=new HashMap<String,String>(); 
-//	      params15.put("name", "111111");
-//	      params15.put("contactName", "stt-name");
-//	      params15.put("contactMobile", "18800009090");
-//	      params15.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
-//	      String msg15 = EnterpriseCenter.addEnter(params15);
-//	      System.out.println(msg15);
-//	      JsonNode  node15=Utils.getJson(mapper, msg15);
-//	      Assert.assertTrue(node15.get("status").asInt()==0);
-//	      Assert.assertTrue(node15.get("msg").asText().equals("Enterprise 111111 has existed."));
-//
-//	      
-//	      //唯一性，其他用户有已认证的stt企业
-//	      Map<String ,String> params16=new HashMap<String,String>(); 
-//	      params16.put("name", "stt");
-//	      params16.put("contactName", "stt-name");
-//	      params16.put("contactMobile", "18800009090");
-//	      params16.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
-//	      String msg16 = EnterpriseCenter.addEnter(params16);
-//	      System.out.println(msg16);
-//	      JsonNode  node16=Utils.getJson(mapper, msg16);
-//	      Assert.assertTrue(node16.get("status").asInt()==0);
-//	      Assert.assertTrue(node16.get("msg").asText().equals("Enterprise stt has existed."));
-//
-//
-//	      //当开票类型是统一社会信用代码时，但“统一社会信用代码”字段没输入值
-//	      Map<String ,String> params17=new HashMap<String,String>(); 
-//	      params17.put("name", "stt"+t);
-//	      params17.put("contactName", "stt-name");
-//	      params17.put("contactMobile", "18800009090");
-//	      params17.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
-//		  params17.put("invoiceType", "integrationCode");
-//	      String msg17 = EnterpriseCenter.addEnter(params17);
-//	      System.out.println(msg17);
-//	      JsonNode  node17=Utils.getJson(mapper, msg17);
-//	      Assert.assertTrue(node17.get("status").asInt()==0);
-//	      Assert.assertTrue(node17.get("msg").asText().equals("Enterprise stt has existed."));
+	      //唯一性,当前用户下有111111的企业
+	      Map<String ,String> params15=new HashMap<String,String>(); 
+	      params15.put("name", "111111");
+	      params15.put("contactName", "stt-name");
+	      params15.put("contactMobile", "18800009090");
+	      params15.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
+	      String msg15 = EnterpriseCenter.addEnter(params15);
+	      System.out.println(msg15);
+	      JsonNode  node15=Utils.getJson(mapper, msg15);
+	      Assert.assertTrue(node15.get("status").asInt()==0);
+	      Assert.assertTrue(node15.get("msg").asText().equals("企业已经存在"));
 
-//
-//			//字段值超长（企业名称、联系人姓名、地址、法人、上级企业）
-//			Map<String ,String> params18=new HashMap<String,String>(); 
-//			params18.put("name", "00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");
-//			params18.put("contactName", "00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");
-//			params18.put("contactMobile", "18800001010");
-//			params18.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
-//			params18.put("address", "1-11-8-北清路68号00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");
-//			params18.put("legalPerson", "00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");
-//			params18.put("superiorCorpId", "00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");		
-//			String msg18 = EnterpriseCenter.addEnter(params18);
-//			System.out.println(msg18);
-//			JsonNode  node18=Utils.getJson(mapper, msg18);
-//			Assert.assertTrue(node18.get("status").asInt()==0);
+	      
+	      //唯一性，其他用户有已认证的stt企业
+	      Map<String ,String> params16=new HashMap<String,String>(); 
+	      params16.put("name", "stt");
+	      params16.put("contactName", "stt-name");
+	      params16.put("contactMobile", "18800009090");
+	      params16.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
+	      String msg16 = EnterpriseCenter.addEnter(params16);
+	      System.out.println(msg16);
+	      JsonNode  node16=Utils.getJson(mapper, msg16);
+	      Assert.assertTrue(node16.get("status").asInt()==0);
+	      Assert.assertTrue(node16.get("msg").asText().equals("企业已经存在"));
+
+
+	      //当开票类型是统一社会信用代码时，但“统一社会信用代码”字段没输入值
+	      Map<String ,String> params17=new HashMap<String,String>(); 
+	      params17.put("name", "stt"+t);
+	      params17.put("contactName", "stt-name");
+	      params17.put("contactMobile", "18800009090");
+	      params17.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
+		  params17.put("invoiceType", "integrationCode");
+	      String msg17 = EnterpriseCenter.addEnter(params17);
+	      System.out.println(msg17);
+	      JsonNode  node17=Utils.getJson(mapper, msg17);
+	      Assert.assertTrue(node17.get("status").asInt()==0);
+	      Assert.assertTrue(node17.get("msg").asText().equals("Enterprise stt has existed."));
+
+
+			//字段值超长（企业名称、联系人姓名、地址、法人、上级企业）
+			Map<String ,String> params18=new HashMap<String,String>(); 
+			params18.put("name", "00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");
+			params18.put("contactName", "00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");
+			params18.put("contactMobile", "18800001010");
+			params18.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
+			params18.put("address", "1-11-8-北清路68号00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");
+			params18.put("legalPerson", "00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");
+			params18.put("superiorCorpId", "00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");		
+			String msg18 = EnterpriseCenter.addEnter(params18);
+			System.out.println(msg18);
+			JsonNode  node18=Utils.getJson(mapper, msg18);
+			Assert.assertTrue(node18.get("status").asInt()==0);
 
 	}
 	
@@ -334,7 +334,8 @@ public class EnterpriseCenterExceptionTestSuntt {
 		String msg = EnterpriseCenter.getMemberEnListByUid(userId);
 		System.out.println(msg);
 		JsonNode  node=Utils.getJson(mapper, msg);
-		Assert.assertTrue(node.get("status").asInt()==1);	
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		Assert.assertTrue(node.get("msg").asText().equals("未找到该用户管理的企业"));
 		
 		//用户id是随便输入的内容
 		//执行应该给友好提示，现在报错
@@ -342,20 +343,21 @@ public class EnterpriseCenterExceptionTestSuntt {
 		System.out.println(msg1);
 		JsonNode  node1=Utils.getJson(mapper, msg1);
 		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("用户ID格式不正确"));
 		
 		//用户id为空
 		String msg2 = EnterpriseCenter.getMemberEnListByUid("");
 		System.out.println(msg2);
 		JsonNode  node2=Utils.getJson(mapper, msg2);
 		Assert.assertTrue(node2.get("status").asInt()==0);
-		Assert.assertTrue(node2.get("msg").asText().equals("userid不能为空"));
+		Assert.assertTrue(node2.get("msg").asText().equals("用户ID不能为空"));
 		
 		//用户id为null
 		String msg3 = EnterpriseCenter.getMemberEnListByUid(null);
 		System.out.println(msg3);
 		JsonNode  node3=Utils.getJson(mapper, msg3);
 		Assert.assertTrue(node3.get("status").asInt()==0);
-		Assert.assertTrue(node3.get("msg").asText().equals("userid不能为空"));
+		Assert.assertTrue(node3.get("msg").asText().equals("用户ID不能为空"));
 				
 	}
 	
@@ -444,7 +446,7 @@ public class EnterpriseCenterExceptionTestSuntt {
 		String msg1 = EnterpriseCenter.searchEnterByTenantId("");
 		System.out.println(msg1);
 		JsonNode  node1=Utils.getJson(mapper, msg1);
-		Assert.assertTrue(node1.get("status").asInt()==1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
 	//	Assert.assertTrue(node1.get("msg1").asText().equals("云数据中心ID不能为空"));
 		
 		//参数是空
@@ -536,7 +538,7 @@ public class EnterpriseCenterExceptionTestSuntt {
 		System.out.println(msg1);
 		JsonNode  node1=Utils.getJson(mapper, msg1);
 		Assert.assertTrue(node1.get("status").asInt()==0);
-//		Assert.assertTrue(node1.get("msg").asText().equals("企业ID不存在"));
+		Assert.assertTrue(node1.get("msg").asText().equals("企业ID不存在"));
 
 		//参数为空
 		String msg2 = EnterpriseCenter.countBindNum("");
@@ -553,4 +555,122 @@ public class EnterpriseCenterExceptionTestSuntt {
 		Assert.assertTrue(node3.get("msg").asText().equals("企业ID不能为空"));
 
 	}
+	
+	@Test
+	/* 搜索企业内用户（关键字范围:用户名、账号、手机号、邮箱）
+	 * 异常情况的测试
+	 * 用户18810039018的企业“st”的ID是f2b4f8b3-a27d-4010-91cb-4d7552ef5abb
+	 */
+	public void  searchEnterUserExceptionTest(){	
+		
+		String enterId="a2962ba0-dcea-4757-859e-fb702119f52a";
+		String keyWord="@";
+		int pageNum=1;
+		int pageSize=3;
+		String sortProperty="user_name ";
+		String sortDirection="ASC";
+		//搜索"1"
+		String msg = EnterpriseCenter.searchEnterUser(enterId,"1",pageNum,pageSize,sortProperty,sortDirection);
+		System.out.println(msg);
+		JsonNode  node=Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt()==0);
+		Assert.assertTrue(node.get("msg").asText().equals("关键字不能用于搜索"));
+	
+		//搜索@
+		String msg1 = EnterpriseCenter.searchEnterUser(enterId,"@",pageNum,pageSize,sortProperty,sortDirection);
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("关键字不能用于搜索"));
+		
+		//搜索条件为空，现在把全部数据查出来，然后按当前页数、条数等其他数据显示数据
+		String msg2 = EnterpriseCenter.searchEnterUser(enterId,"",pageNum,pageSize,sortProperty,sortDirection);
+		System.out.println(msg2);
+		JsonNode  node2=Utils.getJson(mapper, msg2);
+		Assert.assertTrue(node2.get("status").asInt()==1);
+		
+		//搜索条件为null，现在把全部数据查出来，然后按当前页数、条数等其他数据显示数据
+		String msg3 = EnterpriseCenter.searchEnterUser(enterId,null,pageNum,pageSize,sortProperty,sortDirection);
+		System.out.println(msg3);
+		JsonNode  node3=Utils.getJson(mapper, msg3);
+		Assert.assertTrue(node3.get("status").asInt()==1);
+		
+		
+		//页数为负数，现在没有给友好提示
+		String msg4 = EnterpriseCenter.searchEnterUser(enterId,"stt",-3,pageSize,sortProperty,sortDirection);
+		System.out.println(msg4);
+		JsonNode  node4=Utils.getJson(mapper, msg4);
+		Assert.assertTrue(node4.get("status").asInt()==0);
+		Assert.assertTrue(node4.get("msg").asText().equals("页码不能小于1"));
+
+		
+		//页面大小为负数，现在没有给友好提示
+		String msg5 = EnterpriseCenter.searchEnterUser(enterId,"stt",pageNum,-3,sortProperty,sortDirection);
+		System.out.println(msg5);
+		JsonNode  node5=Utils.getJson(mapper, msg5);
+		Assert.assertTrue(node5.get("status").asInt()==0);
+		Assert.assertTrue(node5.get("msg").asText().equals("页面大小不能小于1"));
+
+		
+		//企业ID为空
+		String msg6 = EnterpriseCenter.searchEnterUser("","stt",pageNum,pageSize,sortProperty,sortDirection);
+		System.out.println(msg6);
+		JsonNode  node6=Utils.getJson(mapper, msg6);
+		Assert.assertTrue(node6.get("status").asInt()==0);
+		Assert.assertTrue(node6.get("msg").asText().equals("企业ID不能为空"));
+		
+		
+		//企业ID为null
+		String msg7 = EnterpriseCenter.searchEnterUser(null,"stt",pageNum,pageSize,sortProperty,sortDirection);
+		System.out.println(msg7);
+		JsonNode  node7=Utils.getJson(mapper, msg7);
+		Assert.assertTrue(node7.get("status").asInt()==0);
+		Assert.assertTrue(node7.get("msg").asText().equals("企业ID不能为空"));
+		
+		//排序依据、排序方向（升序、降序）值为空
+		String msg8 = EnterpriseCenter.searchEnterUser(enterId,"stt",pageNum,pageSize,"","");
+		System.out.println(msg8);
+		JsonNode  node8=Utils.getJson(mapper, msg8);
+		Assert.assertTrue(node8.get("status").asInt()==1);
+		
+		//排序依据、排序方向（升序、降序）值为null
+		String msg9 = EnterpriseCenter.searchEnterUser(enterId,"stt",pageNum,pageSize,null,null);
+		System.out.println(msg9);
+		JsonNode  node9=Utils.getJson(mapper, msg9);
+		Assert.assertTrue(node9.get("status").asInt()==1);
+		
+		//搜索13
+		String msg10 = EnterpriseCenter.searchEnterUser(enterId,"13",pageNum,pageSize,sortProperty,sortDirection);
+		System.out.println(msg10);
+		JsonNode  node10=Utils.getJson(mapper, msg10);
+		Assert.assertTrue(node10.get("status").asInt()==0);
+		Assert.assertTrue(node10.get("msg").asText().equals("关键字不能用于搜索"));
+		
+		
+		//搜索15
+		String msg11 = EnterpriseCenter.searchEnterUser(enterId,"15",pageNum,pageSize,sortProperty,sortDirection);
+		System.out.println(msg11);
+		JsonNode  node11=Utils.getJson(mapper, msg11);
+		Assert.assertTrue(node10.get("status").asInt()==0);
+		Assert.assertTrue(node10.get("msg").asText().equals("关键字不能用于搜索"));
+		
+		//搜索18
+		String msg12 = EnterpriseCenter.searchEnterUser(enterId,"18",pageNum,pageSize,sortProperty,sortDirection);
+		System.out.println(msg12);
+		JsonNode  node12=Utils.getJson(mapper, msg12);
+		Assert.assertTrue(node12.get("status").asInt()==0);
+		Assert.assertTrue(node12.get("msg").asText().equals("关键字不能用于搜索"));
+		
+		//搜索*
+		String msg13 = EnterpriseCenter.searchEnterUser(enterId,"*",pageNum,pageSize,sortProperty,sortDirection);
+		System.out.println(msg13);
+		JsonNode  node13=Utils.getJson(mapper, msg13);
+		Assert.assertTrue(node13.get("status").asInt()==0);
+		Assert.assertTrue(node13.get("msg").asText().equals("关键字不能用于搜索"));
+	}
+	
+	
+	
+	
+	
 }

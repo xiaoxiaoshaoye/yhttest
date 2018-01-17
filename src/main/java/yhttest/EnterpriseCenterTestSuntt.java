@@ -114,12 +114,13 @@ public class EnterpriseCenterTestSuntt {
 //		
 		//必输值加创建人，方便在页面上查看
 		Map<String ,String> params5=new HashMap<String,String>(); 	
-		for(int i=0;i<2;i++){			
-		params5.put("name", "stt"+t+i);
+		for(int i=0;i<1;i++){			
+		params5.put("name", "s"+t+i);
 		params5.put("contactName", "stt-name");
 		params5.put("contactMobile", "18800001010");
-		params5.put("creater", "1de8af53-89b7-4c74-8758-79b30b103427");
+		params5.put("creater", "9b22e769-3997-4a95-8b83-e0adf7244e9a");
 //		params5.put("creater", "4bf3e04d-a4bb-4bdf-a9df-68005ea5ea2b");
+		params5.put("contactEmail", "suntt@yonyou.com");		
 		String msg5 = EnterpriseCenter.addEnter(params5);
 		System.out.println(msg5);
 		JsonNode  node5=Utils.getJson(mapper, msg5);
@@ -177,6 +178,7 @@ public class EnterpriseCenterTestSuntt {
 		Assert.assertTrue(node.get("enterprises").get(1).get("name").asText().equals("接口测试数据-查询-申请中"));
 		Assert.assertTrue(node.get("enterprises").get(2).get("name").asText().equals("接口测试数据-查询-已认证"));
 		Assert.assertTrue(node.get("enterprises").get(3).get("name").asText().equals("接口测试数据-查询-未认证"));
+
 
 	}
 	

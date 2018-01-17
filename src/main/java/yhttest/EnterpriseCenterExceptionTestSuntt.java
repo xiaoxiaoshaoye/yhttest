@@ -262,7 +262,7 @@ public class EnterpriseCenterExceptionTestSuntt {
 	      System.out.println(msg17);
 	      JsonNode  node17=Utils.getJson(mapper, msg17);
 	      Assert.assertTrue(node17.get("status").asInt()==0);
-	      Assert.assertTrue(node17.get("msg").asText().equals("Enterprise stt has existed."));
+	      Assert.assertTrue(node17.get("msg").asText().equals("统一社会信用代码不能为空"));
 
 
 			//字段值超长（企业名称、联系人姓名、地址、法人、上级企业）
@@ -439,8 +439,8 @@ public class EnterpriseCenterExceptionTestSuntt {
 		String msg = EnterpriseCenter.searchEnterByTenantId("随便乱输入的内容haha");
 		System.out.println(msg);
 		JsonNode  node=Utils.getJson(mapper, msg);
-		Assert.assertTrue(node.get("status").asInt()==1);
-	//	Assert.assertTrue(node.get("msg").asText().equals(""));
+		Assert.assertTrue(node.get("status").asInt()==0);
+		Assert.assertTrue(node.get("msg").asText().equals("该云数据中心未绑定企业"));
 		
 		//参数是空
 		String msg1 = EnterpriseCenter.searchEnterByTenantId("");
@@ -453,7 +453,7 @@ public class EnterpriseCenterExceptionTestSuntt {
 		String msg2 = EnterpriseCenter.searchEnterByTenantId(null);
 		System.out.println(msg2);
 		JsonNode  node2=Utils.getJson(mapper, msg2);
-		Assert.assertTrue(node2.get("status").asInt()==1);
+		Assert.assertTrue(node2.get("status").asInt()==0);
 	//	Assert.assertTrue(node2.get("msg2").asText().equals("云数据中心ID不能为空"));
 		
 	}
@@ -538,7 +538,7 @@ public class EnterpriseCenterExceptionTestSuntt {
 		System.out.println(msg1);
 		JsonNode  node1=Utils.getJson(mapper, msg1);
 		Assert.assertTrue(node1.get("status").asInt()==0);
-		Assert.assertTrue(node1.get("msg").asText().equals("企业ID不存在"));
+		Assert.assertTrue(node1.get("msg").asText().equals("企业ID格式不正确"));
 
 		//参数为空
 		String msg2 = EnterpriseCenter.countBindNum("");
@@ -555,6 +555,56 @@ public class EnterpriseCenterExceptionTestSuntt {
 		Assert.assertTrue(node3.get("msg").asText().equals("企业ID不能为空"));
 
 	}
+	
+	
+	@Test
+	/* 根据租户ID，查询关联企业ID以及之间的绑定状态(批量)
+	* 常情况的测试
+	* * state状态对应关系
+	* 0   ：  绑定审核中
+	* 1   ：  已绑定
+	* 2   ：  未绑定
+	*/
+	public void  getStateListByTenantIdListExceptionTest(){ 
+	 
+	//参数值包括中文
+	List<String> tenantIdList =new ArrayList<String>();
+	tenantIdList.add("随便乱输入的内容haha");
+	String msg = EnterpriseCenter.getStateListByTenantIdList(tenantIdList);
+	System.out.println(msg);
+	JsonNode  node=Utils.getJson(mapper, msg);
+	Assert.assertTrue(node.get("states").get(0).get("msg").asText().equals("云数据中心ID中含有中文字符"));
+	 
+	//参数为空
+	List<String> tenantIdList1 =new ArrayList<String>();
+	tenantIdList1.add("");
+	String msg1 = EnterpriseCenter.getStateListByTenantIdList(tenantIdList1);
+	System.out.println(msg1);
+	JsonNode  node1=Utils.getJson(mapper, msg1);
+	Assert.assertTrue(node1.get("states").get(0).get("msg").asText().equals("云数据中心ID为空"));
+	 
+	//参数为null
+	List<String> tenantIdList2 =new ArrayList<String>();
+	tenantIdList2.add(null);
+	String msg2 = EnterpriseCenter.getStateListByTenantIdList(tenantIdList2);
+	System.out.println(msg2);
+	JsonNode  node2=Utils.getJson(mapper, msg2);
+	Assert.assertTrue(node1.get("states").get(0).get("msg").asText().equals("云数据中心ID为空"));
+	
+	
+	//参数值不是实际存在的云数据中心id
+	List<String> tenantIdList3 =new ArrayList<String>();
+	tenantIdList3.add("suibianshurudeneironghaha");
+	String msg3 = EnterpriseCenter.getStateListByTenantIdList(tenantIdList3);
+	System.out.println(msg3);
+	JsonNode  node3=Utils.getJson(mapper, msg3);
+	Assert.assertTrue(node3.get("states").get(0).get("state").asInt()==2);
+	
+	
+	}
+	 
+	
+	
 	
 	@Test
 	/* 搜索企业内用户（关键字范围:用户名、账号、手机号、邮箱）

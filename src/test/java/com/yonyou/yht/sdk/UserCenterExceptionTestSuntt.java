@@ -224,14 +224,28 @@ public class UserCenterExceptionTestSuntt {
 	/* 
 	 * 判断用户编码是否已经存在
 	 * 异常情况的测试
-	 * 用户编码输入一个不符合规则的值，和不输入值
 	*/
-	public void isUserCodeExistExceptionTest() {
-		String [] userCode={"随便乱输入的内容haha",""};
-		for(int j=0;j<2;j++){
-		String msg = UserCenter.isUserCodeExist(userCode[j]);
+	public void isUserCodeExistExceptionTest() throws JsonProcessingException, IOException {
+		
+		//参数是随便输入的值
+		String userCode="随便乱输入的内容haha111";	
+		String msg = UserCenter.isUserCodeExist(userCode);
 		System.out.println(msg);
-		}
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("flag").asInt() == 0);
+		
+		//参数为空(系统里真的有code为空的)
+		String userCode1="";	
+		String msg1 = UserCenter.isUserCodeExist(userCode1);
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("flag").asInt() == 1);
+		
+		//参数为null
+		String userCode2=null;	
+		String msg2 = UserCenter.isUserCodeExist(userCode2);
+		System.out.println(msg2);
+		
 	}
 	
 	
@@ -241,11 +255,30 @@ public class UserCenterExceptionTestSuntt {
 	 * 异常情况的测试
 	 * 登录名不输入值
 	*/
-	public void isUserExistExceptionTest() {
-		String loginName="";
-		String msg = UserCenter.isUserExist(loginName);
-		System.out.println(msg);
+	public void isUserExistExceptionTest() throws JsonProcessingException, IOException {
 
+
+		//参数是随便输入的值
+		String userCode="随便乱输入的内容haha111";	
+		String msg = UserCenter.isUserExist(userCode);
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("msg").asText().equals("用户不存在"));
+		
+		//参数为空(系统里真的有code为空的)
+		String userCode1="";	
+		String msg1 = UserCenter.isUserExist(userCode1);
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("msg").asText().equals("参数不能为空"));
+		
+		//参数为null
+		String userCode2=null;	
+		String msg2 = UserCenter.isUserExist(userCode2);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("msg").asText().equals("参数不能为空"));
+		
 	}
 	
 	@Test
@@ -532,8 +565,8 @@ public class UserCenterExceptionTestSuntt {
 	*/
 	public void getUserByContactExceptionTest() throws JsonProcessingException, IOException {
 		String [][] users={
-				{"手机号输入不存在的值","18855559876","mobile","0","未找到该用户"},
-				{"邮箱输入不存在的值","abcdteg1abcdteg2abcdteg3@yonyou.com","email","0","未找到该用户"},
+				{"手机号输入不存在的值","18855559876","mobile","1","未找到该用户"},
+				{"邮箱输入不存在的值","abcdteg1abcdteg2abcdteg3@yonyou.com","email","1","未找到该用户"},
 				{"参数都是空","","","0","参数不能为空"},
 				{"参数都是null",null,null,"0","参数不能为空"},
 				{"手机号格式不正确","随便乱输入的内容haha","mobile","0","手机号格式不正确"},
@@ -1214,7 +1247,7 @@ public class UserCenterExceptionTestSuntt {
 		
 		//参数值不是实际存在的云数据中心id
 		List<String> tenantIdList =new ArrayList<String>();
-		tenantIdList.add("随便乱输入的内容haha");
+		tenantIdList.add("hahahahahahahahhahahahahahaha");
 		String msg = EnterpriseCenter.getStateListByTenantIdList(tenantIdList);
 		System.out.println(msg);
 		JsonNode  node=Utils.getJson(mapper, msg);
@@ -1226,7 +1259,7 @@ public class UserCenterExceptionTestSuntt {
 		String msg1 = EnterpriseCenter.getStateListByTenantIdList(tenantIdList1);
 		System.out.println(msg1);
 		JsonNode  node1=Utils.getJson(mapper, msg1);
-		Assert.assertTrue(node1.get("states").get(0).get("state").asInt()==2);
+		Assert.assertTrue(node1.get("states").get(0).get("msg").asText().equals("云数据中心ID为空"));
 		
 		//参数为null
 		List<String> tenantIdList2 =new ArrayList<String>();
@@ -1234,7 +1267,7 @@ public class UserCenterExceptionTestSuntt {
 		String msg2 = EnterpriseCenter.getStateListByTenantIdList(tenantIdList2);
 		System.out.println(msg2);
 		JsonNode  node2=Utils.getJson(mapper, msg2);
-	//	Assert.assertTrue(node2.get("states").get(0).get("state").asInt()==2);
+		Assert.assertTrue(node2.get("states").get(0).get("msg").asText().equals("云数据中心ID为空"));
 		}
 	
 	
@@ -1816,7 +1849,7 @@ public class UserCenterExceptionTestSuntt {
 		System.out.println(msg);
 		JsonNode node = mapper.readTree(msg);
 		Assert.assertTrue(node.get("status").asInt()==0);	
-		Assert.assertTrue(node.get("msg").asText().equals("用户名或密码错误"));
+		Assert.assertTrue(node.get("code").asText().equals("400"));
 		
 		//没有用户名
 		Map<String, String> params1=new  HashMap<String, String>();
@@ -1826,7 +1859,7 @@ public class UserCenterExceptionTestSuntt {
 		System.out.println(msg1);
 		JsonNode node1 = mapper.readTree(msg1);
 		Assert.assertTrue(node1.get("status").asInt()==0);		
-		Assert.assertTrue(node1.get("msg").asText().equals("用户名或密码错误"));
+		Assert.assertTrue(node.get("code").asText().equals("400"));
 		
 		//用户名密码是空
 		Map<String, String> params2=new  HashMap<String, String>();
@@ -1837,7 +1870,7 @@ public class UserCenterExceptionTestSuntt {
 		System.out.println(msg2);
 		JsonNode node2 = mapper.readTree(msg2);
 		Assert.assertTrue(node2.get("status").asInt()==0);		
-		Assert.assertTrue(node2.get("msg").asText().equals("用户名或密码错误"));
+		Assert.assertTrue(node.get("code").asText().equals("400"));
 				
 		
 		//用户名密码是null
@@ -1849,7 +1882,7 @@ public class UserCenterExceptionTestSuntt {
 		System.out.println(msg3);
 		JsonNode node3 = mapper.readTree(msg3);
 		Assert.assertTrue(node3.get("status").asInt()==0);		
-		Assert.assertTrue(node3.get("msg").asText().equals("用户名或密码错误"));
+		Assert.assertTrue(node.get("code").asText().equals("400"));
 	}
 	
 	
@@ -2202,6 +2235,7 @@ public class UserCenterExceptionTestSuntt {
 	/* 
 	 * 为用户产生自动登录Token
 	 * 异常情况的测试
+	 * 废弃接口，除了云审批用外，没人用，这个接口不安全。云审批后期也会换
 	*/			
 		public void genTokenByUserIdExceptionTest() throws JsonProcessingException, IOException, InterruptedException {
 		
@@ -2867,11 +2901,14 @@ public class UserCenterExceptionTestSuntt {
 		//第三列返回值使用uKey
 		//第四列返回值免密码登录(目前是预留字段，没作用)
 		//第五列返回值status
+		//第六列返回值msg
+		//第七列返回值useUkey
+		//第八列返回值noPassword
 		String [][] value={				
-				{"使用uKey和免密码登录的值都是null",userId,null,null,"1","false","false"},
-				{"userId是随便输入不存在的值","随便乱输入的内容哈哈","true","true","0"},
-				{"userId为空","","true","false","0"},
-				{"userId为null",null,"true","true","0"},
+				{"使用uKey和免密码登录的值都是null",userId,null,null,"1","","false","false"},
+				{"userId是随便输入不存在的值","随便乱输入的内容哈哈","true","true","0","Can not find user by userId 随便乱输入的内容哈哈"},
+				{"userId为空","","true","false","0","UserId can not be empty "},
+				{"userId为null",null,"true","true","0","UserId can not be empty "},
 		};	
 		
 		//返回值有msg的异常情况
@@ -2884,10 +2921,12 @@ public class UserCenterExceptionTestSuntt {
 		
 		if(num==1){
 			Assert.assertTrue(node.get("status").asInt() == Integer.valueOf(value[j][4]));
-			Assert.assertTrue(node.get("ca").get("useUkey").asText().equals(value[j][5]));
-			Assert.assertTrue(node.get("ca").get("noPassword").asText().equals(value[j][6]));
+			Assert.assertTrue(node.get("ca").get("useUkey").asText().equals(value[j][6]));
+			Assert.assertTrue(node.get("ca").get("noPassword").asText().equals(value[j][7]));
 		}else{
 			Assert.assertTrue(node.get("status").asInt() == Integer.valueOf(value[j][4]));
+			Assert.assertTrue(node.get("msg").asText().equals(value[j][5]));
+
 		}
 
 		}
@@ -3023,6 +3062,31 @@ public class UserCenterExceptionTestSuntt {
 		}
 	
 	
+		
+		@Test
+		/* 
+		 * 检测AccessToken是否过期
+		 * 异常情况的测试
+		*/	
+		public void isAccessTokenValidExceptionTest() throws JsonProcessingException, IOException {
+			
+			//第一列是测试点
+			//第二列参数临时AccessToken
+			
+			String [][] value1={
+					{"参数不正确","随便乱输入的内容哈哈"},
+					{"参数为空",""},
+					{"参数为null",null},
+			};	
+			
+			for(int i=0;i<3;i++){
+			boolean msg = UserCenter.isAccessTokenValid(value1[i][1]);
+			System.out.println(msg);
+			Assert.assertFalse(msg);
+			}
+		}
+		
+		
 }
 	
 

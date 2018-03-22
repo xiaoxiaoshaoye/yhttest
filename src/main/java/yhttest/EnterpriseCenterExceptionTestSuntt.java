@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yonyou.yht.entity.UserInfo;
 import com.yonyou.yht.sdk.EnterpriseCenter;
+import com.yonyou.yht.sdk.UserCenter;
 import com.yonyou.yht.sdk.Utils;
 
 public class EnterpriseCenterExceptionTestSuntt {
@@ -235,7 +236,7 @@ public class EnterpriseCenterExceptionTestSuntt {
 	      System.out.println(msg15);
 	      JsonNode  node15=Utils.getJson(mapper, msg15);
 	      Assert.assertTrue(node15.get("status").asInt()==0);
-	      Assert.assertTrue(node15.get("msg").asText().equals("企业已经存在"));
+	      Assert.assertTrue(node15.get("msg").asText().equals("该企业已存在"));
 
 	      
 	      //唯一性，其他用户有已认证的stt企业
@@ -248,7 +249,7 @@ public class EnterpriseCenterExceptionTestSuntt {
 	      System.out.println(msg16);
 	      JsonNode  node16=Utils.getJson(mapper, msg16);
 	      Assert.assertTrue(node16.get("status").asInt()==0);
-	      Assert.assertTrue(node16.get("msg").asText().equals("企业已经存在"));
+	      Assert.assertTrue(node16.get("msg").asText().equals("该企业已存在"));
 
 
 	      //当开票类型是统一社会信用代码时，但“统一社会信用代码”字段没输入值
@@ -262,7 +263,7 @@ public class EnterpriseCenterExceptionTestSuntt {
 	      System.out.println(msg17);
 	      JsonNode  node17=Utils.getJson(mapper, msg17);
 	      Assert.assertTrue(node17.get("status").asInt()==0);
-	      Assert.assertTrue(node17.get("msg").asText().equals("统一社会信用代码不能为空"));
+	      Assert.assertTrue(node17.get("msg").asText().equals("开票类型为企业统一社会信用代码，但统一社会信用代码为空"));
 
 
 			//字段值超长（企业名称、联系人姓名、地址、法人、上级企业）
@@ -719,8 +720,124 @@ public class EnterpriseCenterExceptionTestSuntt {
 		Assert.assertTrue(node13.get("msg").asText().equals("关键字不能用于搜索"));
 	}
 	
+	@Test
+	/* 
+	 * 云市场企业认证失败回调
+	 * 异常情况的测试
+	*/	
+	public void isAccessTokenValidExceptionTest() throws JsonProcessingException, IOException {
+
+//		String enterId="681e162c-049b-4c47-b157-432ee2795da6";
+		String enterId="6704db23-b51d-414a-b7af-aa99461e496a";
+		String userName = "18810039018"; 
+		String auditorId = UserCenterUtil.getUserIdByLoginName(userName);
+		String message="测试云市场企业认证失败的情况";
+		
+		String [][] value1={
+				{"enterId随便输入的值","随便乱输入的内容哈哈",auditorId,message},
+				{"enterId为空","",auditorId,message},
+				{"enterId为null",null,auditorId,message},
+				{"auditorId随便输入的值",enterId,"随便乱输入的内容哈哈",message},
+				{"auditorId为空",enterId,"",message},
+				{"auditorId为null",enterId,null,message},
+				{"失败原因为空",enterId,auditorId,""},
+				{"失败原因为null",enterId,auditorId,null},
+				{"企业本身就是认证失败的",enterId,auditorId,"重复验证失败"},
+		};	
+		
+		for(int i=0;i<value1.length;i++){
+		String msg = EnterpriseCenter.marketAuthenticateFailed(value1[i][1],value1[i][2],value1[i][3]);
+		System.out.println(msg);
+		}
+	}
 	
 	
+	@Test
+	/* 
+	 * 云市场企业认证成功回调
+	 * 异常情况的测试
+	*/	
+	public void marketAuthenticateSuccessExceptionTest() throws JsonProcessingException, IOException {
+
+		String enterId="6704db23-b51d-414a-b7af-aa99461e496a";
+		String userName = "18810039018"; 
+		String auditorId = UserCenterUtil.getUserIdByLoginName(userName);
+		String message="测试云市场企业认证失败的情况";
+		
+		String [][] value1={
+				{"enterId随便输入的值","随便乱输入的内容哈哈",auditorId},
+				{"enterId为空","",auditorId},
+				{"enterId为null",null,auditorId},
+				{"auditorId随便输入的值",enterId,"随便乱输入的内容哈哈"},
+				{"auditorId为空",enterId,""},
+				{"auditorId为null",enterId,null},
+				{"企业本身就是已认证的",enterId,auditorId},
+		};	
+		
+		for(int i=0;i<value1.length;i++){
+		String msg = EnterpriseCenter.marketAuthenticateSuccess(value1[i][1],value1[i][2]);
+		System.out.println(msg);
+		}
+	}
 	
+	
+	@Test
+	/* 根据UserID搜索ISV企业
+	 * 正常情况的测试
+	*/
+	public void   searchMarketISVenterByUserIdTest(){
+		
+		//参数时随便输入的值
+		String msg1 = EnterpriseCenter.searchMarketISVenterByUserId("随便乱输入的内容haha");
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==1);
+		Assert.assertTrue(node1.get("data").asText().equals(""));
+
+		//参数为空
+		String msg2 = EnterpriseCenter.searchMarketISVenterByUserId("");
+		System.out.println(msg2);
+		JsonNode  node2=Utils.getJson(mapper, msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+		Assert.assertTrue(node2.get("msg").asText().equals("userId不能为空"));
+		
+		//参数为null
+		String msg3 = EnterpriseCenter.searchMarketISVenterByUserId(null);
+		System.out.println(msg3);
+		JsonNode  node3=Utils.getJson(mapper, msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+		Assert.assertTrue(node3.get("msg").asText().equals("userId不能为空"));
+
+	}
+	
+	
+	@Test
+	/* 根据企业ID获取云市场企业信息
+	 * 正常情况的测试
+	*/
+	public void   getMarketEnterInfoTest(){
+		
+		//参数时随便输入的值
+		String msg1 = EnterpriseCenter.getMarketEnterInfo("随便乱输入的内容haha");
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==1);
+		Assert.assertTrue(node1.get("data").asText().equals(""));
+
+		//参数为空
+		String msg2 = EnterpriseCenter.getMarketEnterInfo("");
+		System.out.println(msg2);
+		JsonNode  node2=Utils.getJson(mapper, msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+		Assert.assertTrue(node2.get("msg").asText().equals("enterId不能为空"));
+		
+		//参数为null
+		String msg3 = EnterpriseCenter.getMarketEnterInfo(null);
+		System.out.println(msg3);
+		JsonNode  node3=Utils.getJson(mapper, msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+		Assert.assertTrue(node3.get("msg").asText().equals("enterId不能为空"));
+
+	}
 	
 }

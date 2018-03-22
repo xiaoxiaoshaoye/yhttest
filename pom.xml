@@ -8,7 +8,7 @@
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<cas.version>0.1-SNAPSHOT</cas.version>
+		<cas.version>0.4-SNAPSHOT</cas.version>
 		<junit.version>4.12</junit.version>
 		<assertj.version>3.6.2</assertj.version>
 	</properties>
@@ -56,19 +56,19 @@
 		<dependency>
 			<groupId>com.yonyou.yht</groupId>
 			<artifactId>yht-sso-client</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.4-SNAPSHOT</version>
 		</dependency>
 		<!-- 登录后使用Redis存储session时需要 -->
 		<dependency>
 			<groupId>com.yonyou.yht</groupId>
 			<artifactId>yht-sso-cache</artifactId>
-			<version>0.3-SNAPSHOT</version>
+			<version>0.4-SNAPSHOT</version>
 		</dependency>
 		<!--调用友户通SDK的依赖 -->
 		<dependency>
 			<groupId>com.yonyou.yht</groupId>
 			<artifactId>yht-sdk</artifactId>
-			<version>0.3-SNAPSHOT</version>
+			<version>0.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>

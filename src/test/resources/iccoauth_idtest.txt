@@ -1,0 +1,7 @@
+client_id=26
+client_secret=3bf34a983bdcfe0d922d3a84579ead3r
+redirect_uri=.*
+grant_type=5
+access_token_expire_in=86400
+scope=7
+client_name=icc

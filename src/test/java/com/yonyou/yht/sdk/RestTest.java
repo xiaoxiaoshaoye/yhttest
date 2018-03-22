@@ -9,8 +9,8 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yonyou.yht.utils.CasClientPropertyUtil;
-import com.yonyou.yht.utils.sign.SignUtils;
+import com.yonyou.yht.sdkutils.CasClientPropertyUtil;
+import com.yonyou.yht.sdkutils.sign.SignUtils;
 
 import net.sf.json.JSONObject;
 import yhttest.UserCenterUtil;

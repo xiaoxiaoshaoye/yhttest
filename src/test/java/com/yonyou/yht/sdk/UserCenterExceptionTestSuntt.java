@@ -234,17 +234,21 @@ public class UserCenterExceptionTestSuntt {
 		JsonNode node = mapper.readTree(msg);
 		Assert.assertTrue(node.get("flag").asInt() == 0);
 		
-		//参数为空(系统里真的有code为空的)
+		//参数为空
 		String userCode1="";	
 		String msg1 = UserCenter.isUserCodeExist(userCode1);
 		System.out.println(msg1);
 		JsonNode node1 = mapper.readTree(msg1);
-		Assert.assertTrue(node1.get("flag").asInt() == 1);
+		Assert.assertTrue(node1.get("status").asInt() == 0);
+		Assert.assertTrue(node1.get("msg").asText().equals("usercode不能为空"));
 		
 		//参数为null
 		String userCode2=null;	
 		String msg2 = UserCenter.isUserCodeExist(userCode2);
 		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt() == 0);
+		Assert.assertTrue(node2.get("msg").asText().equals("usercode不能为空"));
 		
 	}
 	
@@ -805,19 +809,19 @@ public class UserCenterExceptionTestSuntt {
 //		Assert.assertTrue(node8.get("msg").asText().equals("帐号格式不正确，帐号目前支持两位以上的中文名称或3-36位的数字和字符组合"));
 //
 //		
-//		//userName超长,应该给友好提示
-//		Map<String, String> params9 = new HashMap<String, String>();
-//		SimpleDateFormat date9 =new SimpleDateFormat("yyyyMMddHHmmssSSS");
-//		String userCode9 =date9.format(new Date());
-//		params9.put("userCode", userCode9+"code");
-//		params9.put("userName", userCode9+"0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");
-//		params9.put("userEmail", userCode9+"@chacuo.net");		
-//		String msg9 = UserCenter.addUser(params9);
-//		System.out.println(msg9);
-//		JsonNode node9 = mapper.readTree(msg9);
-//		Assert.assertTrue(node9.get("status").asInt()==0);
-//		//Assert.assertTrue(node9.get("msg").asText().equals("用户名不能超过64个字符"));
-//
+		//userName超长,应该给友好提示
+		Map<String, String> params9 = new HashMap<String, String>();
+		SimpleDateFormat date9 =new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		String userCode9 =date9.format(new Date());
+		params9.put("userCode", userCode9+"code");
+		params9.put("userName", userCode9+"0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");
+		params9.put("userEmail", userCode9+"@chacuo.net");		
+		String msg9 = UserCenter.addUser(params9);
+		System.out.println(msg9);
+		JsonNode node9 = mapper.readTree(msg9);
+		Assert.assertTrue(node9.get("status").asInt()==0);
+		Assert.assertTrue(node9.get("msg").asText().equals("用户名不可超过64个字符"));
+
 //		//userEmail格式不正确
 //		Map<String, String> params10 = new HashMap<String, String>();
 //		SimpleDateFormat date10 =new SimpleDateFormat("yyyyMMddHHmmssSSS");
@@ -1094,38 +1098,34 @@ public class UserCenterExceptionTestSuntt {
 		String d =date.format(new Date());
 		
 		//参数值随便输入
-		//现在提示“修改用户属性失败”，应该是更友好的提示“修改用户属性失败，属性不正确”
 		String key="随便乱输入的内容haha";
 		String value="随便乱输入的内容haha";			
 		String msg = UserCenter.updateUserProperties(userId,key,value);
 		System.out.println(msg);
 		JsonNode node = mapper.readTree(msg);
 		Assert.assertTrue(node.get("status").asInt()==0);
-		Assert.assertTrue(node.get("msg").asText().equals("修改用户属性失败"));
+		Assert.assertTrue(node.get("msg").asText().equals("修改用户属性失败,属性不正确"));
 		
 		
-//		//修改性别，性别随便输入不正确的值
-//		//现在报错
-//		String key1="sex";
-//		String value1="随便乱输入的内容haha";		
-//		String msg1 = UserCenter.updateUserProperties(userId,key1,value1);
-//		System.out.println(msg1);
-//		JsonNode node1 = mapper.readTree(msg1);
-//		Assert.assertTrue(node1.get("status").asInt()==0);
-//		Assert.assertTrue(node1.get("msg").asText().equals("修改用户属性失败，属性值不正确"));
-//
-//		//修改出生日期,日期随便输入不正确的值
-//		//现在status" : 1,提示“修改用户属性成功”。应该status" : 0，提示“修改用户属性失败，属性值不正确”
-//		String key2="birthday";
-//		String value2="随便乱输入的内容haha";		
-//		String msg2 = UserCenter.updateUserProperties(userId,key2,value2);
-//		System.out.println(msg2);
-//		JsonNode node2 = mapper.readTree(msg2);
-//		Assert.assertTrue(node2.get("status").asInt()==0);
-//		Assert.assertTrue(node2.get("msg").asText().equals("修改用户属性失败，属性值不正确"));
-//		
+		//修改性别，性别随便输入不正确的值
+		String key1="sex";
+		String value1="随便乱输入的内容haha";		
+		String msg1 = UserCenter.updateUserProperties(userId,key1,value1);
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("性别格式错误"));
+
+		//修改出生日期,日期随便输入不正确的值
+		String key2="birthday";
+		String value2="随便乱输入的内容haha";		
+		String msg2 = UserCenter.updateUserProperties(userId,key2,value2);
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+		Assert.assertTrue(node2.get("msg").asText().equals("生日格式错误"));
+		
 		//修改地址，地址随便输入不正确的值
-		//现在报错
 		String key3="address";
 		String value3="随便乱输入的内容haha";		
 		String msg3 = UserCenter.updateUserProperties(userId,key3,value3);
@@ -1134,21 +1134,19 @@ public class UserCenterExceptionTestSuntt {
 		Assert.assertTrue(node3.get("status").asInt()==0);
 		Assert.assertTrue(node3.get("msg").asText().equals("地址格式错误"));
 
-//		//属性和属性值为""
-//		//现在提示"用户ID不能为空",应该是"属性和属性值不能为空"
-//		String msg4 = UserCenter.updateUserProperties(userId,"","");
-//		System.out.println(msg4);
-//		JsonNode node4 = mapper.readTree(msg4);
-//		Assert.assertTrue(node4.get("status").asInt()==0);
-//		Assert.assertTrue(node4.get("msg").asText().equals("属性和属性值不能为空"));
-//		
-//		//属性和属性值为null
-//		//现在提示"用户ID不能为空",应该是"属性和属性值不能为空"
-//		String msg5 = UserCenter.updateUserProperties(userId,null,null);
-//		System.out.println(msg5);
-//		JsonNode node5 = mapper.readTree(msg5);
-//		Assert.assertTrue(node5.get("status").asInt()==0);
-//		Assert.assertTrue(node5.get("msg").asText().equals("属性和属性值不能为空"));
+		//属性和属性值为""
+		String msg4 = UserCenter.updateUserProperties(userId,"","");
+		System.out.println(msg4);
+		JsonNode node4 = mapper.readTree(msg4);
+		Assert.assertTrue(node4.get("status").asInt()==0);
+		Assert.assertTrue(node4.get("msg").asText().equals("key不能为空"));
+		
+		//属性和属性值为null
+		String msg5 = UserCenter.updateUserProperties(userId,null,null);
+		System.out.println(msg5);
+		JsonNode node5 = mapper.readTree(msg5);
+		Assert.assertTrue(node5.get("status").asInt()==0);
+		Assert.assertTrue(node5.get("msg").asText().equals("key不能为空"));
 		
 		//用户ID为空	
 		String msg6 = UserCenter.updateUserProperties("","birthday","2017年8月8日");
@@ -1190,7 +1188,7 @@ public class UserCenterExceptionTestSuntt {
 		String msg = UserCenter.updateUserMultiProperties(userId,params);
 		System.out.println(msg);
 		JsonNode node = mapper.readTree(msg);
-//		Assert.assertTrue(node.get("status").asInt()==1);		
+		Assert.assertTrue(node.get("status").asInt()==1);		
 		
 		//属性值都是空
 		//现在提示“修改用户属性失败”，应该给更友好的提示，为什么失败		
@@ -1203,7 +1201,7 @@ public class UserCenterExceptionTestSuntt {
 		String msg1 = UserCenter.updateUserMultiProperties(userId,params1);
 		System.out.println(msg1);
 		JsonNode node1 = mapper.readTree(msg1);
-//		Assert.assertTrue(node1.get("status").asInt()==0);		
+		Assert.assertTrue(node1.get("status").asInt()==1);		
 		
 		//属性值都是null
 		Map<String, String> params2 = new HashMap<String, String>();
@@ -1214,24 +1212,24 @@ public class UserCenterExceptionTestSuntt {
 		params2.put("userCode",null);		
 		String msg2 = UserCenter.updateUserMultiProperties(userId,params2);
 		System.out.println(msg2);
-//		JsonNode node2 = mapper.readTree(msg2);
-//		Assert.assertTrue(node2.get("status").asInt()==0);		
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);	
 		
 		//属性是空
 		Map<String, String> params3 = new HashMap<String, String>();
 		params3.put("","随便乱输入的内容haha");		
 		String msg3 = UserCenter.updateUserMultiProperties(userId,params3);
 		System.out.println(msg3);
-//		JsonNode node3 = mapper.readTree(msg3);
-//		Assert.assertTrue(node3.get("status").asInt()==0);
-				
+		JsonNode node3 = mapper.readTree(msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+			
 		//属性是null
 		Map<String, String> params4 = new HashMap<String, String>();
 		params4.put(null,"随便乱输入的内容haha");		
 		String msg4 = UserCenter.updateUserMultiProperties(userId,params4);
 		System.out.println(msg4);
-//		JsonNode node4 = mapper.readTree(msg4);
-//		Assert.assertTrue(node4.get("status").asInt()==0);
+		JsonNode node4 = mapper.readTree(msg4);
+		Assert.assertTrue(node4.get("status").asInt()==0);
 	
 	}
 	
@@ -2062,24 +2060,24 @@ public class UserCenterExceptionTestSuntt {
 		//第四列返回值status
 		//第五列返回值msg
 		String [][] value={				
-				{"头像文件路径为空",userId,"","0","文件不存在"},
+				{"头像文件路径为空",userId,"","0","非图片格式"},
 				{"用户ID为空","","F:\\头像.png","0","用户ID不能为空"},
 				{"用户ID为null",null,"F:\\头像.png","0","用户ID不能为空"},
 				{"头像格式不正确",userId,"F:\\校验导入数据.xls","0","应该给友好提示，列出能上传的类型"},
 				{"用户ID不正确","随便乱输入的内容haha","F:\\头像.png","0","用户不存在"},
-				{"头像文件路径为null",userId,null,"1","文件不存在"},
-				{"头像文件路径不存在",userId,"随便乱输入的内容haha","1","文件不存在"},
+				{"头像文件路径为null",userId,null,"0","文件不存在"},
+				{"头像文件路径不存在",userId,"随便乱输入的内容haha","0","文件不存在"},
 				};	
 		
 		//返回值有msg的异常情况
-		for(int j=0;j<7;j++){
+		for(int j=0;j<value.length;j++){
 		String msg = UserCenter.uploadUserAvator(value[j][1],value[j][2]);
 		System.out.println(msg);
 		JsonNode node = mapper.readTree(msg);
 		String status=value[j][3];
 		Assert.assertTrue(node.get("status").asInt() == Integer.valueOf(status));
-		String msg1=value[j][4];
-		Assert.assertTrue(node.get("msg").asText().equals(msg1));
+//		String msg1=value[j][4];
+//		Assert.assertTrue(node.get("msg").asText().equals(msg1));
 
 		}
 
@@ -2142,11 +2140,11 @@ public class UserCenterExceptionTestSuntt {
 		//第四列返回值status
 		//第五列返回值msg
 		String [][] value={				
-				{"消息为空",userId,"","0","通过手机号发送消息失败"},
+				{"消息为空",userId,"","0","邮件内容不能为空"},
 				{"用户ID为空","","发送测试消息","0","用户ID不能为空"},
 				{"用户ID为null",null,"发送测试消息","0","用户ID不能为空"},
 				{"用户ID不正确","随便乱输入的内容haha","发送测试消息","0","用户不存在"},
-				{"消息为null",userId,null,"0","通过手机号发送消息失败"},
+				{"消息为null",userId,null,"0","邮件内容不能为空"},
 				};	
 		
 		//返回值有msg的异常情况
@@ -2174,9 +2172,9 @@ public class UserCenterExceptionTestSuntt {
 		//参数是随便输入的不正确的值,不存在这个用户
 		String msg = UserCenter.getTags("随便乱输入的内容haha");
 		System.out.println(msg);
-//		JsonNode node = mapper.readTree(msg);
-//		Assert.assertTrue(node.get("status").asInt()==0);	
-//		Assert.assertTrue(node.get("msg").asText().equals("用户不存在"));	
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		Assert.assertTrue(node.get("msg").asText().equals("用户不存在"));	
 		
 		//参数为空
 		String msg1 = UserCenter.getTags("");
@@ -2196,7 +2194,7 @@ public class UserCenterExceptionTestSuntt {
 		String msg3 = UserCenter.getTags("jlccstt@126.com");
 		System.out.println(msg3);
 		JsonNode node3 = mapper.readTree(msg3);
-		Assert.assertTrue(node3.get("status").asInt()==1);	
+		Assert.assertTrue(node3.get("status").asInt()==0);	
 		Assert.assertTrue(node3.get("msg").asText().equals("该用户无标签"));
 	}
 	
@@ -2319,23 +2317,23 @@ public class UserCenterExceptionTestSuntt {
 		//第四列返回值status
 		//第五列返回值msg
 		String [][] value={				
-				{"标签为空",userId,"","0","标签不能为空"},
-				{"用户ID为空","","恬恬O(∩_∩)O哈哈~","0","用户ID不能为空"},
-				{"用户ID为null",null,"恬恬O(∩_∩)O哈哈~","0","用户ID不能为空"},
+				{"标签为空",userId,"","0","提供的信息不全"},
+				{"用户ID为空","","恬恬O(∩_∩)O哈哈~","0","提供的信息不全"},
+				{"用户ID为null",null,"恬恬O(∩_∩)O哈哈~","0","提供的信息不全"},
 				{"用户ID不正确","随便乱输入的内容haha","恬恬O(∩_∩)O哈哈~","0","用户不存在"},
-				{"标签为null",userId,null,"0","标签不能为空"},
-				{"标签为不存在的随便输入的内容",userId,"随便乱输入的内容haha","1","标签不存在，无法删除"},
+				{"标签为null",userId,null,"0","提供的信息不全"},
+				{"标签为不存在的随便输入的内容",userId,"随便乱输入的内容haha","0","标签不存在，无法删除"},
 				};	
 		
 		//返回值有msg的异常情况
 		for(int j=0;j<6;j++){
 		String msg = UserCenter.removeTag(value[j][1],value[j][2]);
 		System.out.println(msg);
-//		JsonNode node = mapper.readTree(msg);
-//		String status=value[j][3];
-//		Assert.assertTrue(node.get("status").asInt() == Integer.valueOf(status));
-//		String msg1=value[j][4];
-//		Assert.assertTrue(node.get("msg").asText().equals(msg1));
+		JsonNode node = mapper.readTree(msg);
+		String status=value[j][3];
+		Assert.assertTrue(node.get("status").asInt() == Integer.valueOf(status));
+		String msg1=value[j][4];
+		Assert.assertTrue(node.get("msg").asText().equals(msg1));
 		}
 	
 	}
@@ -2434,8 +2432,8 @@ public class UserCenterExceptionTestSuntt {
 		String msg1 = UserCenter.getConflictUserById("随便乱输入的内容哈哈哈哈哈");
 		System.out.println(msg1);
 		JsonNode node1 = mapper.readTree(msg1);
-//		Assert.assertTrue(node1.get("status").asInt() == 0);
-//		Assert.assertTrue(node1.get("msg").asText().equals("用户不存在"));
+		Assert.assertTrue(node1.get("status").asInt() == 0);
+		Assert.assertTrue(node1.get("msg").asText().equals("can not find user by userid 随便乱输入的内容哈哈哈哈哈"));
 		
 		//参数是null
 		String msg2 = UserCenter.getConflictUserById(null);
@@ -2530,21 +2528,21 @@ public class UserCenterExceptionTestSuntt {
 		System.out.println(msg);
 		JsonNode node = mapper.readTree(msg);
 		Assert.assertTrue(node.get("status").asInt() == 0);
-		Assert.assertTrue(node.get("msg").asText().equals("userId不能为空"));
+		Assert.assertTrue(node.get("msg").asText().equals("用户ID不能为空"));
 		
 		//参数是随便输入的值
 		String msg1 = UserCenter.getPersonVerifyStatus("随便乱输入的内容哈哈哈哈哈");
 		System.out.println(msg1);
 		JsonNode node1 = mapper.readTree(msg1);
-//		Assert.assertTrue(node1.get("status").asInt() == 0);
-//		Assert.assertTrue(node1.get("msg").asText().equals("用户不存在"));
+		Assert.assertTrue(node1.get("status").asInt() == 0);
+		Assert.assertTrue(node1.get("msg").asText().equals("用户不存在"));
 		
 		//参数是null
 		String msg2 = UserCenter.getPersonVerifyStatus(null);
 		System.out.println(msg2);
 		JsonNode node2 = mapper.readTree(msg2);
 		Assert.assertTrue(node2.get("status").asInt() == 0);
-		Assert.assertTrue(node2.get("msg").asText().equals("userId不能为空"));
+		Assert.assertTrue(node2.get("msg").asText().equals("用户ID不能为空"));
 	}
 	
 	
@@ -3027,9 +3025,9 @@ public class UserCenterExceptionTestSuntt {
 			for(int i=0;i<4;i++){
 			String msg = UserCenter.decrypt(value1[i][1]);
 			System.out.println(msg);
-//			JsonNode node = mapper.readTree(msg);
-//			Assert.assertTrue(node.get("status").asInt()==Integer.valueOf(value1[i][2]));		
-//			
+			JsonNode node = mapper.readTree(msg);
+			Assert.assertTrue(node.get("status").asInt()==Integer.valueOf(value1[i][2]));		
+			
 			}
 		}
 	
@@ -3055,9 +3053,9 @@ public class UserCenterExceptionTestSuntt {
 			for(int i=0;i<3;i++){
 			String msg = UserCenter.getBackSsoTokenByBTmpToken(value1[i][1]);
 			System.out.println(msg);
-//			JsonNode node = mapper.readTree(msg);
-//			Assert.assertTrue(node.get("status").asInt()==Integer.valueOf(value1[i][2]));		
-//			
+			JsonNode node = mapper.readTree(msg);
+			Assert.assertTrue(node.get("status").asInt()==Integer.valueOf(value1[i][2]));		
+			
 			}
 		}
 	

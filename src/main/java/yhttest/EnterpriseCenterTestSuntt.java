@@ -5,9 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,17 +25,54 @@ import com.yonyou.yht.sdk.EnterpriseCenter;
 import com.yonyou.yht.sdk.SDKUtils;
 import com.yonyou.yht.sdk.UserCenter;
 import com.yonyou.yht.sdk.Utils;
+import com.yonyou.yht.sdkutils.PropertyUtil;
 
 public class EnterpriseCenterTestSuntt {
 
+	ObjectMapper mapper= new ObjectMapper();
+	
 
-	ObjectMapper mapper;
-	
-	@Before
-	public void init() {
-		mapper = new ObjectMapper();
-	}
-	
+//	  @Before
+		public void  beforeEuc(){
+			System.setProperty("yht.load.order","2");
+			String path="eucsdk.properties";
+//			String authfile="euc.properties";
+			String authfile="marketeuc.properties";
+			String oauthfile="oauth2_eucCloud.properties";
+			Properties p = PropertyUtil.loadFile(path);
+			Properties p2 = PropertyUtil.loadFile(authfile);
+			Properties p3 = PropertyUtil.loadFile(oauthfile);
+			setEnv(p);
+			setEnv(p2);
+			setEnv(p3);
+			System.out.println("#############finished before");
+		}
+		
+	  @Before
+		public void  beforeIdtest(){
+		  	System.setProperty("yht.load.order","2");
+			String path="idtestsdk.properties";
+			String authfile="market.properties";
+		//	String authfile="uculture.properties";
+			String oauthfile="oauth2_dd.properties";
+			Properties p = PropertyUtil.loadFile(path);
+			Properties p2 = PropertyUtil.loadFile(authfile);
+			Properties p3 = PropertyUtil.loadFile(oauthfile);
+			setEnv(p);
+			setEnv(p2);
+			setEnv(p3);
+			System.out.println("#############finished before");
+		}
+
+		private void setEnv(Properties p) {
+			Enumeration e = p.propertyNames();
+			String name=null;
+			while(e.hasMoreElements()){
+				name=(String)e.nextElement();
+				System.setProperty(name,p.getProperty(name));
+			}
+		}
+
 	
 	@Test
 	/*添加企业
@@ -113,19 +152,39 @@ public class EnterpriseCenterTestSuntt {
 //		JsonNode  node4=Utils.getJson(mapper, msg4);
 //		Assert.assertTrue(node4.get("status").asInt()==1);
 		
-		//必输值加创建人，方便在页面上查看
+		//必输值加创建人，方便在页面上查看	
+		
 		Map<String ,String> params5=new HashMap<String,String>(); 	
 		for(int i=0;i<1;i++){			
 		params5.put("name", "s"+t+i);
 		params5.put("contactName", "stt-name");
 		params5.put("contactMobile", "18800001010");
-		params5.put("creater", "1ad6048c-7729-478e-9b24-d1663c7da4b3");
+//		params5.put("creater", "1ad6048c-7729-478e-9b24-d1663c7da4b3");
+		params5.put("creater", "555efe32-1447-4f86-96cc-a972d440ea0b");
 		params5.put("contactEmail", "suntt@yonyou.com");		
 		String msg5 = EnterpriseCenter.addEnter(params5);
 		System.out.println(msg5);
 		JsonNode  node5=Utils.getJson(mapper, msg5);
 		Assert.assertTrue(node5.get("status").asInt()==1);
 		}
+		
+		
+//		//循环多建几个企业
+//		for (int j=0;j<50;j++){
+//		Map<String ,String> params5=new HashMap<String,String>(); 	
+//		for(int i=0;i<1;i++){			
+//		params5.put("name", "s"+t+i+j);
+//		params5.put("contactName", "stt-name");
+//		params5.put("contactMobile", "18800001010");
+//		params5.put("creater", "6cb090a7-83aa-493e-a493-fcfc7448a80e");
+//		params5.put("contactEmail", "suntt@yonyou.com");		
+//		String msg5 = EnterpriseCenter.addEnter(params5);
+//		System.out.println(msg5);
+//		JsonNode  node5=Utils.getJson(mapper, msg5);
+//		Assert.assertTrue(node5.get("status").asInt()==1);
+//		}
+//		}
+		
 	}
 	
 	
@@ -139,6 +198,7 @@ public class EnterpriseCenterTestSuntt {
 	public void  getEnInfoTest(){
 		//用户stt2017092801@chacuo.net创建的a111111这个企业的id是f33c078b-7c17-45dd-949e-3c7f734e1618
 		String enterpriseId="f33c078b-7c17-45dd-949e-3c7f734e1618";
+		//String enterpriseId="868d2718-4723-4504-aa03-a773918c2fdb";	
 		String msg = EnterpriseCenter.getEnInfo(enterpriseId);
 		System.out.println(msg);
 		JsonNode  node=Utils.getJson(mapper, msg);
@@ -151,7 +211,7 @@ public class EnterpriseCenterTestSuntt {
 		Assert.assertTrue(node.get("eninfo").get("legalPerson").asText().equals("aa"));
 		Assert.assertTrue(node.get("eninfo").get("invoiceType").asText().equals("businessTax"));
 		Assert.assertTrue(node.get("eninfo").get("contactMobile").asText().equals("18800001111"));
-		Assert.assertTrue(node.get("eninfo").get("address").asText().equals("中国-河北-石家庄-bb"));
+		Assert.assertTrue(node.get("eninfo").get("address").asText().equals("中国-河北省-石家庄市-bb"));
 		Assert.assertTrue(node.get("eninfo").get("responsePersonName").asText().equals("aa"));
 		Assert.assertTrue(node.get("eninfo").get("contactName").asText().equals("dd"));
 		Assert.assertTrue(node.get("eninfo").get("sourceSystemId").asText().equals("yht"));
@@ -159,7 +219,7 @@ public class EnterpriseCenterTestSuntt {
 		Assert.assertTrue(node.get("eninfo").get("responsePersonIDCode").asText().equals("aa"));
 		Assert.assertTrue(node.get("eninfo").get("creater").asText().equals("b1820c08-e50f-4f6d-b074-c5187ab9ab51"));
 		Assert.assertTrue(node.get("eninfo").get("superiorCorpId").asText().equals("cc"));
- 	}
+	}
 	
 	
 	@Test
@@ -230,15 +290,15 @@ public class EnterpriseCenterTestSuntt {
 	*/
 	public void  bindEnter1Test(){
 		//用户18810039018的已认证企业“绑定解绑--正常测试使用”的id是f15738fe-771b-494c-ad77-91523c10514d
-		//用户18810039018的云数据中心stt05,tenantId=jxckxy8j,未帮带企业。
-		//用户18810039018的云数据中心stt06,tenantId=u2okte6b,未帮带企业。
+		//用户18810039018的云数据中心stt05,tenantId=bdv029uh,未帮带企业。
+		//用户18810039018的云数据中心stt06,tenantId=t67iench,未帮带企业。
 		//用户18611286701的云数据中心18611286701stt01,tenantId=swc3evbp,未帮带企业。
 		//此测试方法，先绑定，再解绑。
 		
 
 		String data [][]={
-				{"f15738fe-771b-494c-ad77-91523c10514d","jxckxy8j","18810039018","1","企业ID和租户ID都是18810039018的"},
-				{"f15738fe-771b-494c-ad77-91523c10514d","u2okte6b","18611286701","0","企业ID和租户ID都不是18611286701的"},
+				{"f15738fe-771b-494c-ad77-91523c10514d","bdv029uh","18810039018","1","企业ID和租户ID都是18810039018的"},
+				{"f15738fe-771b-494c-ad77-91523c10514d","t67iench","18611286701","0","企业ID和租户ID都不是18611286701的"},
 				{"f15738fe-771b-494c-ad77-91523c10514d","swc3evbp","18611286701","0","企业ID是18810039018，租户ID是18611286701的"}
 				};
 
@@ -251,6 +311,7 @@ public class EnterpriseCenterTestSuntt {
 		String msg = EnterpriseCenter.bindEnter(data[i][0],data[i][1],userId);
 		System.out.println(msg);
 		JsonNode  node=Utils.getJson(mapper, msg);
+		System.out.println("-----------------------"+i+"--------------------");
 		Assert.assertTrue(node.get("status").asInt()==1);
 		Assert.assertTrue(node.get("msg").asText().equals("绑定企业成功"));
 		Assert.assertTrue(node.get("code").asInt()==Integer.valueOf(data[i][3]));
@@ -406,10 +467,17 @@ public class EnterpriseCenterTestSuntt {
 	 */
 	public void  marketAuthenticateFailedTest(){	
 		
-		String enterId="40515c8a-5def-41b1-8bfb-33d7d49dd326";
-//		String userName = "18810039018"; 
+//		String enterId="cb6e7100-6537-4977-b076-ed71f7fdaf7e";
+		String enterId="63c70829-4a49-474e-92f4-fc3729439bb4";
+	
+		String userName = "18810039018"; 
 //		String auditorId = UserCenterUtil.getUserIdByLoginName(userName);
-		String auditorId = "488e6137-e684-4d40-86ea-a619d43c5a50";
+//		String auditorId = "488e6137-e684-4d40-86ea-a619d43c5a50";
+		
+		//euc的数据
+		String auditorId = "e06b733d-8b4b-4fce-856d-d085284dbdd8";
+		
+		
 		String message="测试云市场企业认证失败的情况";
 		String msg = EnterpriseCenter.marketAuthenticateFailed(enterId,auditorId,message);
 		System.out.println(msg);
@@ -423,10 +491,17 @@ public class EnterpriseCenterTestSuntt {
 	 */
 	public void  marketAuthenticateSuccessTest(){	
 		
-		String enterId="a0a87750-74e4-4875-a7e5-966e197aee45";
+
+		String enterId="558aff6f-9749-4b77-92d4-7d8fff2fa090";
 //		String userName = "18810039018"; 
 //		String auditorId = UserCenterUtil.getUserIdByLoginName(userName);
+		
+		//idtest的数据
 		String auditorId = "488e6137-e684-4d40-86ea-a619d43c5a50";
+		
+		//euc的数据
+//		String auditorId = "e06b733d-8b4b-4fce-856d-d085284dbdd8";
+		
 		String msg = EnterpriseCenter.marketAuthenticateSuccess(enterId,auditorId);
 		System.out.println(msg);
 		JsonNode  node=Utils.getJson(mapper, msg);
@@ -466,9 +541,9 @@ public class EnterpriseCenterTestSuntt {
 	 */
 	public void  saveEnterpriseAuthInfoTest(){
 		Map<String, Object> json = new HashMap<String, Object>();
-		json.put("enterpriseName", "保定市常联系商贸有限公司");
+		json.put("enterpriseName", "广州还有音乐传播有限公司");
 		json.put("licenseRegisterCode", "111111111111122222");
-		json.put("userId", "63b8a50a-51c5-45fa-a3cc-120ffc9f2295");
+		json.put("userId", "e6b50050-c00d-458b-9f95-8af04d1b1ff1");
 		json.put("enterpriseType", "LegalPerson");
 		json.put("agentName", "经办人小哈");
 		json.put("agentMobile", "18800000001");
@@ -477,7 +552,7 @@ public class EnterpriseCenterTestSuntt {
 		json.put("contactName", "企业联系人小乖");
 		json.put("contactMobile", "18800000002");
 		json.put("contactEmail", "qiyelianxiren01@test1988.com");
-		json.put("address", "1-13-1-aaa");
+		json.put("address", "1-11-8-北清路68号");
 		json.put("registerTime", "20180315000521");
 		json.put("legalPersoName", "法人小屁");
 		json.put("legalPersoCertNo", "110111111111111102");
@@ -495,6 +570,112 @@ public class EnterpriseCenterTestSuntt {
 		System.out.println(msg);
 		JsonNode  node=Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt()==1);		
+	}
+	
+	@Test
+	/* 天威企业基本信息认证
+	 * 正常情况的测试
+	 */
+	public void  enterpriseITrustTest(){
+		//stt2018030101@test1988.com  的企业   
+		//通过企业对公打款认证页面http://idtest.yyuap.com/enterprise/remitauthoo?sysid=ipu&tenantid=gg4jrldf
+		String enterId="42d205bc-8cdf-4542-8944-4517677506d1b";
+		String msg = EnterpriseCenter.enterpriseITrust(enterId);
+		System.out.println(msg);
+		JsonNode  node=Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt()==1);	
+		
+		//stt2018030101@test1988.com  的未认证的企业中心建的企业2018030101-a
+		String enterId1="c73885eb-889b-4cd4-b47d-cadc909d9836";
+		String msg1 = EnterpriseCenter.enterpriseITrust(enterId1);
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==1);	
+		
+	}
+	
+	
+	@Test
+	/* 获取天威认证地址
+	 * 正常情况的测试
+	 */
+	public void  enterItrust(){
+		
+		String tenantId="zog4csgc";
+		String msg1 = EnterpriseCenter.enterpriseITrust(tenantId);
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==1);	
+		
+	}
+	
+	@Test
+	/* 授权应用标记企业用户
+	 * 正常情况的测试
+	 * enterId的值是用户18810039018里201471220-a-188haha这个企业的id
+	 * 这个用例执行，需要在manager里企业应用授权里添加一个数据。
+	 * 企业名是201471220-a-188haha，应用是uculture。
+	 * 这个是根据String authfile="uculture.properties"这个里面的username的值
+	 * 并且权限是读写
+	 */
+	public void  markEnterUserTest(){
+			
+		String enterId="f83a9964-5c8e-4b8e-b2cc-0a174cb952cf";
+		String userName = "18611286701"; 
+		String userId = UserCenterUtil.getUserIdByLoginName(userName);
+		String msg1 = EnterpriseCenter.markEnterUser(enterId,userId);
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==1);	
+		
+	}
+	
+	@Test
+	/* 授权应用移除标记企业用户
+	 * 正常情况的测试
+	 * enterId的值是用户18810039018里201471220-a-188haha这个企业的id
+	 * 并且权限是读写
+	 */
+	public void  unMarkEnterUserTest(){
+			
+		String enterId="f83a9964-5c8e-4b8e-b2cc-0a174cb952cf";
+		String userName = "18611286701"; 
+		String userId = UserCenterUtil.getUserIdByLoginName(userName);
+		String msg1 = EnterpriseCenter.unMarkEnterUser(enterId,userId);
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==1);	
+		
+	}
+	
+	
+	@Test
+	/* 根据时间获取最新的企业信息
+	 * 正常情况的测试
+	 */
+	public void  listNewEnter2MDTest(){
+			
+		String time="2018-08-03 14:50:31";
+		String dateFormat = "yyyy-MM-dd HH:mm:ss"; 
+		String msg1 = EnterpriseCenter.listNewEnter2MD(time,dateFormat);
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==1);	
+	}
+	
+	@Test
+	/* 根据企业ID获取企业对公打款认证信息（云合同e签宝）
+	 * 正常情况的测试
+	 * enterId的值是用户18810039018里"荣盛建设工程有限公司"这个企业的id
+	 */
+	public void  getTsignRemitInfoTest(){
+			
+		String enterId="4219e8dd-d3f9-46d4-a030-41aa1909d2ef";
+		String msg1 = EnterpriseCenter.getTsignRemitInfo(enterId);
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==1);	
+		
 	}
 	
 }

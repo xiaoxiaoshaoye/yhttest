@@ -5,9 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,16 +24,54 @@ import com.yonyou.yht.entity.UserInfo;
 import com.yonyou.yht.sdk.EnterpriseCenter;
 import com.yonyou.yht.sdk.UserCenter;
 import com.yonyou.yht.sdk.Utils;
+import com.yonyou.yht.sdkutils.PropertyUtil;
 
 public class EnterpriseCenterExceptionTestSuntt {
 
 
-	ObjectMapper mapper;
+	ObjectMapper mapper= new ObjectMapper();
 	
-	@Before
-	public void init() {
-		mapper = new ObjectMapper();
-	}
+
+//	  @Before
+		public void  beforeEuc(){
+			System.setProperty("yht.load.order","2");
+			String path="eucsdk.properties";
+			String authfile="euc.properties";
+			String oauthfile="oauth2_eucCloud.properties";
+			Properties p = PropertyUtil.loadFile(path);
+			Properties p2 = PropertyUtil.loadFile(authfile);
+			Properties p3 = PropertyUtil.loadFile(oauthfile);
+			setEnv(p);
+			setEnv(p2);
+			setEnv(p3);
+			System.out.println("#############finished before");
+		}
+		
+	  @Before
+		public void  beforeIdtest(){
+		  	System.setProperty("yht.load.order","2");
+			String path="idtestsdk.properties";
+		//	String authfile="market.properties";
+			String authfile="uculture.properties";
+			String oauthfile="oauth2_dd.properties";
+			Properties p = PropertyUtil.loadFile(path);
+			Properties p2 = PropertyUtil.loadFile(authfile);
+			Properties p3 = PropertyUtil.loadFile(oauthfile);
+			setEnv(p);
+			setEnv(p2);
+			setEnv(p3);
+			System.out.println("#############finished before");
+		}
+
+		private void setEnv(Properties p) {
+			Enumeration e = p.propertyNames();
+			String name=null;
+			while(e.hasMoreElements()){
+				name=(String)e.nextElement();
+				System.setProperty(name,p.getProperty(name));
+			}
+		}
+
 	
 	@Test
 	/* 添加企业
@@ -840,4 +880,148 @@ public class EnterpriseCenterExceptionTestSuntt {
 
 	}
 	
+	@Test
+	/* 天威企业基本信息认证
+	 * 异常情况的测试
+	 */
+	public void  enterpriseITrustExceptionTest(){
+
+		//参数时随便输入的值
+		String msg1 = EnterpriseCenter.enterpriseITrust("随便乱输入的内容hahaaaaaa");
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("data").asText().equals("该企业帐号不存在"));
+
+		//参数为空
+		String msg2 = EnterpriseCenter.enterpriseITrust("");
+		System.out.println(msg2);
+		JsonNode  node2=Utils.getJson(mapper, msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+		Assert.assertTrue(node2.get("msg").asText().equals("tenantId不能为空"));
+		
+		//参数为null
+		String msg3 = EnterpriseCenter.enterpriseITrust(null);
+		System.out.println(msg3);
+		JsonNode  node3=Utils.getJson(mapper, msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+		Assert.assertTrue(node3.get("msg").asText().equals("tenantId不能为空"));
+		
+	}
+	
+	@Test
+	/* 授权应用标记企业用户
+	 * 异常情况的测试
+	 * enterId的值是用户18810039018里201471220-a-188haha这个企业的id
+	 * 这个用例执行，需要在manager里企业应用授权里添加一个数据。
+	 * 企业名是201471220-a-188haha，应用是uculture。
+	 * 这个是根据String authfile="uculture.properties"这个里面的username的值
+	 * 并且权限是读写
+	 */
+	public void  markEnterUserExceptionTest() throws JsonProcessingException, IOException{
+
+		String enterId="f83a9964-5c8e-4b8e-b2cc-0a174cb952cf";
+		String userName = "18611286701"; 
+		String userId = UserCenterUtil.getUserIdByLoginName(userName);
+		
+		//第一列是测试点
+		//第二列参数enterId
+		//第三列参数userId 
+		//第四列返回值：status
+		
+		String [][] value={		
+				
+				{"enterId错误","随便乱输入的内容哈哈",userId,"0","企业不存在"},
+				{"enterId为空","",userId,"0","enterId不能为空"},
+				{"enterId为null",null,userId,"0","enterId不能为空"},
+				{"userId错误",enterId,"随便乱输入的内容哈哈","0","未找到用户"},
+				{"userId为空",enterId,"","0","userId不能为空"},
+				{"userId为null",enterId,null,"0","userId不能为空"},
+		};	
+		
+		for(int i=0;i<value.length;i++){		
+		String msg = EnterpriseCenter.markEnterUser(value[i][1],value[i][2]);
+		System.out.println(msg);
+		System.out.println("------------------------------"+i+"-------------------------");	
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==Integer.valueOf(value[i][3]));		
+		Assert.assertTrue(node.get("msg").asText().equals(value[i][4]));
+		}
+		
+	}
+	
+	
+	@Test
+	/* 授权应用移除标记企业用户
+	 * 异常情况的测试
+	 * enterId的值是用户18810039018里201471220-a-188haha这个企业的id
+	 * 这个用例执行，需要在manager里企业应用授权里添加一个数据。
+	 * 企业名是201471220-a-188haha，应用是uculture。
+	 * 这个是根据String authfile="uculture.properties"这个里面的username的值
+	 * 并且权限是读写
+	 */
+	public void  unMarkEnterUserExceptionTest() throws JsonProcessingException, IOException{
+
+		String enterId="f83a9964-5c8e-4b8e-b2cc-0a174cb952cf";
+		String userName = "18611286701"; 
+		String userId = UserCenterUtil.getUserIdByLoginName(userName);
+		
+		//第一列是测试点
+		//第二列参数enterId
+		//第三列参数userId 
+		//第四列返回值：status
+		
+		String [][] value={				
+				{"enterId错误","随便乱输入的内容哈哈",userId,"0","企业不存在"},
+				{"enterId为空","",userId,"0","enterId不能为空"},
+				{"enterId为null",null,userId,"0","enterId不能为空"},
+				{"userId错误",enterId,"随便乱输入的内容哈哈","0","未找到用户"},
+				{"userId为空",enterId,"","0","userId不能为空"},
+				{"userId为null",enterId,null,"0","userId不能为空"},
+		};	
+		
+		for(int i=0;i<value.length;i++){
+		String msg = EnterpriseCenter.unMarkEnterUser(value[i][1],value[i][2]);
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==Integer.valueOf(value[i][3]));		
+		Assert.assertTrue(node.get("msg").asText().equals(value[i][4]));
+		}
+		}
+	
+	
+	
+	
+	@Test
+	/* 根据时间获取最新的企业信息
+	 * 异常情况的测试
+	 */
+	public void  listNewEnter2MDExceptionTest() throws JsonProcessingException, IOException{
+
+		String time="2018-07-03 14:50:31";
+		String dateFormat = "yyyy-MM-dd HH:mm:ss"; 
+		
+		//第一列是测试点
+		//第二列参数enterId
+		//第三列参数userId 
+		//第四列返回值：status
+		
+		String [][] value={				
+				{"time格式错误","随便乱输入的内容哈哈",dateFormat,"0","时间格式转换异常"},
+				{"time为空","",dateFormat,"0","时间不能为空"},
+				{"time为null",null,dateFormat,"0","时间不能为空"},
+				{"dateFormat格式错误",time,"随便乱输入的内容哈哈","0","时间格式转换异常"},
+				{"dateFormat为空",time,"","0","时间格式不能为空"},
+				{"dateFormat为null",time,null,"0","时间格式不能为空"},
+		};	
+		
+		for(int i=0;i<value.length;i++){
+		String msg = EnterpriseCenter.listNewEnter2MD(value[i][1],value[i][2]);
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt()==Integer.valueOf(value[i][3]));	
+		Assert.assertTrue(node.get("msg").asText().equals(value[i][4]));
+		}
+		
+	}
 }

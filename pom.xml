@@ -13,6 +13,23 @@
 		<assertj.version>3.6.2</assertj.version>
 	</properties>
 	<dependencies>
+	
+		<dependency>
+			<groupId>com.yonyou.yht</groupId>
+			<artifactId>app-sdk</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+	
+
+
+
+		<dependency>
+ 			 <groupId>com.yonyou.iuap</groupId>
+ 			 <artifactId>iuap-tenant-sdk</artifactId>
+ 			 <version>2.0.4-SNAPSHOT</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -53,23 +70,32 @@
 			</exclusions>
 		</dependency>
 		<!--集成友户通登录需要 -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.yonyou.yht</groupId>
 			<artifactId>yht-sso-client</artifactId>
 			<version>0.4-SNAPSHOT</version>
-		</dependency>
+		</dependency> -->
 		<!-- 登录后使用Redis存储session时需要 -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.yonyou.yht</groupId>
 			<artifactId>yht-sso-cache</artifactId>
 			<version>0.4-SNAPSHOT</version>
-		</dependency>
+		</dependency> -->
 		<!--调用友户通SDK的依赖 -->
-		<dependency>
+
+    	<dependency>
 			<groupId>com.yonyou.yht</groupId>
 			<artifactId>yht-sdk</artifactId>
-			<version>0.4-SNAPSHOT</version>
+			<version>0.5.6-SNAPSHOT</version>
 		</dependency>
+	
+		<dependency>
+      		<groupId>com.yonyou.yht</groupId>
+      		<artifactId>yht-sdk-external</artifactId>   
+     		<version>1.9.2-SNAPSHOT</version>
+		</dependency>
+	
+
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
@@ -102,28 +128,28 @@
 			<version>4.0.5.RELEASE</version>
 		</dependency>
 		<!-- 系统互信 -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.yonyou.iuap</groupId>
 			<artifactId>iuap-security</artifactId>
 			<version>3.0.0-RC001</version>
 			<exclusions>
 				<exclusion>
-					<!-- declare the exclusion here -->
+					declare the exclusion here
 					<groupId>xml-apis</groupId>
 					<artifactId>xml-apis</artifactId>
 				</exclusion>
 				<exclusion>
-					<!-- declare the exclusion here -->
+					declare the exclusion here
 					<groupId>org.slf4j</groupId>
 					<artifactId>jcl-over-slf4j</artifactId>
 				</exclusion>
 				<exclusion>
-					<!-- declare the exclusion here -->
+					declare the exclusion here
 					<groupId>xom</groupId>
 					<artifactId>xom</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -138,6 +164,19 @@
 		</dependency>
 	</dependencies>
 	<repositories>
+	<repository>
+			<id>soma</id>
+			<name>soma</name>
+			<url>http://soma.yonyou.com/nexus/content/repositories/yht/</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+<!--
 		<repository>
 			<id>yhtSnapshots</id>
 			<name>yhtSnapshots</name>
@@ -149,6 +188,20 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+-->
+		<repository>
+          <id>yhtSnapshots</id>
+          <name>yhtSnapshots</name>
+	    	<url>https://eucdaily.yyuap.com/nexus/content/groups/yhtgroup/</url>
+          <layout>default</layout>
+          <releases>
+             <enabled>false</enabled>
+          </releases>
+          <snapshots>
+             <enabled>true</enabled>
+          </snapshots>
+    	</repository>
+
 		<repository>
 			<id>iUAP</id>
 			<name>iUAP-Snapshots</name>

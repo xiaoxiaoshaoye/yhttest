@@ -21,18 +21,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yonyou.yht.entity.UserInfo;
+import com.yonyou.yht.sdk.CustomerCenter;
 import com.yonyou.yht.sdk.EnterpriseCenter;
 import com.yonyou.yht.sdk.SDKUtils;
 import com.yonyou.yht.sdk.UserCenter;
 import com.yonyou.yht.sdk.Utils;
 import com.yonyou.yht.sdkutils.PropertyUtil;
 
+import net.sf.json.JSONObject;
+
 public class EnterpriseCenterTestSuntt {
 
 	ObjectMapper mapper= new ObjectMapper();
 	
 
-//	  @Before
+	// @Before
 		public void  beforeEuc(){
 			System.setProperty("yht.load.order","2");
 			String path="eucsdk.properties";
@@ -48,12 +51,12 @@ public class EnterpriseCenterTestSuntt {
 			System.out.println("#############finished before");
 		}
 		
-	  @Before
+	  	@Before
 		public void  beforeIdtest(){
 		  	System.setProperty("yht.load.order","2");
 			String path="idtestsdk.properties";
 			String authfile="market.properties";
-		//	String authfile="uculture.properties";
+			//String authfile="uculture.properties";
 			String oauthfile="oauth2_dd.properties";
 			Properties p = PropertyUtil.loadFile(path);
 			Properties p2 = PropertyUtil.loadFile(authfile);
@@ -86,7 +89,7 @@ public class EnterpriseCenterTestSuntt {
 		
 //		//只填必输值
 //		Map<String ,String> params=new HashMap<String,String>(); 
-//		params.put("name", "stt"+t);
+//		params.put("name", "测试01stt"+t);
 //		params.put("contactName", "stt-name");
 //		params.put("contactMobile", "18800001010");
 //		String msg = EnterpriseCenter.addEnter(params);
@@ -96,7 +99,7 @@ public class EnterpriseCenterTestSuntt {
 //		
 //		//必输值加创建人，方便在页面上查看
 //		Map<String ,String> params1=new HashMap<String,String>(); 		
-//		params1.put("name", "stt"+t+"1");
+//		params1.put("name", "测试01stt"+t+"1");
 //		params1.put("contactName", "stt-name");
 //		params1.put("contactMobile", "18800001010");
 //		params1.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
@@ -111,7 +114,7 @@ public class EnterpriseCenterTestSuntt {
 //		
 //		//接口文档里有的字段，能填的字段都输入值
 //		Map<String ,String> params2=new HashMap<String,String>(); 
-//		params2.put("name", "stt"+t+"2");
+//		params2.put("name", "测试01stt"+t+"2");
 //		params2.put("contactName", "stt-name");
 //		params2.put("contactMobile", "18800001010");
 //		params2.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
@@ -132,7 +135,7 @@ public class EnterpriseCenterTestSuntt {
 //
 //		//特殊字符，不包括"\ 因为有这两个代码就不通过
 //		Map<String ,String> params3=new HashMap<String,String>(); 
-//		params3.put("name", "stt"+t+"~!@#$%^&*()_+|{}:<>?/.,';][=-`");
+//		params3.put("name", "测试01stt"+t+"~!@#$%^&*()_+|{}:<>?/.,';][=-`");
 //		params3.put("contactName", "stt-name");
 //		params3.put("contactMobile", "18800001010");
 //		params3.put("creater", "55806668-426e-4ba8-aa2b-f3333cd2bc43");
@@ -156,11 +159,11 @@ public class EnterpriseCenterTestSuntt {
 		
 		Map<String ,String> params5=new HashMap<String,String>(); 	
 		for(int i=0;i<1;i++){			
-		params5.put("name", "s"+t+i);
+		params5.put("name", "测试01s"+t+i);
 		params5.put("contactName", "stt-name");
 		params5.put("contactMobile", "18800001010");
-//		params5.put("creater", "1ad6048c-7729-478e-9b24-d1663c7da4b3");
-		params5.put("creater", "555efe32-1447-4f86-96cc-a972d440ea0b");
+		params5.put("creater", "1ad6048c-7729-478e-9b24-d1663c7da4b3");
+//		params5.put("creater", "555efe32-1447-4f86-96cc-a972d440ea0b");
 		params5.put("contactEmail", "suntt@yonyou.com");		
 		String msg5 = EnterpriseCenter.addEnter(params5);
 		System.out.println(msg5);
@@ -173,7 +176,7 @@ public class EnterpriseCenterTestSuntt {
 //		for (int j=0;j<50;j++){
 //		Map<String ,String> params5=new HashMap<String,String>(); 	
 //		for(int i=0;i<1;i++){			
-//		params5.put("name", "s"+t+i+j);
+//		params5.put("name", "测试01s"+t+i+j);
 //		params5.put("contactName", "stt-name");
 //		params5.put("contactMobile", "18800001010");
 //		params5.put("creater", "6cb090a7-83aa-493e-a493-fcfc7448a80e");
@@ -368,7 +371,7 @@ public class EnterpriseCenterTestSuntt {
 		JsonNode  node=Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("bindNum").asInt()==2);
 		Assert.assertTrue(node.get("status").asInt()==1);
-		Assert.assertTrue(node.get("msg").asText().equals("获取企业绑定信息成功"));
+		Assert.assertTrue(node.get("msg").asText().equals("查询绑定信息成功"));
 
 	}
 	
@@ -655,7 +658,7 @@ public class EnterpriseCenterTestSuntt {
 	 */
 	public void  listNewEnter2MDTest(){
 			
-		String time="2018-08-03 14:50:31";
+		String time="2018-11-03 14:50:31";
 		String dateFormat = "yyyy-MM-dd HH:mm:ss"; 
 		String msg1 = EnterpriseCenter.listNewEnter2MD(time,dateFormat);
 		System.out.println(msg1);
@@ -669,7 +672,7 @@ public class EnterpriseCenterTestSuntt {
 	 * enterId的值是用户18810039018里"荣盛建设工程有限公司"这个企业的id
 	 */
 	public void  getTsignRemitInfoTest(){
-			
+		   
 		String enterId="4219e8dd-d3f9-46d4-a030-41aa1909d2ef";
 		String msg1 = EnterpriseCenter.getTsignRemitInfo(enterId);
 		System.out.println(msg1);
@@ -678,4 +681,131 @@ public class EnterpriseCenterTestSuntt {
 		
 	}
 	
+	
+	@Test
+	/* 新增客户--通过word“11-11上线相关接口测试”接口文档编写的
+	 * 正常情况的测试
+	 * 执行接口，改一下sysCustomerId的值，就会在yht-manager/客户中台里低辨识度审核里有一个待审批的数据
+	 * 如果sysCustomerId是已存在的数据，就会把已存在的客户带出来。yht-manager/客户中台里低辨识度审核里没有待审数据
+	 * 新增后，可以根据name到库里查询下，select *from pub_yht_enterprise where name = 'stt科技有限公司';
+	 */
+	public void  addCustomerTest(){
+		
+		SimpleDateFormat date =new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		String t =date.format(new Date());
+		String sysCustomerId=t;
+		String name="测试01stt科技有限公司"+t;
+		
+		System.out.println("***********************"+t+"***********************");
+		
+		//如果sysCustomerId的值是新的，客户不存在。
+		String baseInfo = "{\"masterDataCode\":\"\",\"sysCustomerId\":\""+sysCustomerId+"\",\"name\":\""+name+"\",\"industryEb\":\"0001\",\"regionEb\":\"021101\",\"integrationCode\":\"91450100MA5KD9R87W\",\"website\":\"\",\"address\":\"stt南宁市青秀区金湖路61号佳得鑫水晶城D座1703号\",\"legalperson\":\"叶宏林\",\"mainBusiness\":\"\",\"registeredCapital\":\"\"}";
+		String extInfo = "{\"createTime\":\"2018-11-02\",\"MDM_CODE\":\"\",\"shortName\":\"stt哈哈\",\"totalEmployee\":\"0601\"}";
+		String msg = CustomerCenter.addCustomer(baseInfo, extInfo);
+		System.out.println(msg);
+		JsonNode  node=Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		Assert.assertTrue(node.get("msg").asText().equals("未找到客户工商信息，已放至审核队列"));	
+		
+		
+		//如果sysCustomerId的值是已存在的，客户已存在。
+//		String baseInfo1 = "{\"masterDataCode\":\"\",\"sysCustomerId\":\"1756888\",\"name\":\"stt科技有限公司\",\"industryEb\":\"0001\",\"regionEb\":\"021101\",\"integrationCode\":\"91450100MA5KD9R87W\",\"website\":\"\",\"address\":\"stt南宁市青秀区金湖路61号佳得鑫水晶城D座1703号\",\"legalperson\":\"叶宏林\",\"mainBusiness\":\"\",\"registeredCapital\":\"\"}";
+		String baseInfo1 = "{\"masterDataCode\":\"\",\"sysCustomerId\":\"1756888\",\"name\":\"测试01stt科技有限公司888\",\"industryEb\":\"0021\",\"regionEb\":\"021111\",\"integrationCode\":\"91450100MA5KD9Raaa\",\"website\":\"\",\"address\":\"stt用友产业园888号11111\",\"legalperson\":\"叶宏林11\",\"mainBusiness\":\"\",\"registeredCapital\":\"\"}";
+//		String baseInfo1 = "{\"masterDataCode\":\"\",\"sysCustomerId\":\"778899\",\"name\":\"测试01stt科技有限公司8888\",\"industryEb\":\"0001\",\"regionEb\":\"021101\",\"integrationCode\":\"91450100MA5KD9R87W\",\"website\":\"\",\"address\":\"stt用友产业园888号\",\"legalperson\":\"叶宏林\",\"mainBusiness\":\"\",\"registeredCapital\":\"\"}";
+		String extInfo1 = "{\"createTime\":\"2018-11-06\",\"MDM_CODE\":\"\",\"shortName\":\"stt哈哈\",\"totalEmployee\":\"0601\"}";
+		String msg1 = CustomerCenter.addCustomer(baseInfo1, extInfo1);
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==1);	
+		Assert.assertTrue(node1.get("msg").asText().equals("成功"));	
+		
+		//只填必输字段
+		String sysCustomerId2="02"+t;
+		String name2="测试01stt科技有限公司02"+t;
+		String baseInfo2 = "{\"sysCustomerId\":\""+sysCustomerId2+"\",\"name\":\""+name2+"\"}";
+		String extInfo2 = "";
+		String msg2 = CustomerCenter.addCustomer(baseInfo2, extInfo2);
+		System.out.println(msg2);
+		JsonNode  node2=Utils.getJson(mapper, msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);	
+		Assert.assertTrue(node2.get("msg").asText().equals("未找到客户工商信息，已放至审核队列"));	
+
+
+		
+		
+	}
+	
+	@Test
+	/* 根据主数据编码或各应用中客户ID查询客户信息--通过word“11-11上线相关接口测试”接口文档编写的
+	 * 正常情况的测试
+	 * addCustomer这个接口新增的，还没有审核的客户，在getByCode接口里使用，是查不到的。
+	 * 这个里面得是审核通过的
+	 */
+	public void  getByCodeTest(){
+		String masterDataCode = "";
+		String sysCustomerId = "778899";
+		String msg = CustomerCenter.getByCode(masterDataCode, sysCustomerId);
+		System.out.println(msg);
+		JsonNode  node=Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt()==1);	
+		Assert.assertTrue(node.get("msg").asText().equals("成功"));	
+		Assert.assertTrue(node.get("data").get("baseInfo").get("name").asText().equals("测试01stt科技有限公司8888"));	
+		Assert.assertTrue(node.get("data").get("baseInfo").get("industryEb").asText().equals("0001"));	
+		Assert.assertTrue(node.get("data").get("baseInfo").get("integrationCode").asText().equals("91450100MA5KD9R87W"));	
+		Assert.assertTrue(node.get("data").get("baseInfo").get("address").asText().equals("stt用友产业园888号"));	
+	
+		
+	}
+	
+	
+	@Test
+	/* 根据名称精确查询客户信息--通过word“11-11上线相关接口测试”接口文档编写的
+	 * 正常情况的测试
+	 * addCustomer这个接口新增的，还没有审核的客户，在getByCode接口里使用，是查不到的。
+	 * 这个里面得是审核通过的
+	 */
+	public void  getByNameTest(){
+		String name = "测试01stt科技有限公司8888";
+		String msg = CustomerCenter.getByName(name);
+		System.out.println(msg);
+		JsonNode  node=Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt()==1);	
+		Assert.assertTrue(node.get("msg").asText().equals("成功"));	
+		Assert.assertTrue(node.get("data").get("baseInfo").get("industryEb").asText().equals("0001"));	
+		Assert.assertTrue(node.get("data").get("baseInfo").get("integrationCode").asText().equals("91450100MA5KD9R87W"));	
+		Assert.assertTrue(node.get("data").get("baseInfo").get("address").asText().equals("stt用友产业园888号"));	
+	}
+	
+	@Test
+	/* 客户名称变更--通过word“11-11上线相关接口测试”接口文档编写的
+	 * 正常情况的测试
+	 * 客户得是审核通过的。
+	 */
+	public void  updateCustomerNameTest(){
+		String masterDataCode = "";
+		String sysCustomerId = "778899";
+		String name = "测试01stt科技有限公司8888999";
+		String msg = CustomerCenter.updateCustomerName(masterDataCode, sysCustomerId,name);
+		System.out.println(msg);
+		JsonNode  node=Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt()==1);	
+		Assert.assertTrue(node.get("msg").asText().equals("成功"));	
+//		Assert.assertTrue(node.get("data").get("masterDataCode").asText().equals("KH02000000000088"));	
+		
+
+		
+		String name1 = "测试01stt科技有限公司8888";
+		String msg1 = CustomerCenter.updateCustomerName(masterDataCode, sysCustomerId,name1);
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==1);	
+		Assert.assertTrue(node1.get("msg").asText().equals("成功"));	
+//		Assert.assertTrue(node1.get("data").get("masterDataCode").asText().equals("KH02000000000088"));	
+
+
+	}
+	
+	
+	
+
 }

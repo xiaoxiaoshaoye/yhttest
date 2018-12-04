@@ -21,6 +21,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yonyou.yht.entity.UserInfo;
+import com.yonyou.yht.sdk.CustomerCenter;
 import com.yonyou.yht.sdk.EnterpriseCenter;
 import com.yonyou.yht.sdk.UserCenter;
 import com.yonyou.yht.sdk.Utils;
@@ -51,8 +52,8 @@ public class EnterpriseCenterExceptionTestSuntt {
 		public void  beforeIdtest(){
 		  	System.setProperty("yht.load.order","2");
 			String path="idtestsdk.properties";
-		//	String authfile="market.properties";
-			String authfile="uculture.properties";
+			String authfile="market.properties";
+//			String authfile="uculture.properties";
 			String oauthfile="oauth2_dd.properties";
 			Properties p = PropertyUtil.loadFile(path);
 			Properties p2 = PropertyUtil.loadFile(authfile);
@@ -1022,6 +1023,204 @@ public class EnterpriseCenterExceptionTestSuntt {
 		Assert.assertTrue(node.get("status").asInt()==Integer.valueOf(value[i][3]));	
 		Assert.assertTrue(node.get("msg").asText().equals(value[i][4]));
 		}
+	
+	}
+	
+	
+	
+	@Test
+	/* 新增客户
+	 * 异常情况的测试
+	 */
+	public void  addCustomerExceptionTest(){
+		
+		SimpleDateFormat date =new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		String t =date.format(new Date());
+		
+//		//参数JSON格式不正确
+//		String msg1 = CustomerCenter.addCustomer("随便乱输入的内容hahaaaaaa","随便乱输入的内容hahaaaaaa");
+//		System.out.println(msg1);
+//		JsonNode  node1=Utils.getJson(mapper, msg1);
+//		Assert.assertTrue(node1.get("status").asInt()==0);
+//		Assert.assertTrue(node1.get("msg").asText().equals("基础信息JSON转换实体异常"));
+//		
+//		//必输字段sysCustomerId没有值
+//		String baseInfo2 = "{\"masterDataCode\":\"\",\"sysCustomerId\":\"\",\"name\":\"stt科技有限公司\",\"industryEb\":\"0001\",\"regionEb\":\"021101\",\"integrationCode\":\"91450100MA5KD9R87W\",\"website\":\"\",\"address\":\"stt南宁市青秀区金湖路61号佳得鑫水晶城D座1703号\",\"legalperson\":\"叶宏林\",\"mainBusiness\":\"\",\"registeredCapital\":\"\"}";
+//		String extInfo2 = "{\"createTime\":\"2018-11-02\",\"MDM_CODE\":\"\",\"shortName\":\"stt哈哈\",\"totalEmployee\":\"0601\"}";
+//		String msg2 = CustomerCenter.addCustomer(baseInfo2, extInfo2);
+//		System.out.println(msg2);
+//		JsonNode  node2=Utils.getJson(mapper, msg2);
+//		Assert.assertTrue(node2.get("status").asInt()==0);
+//		Assert.assertTrue(node2.get("msg").asText().equals("当前应用下客户ID不能为空"));
+//		
+//		//必输字段name没有值
+//		String baseInfo3 = "{\"masterDataCode\":\"\",\"sysCustomerId\":\"1756999\",\"name\":\"\",\"industryEb\":\"0001\",\"regionEb\":\"021101\",\"integrationCode\":\"91450100MA5KD9R87W\",\"website\":\"\",\"address\":\"stt南宁市青秀区金湖路61号佳得鑫水晶城D座1703号\",\"legalperson\":\"叶宏林\",\"mainBusiness\":\"\",\"registeredCapital\":\"\"}";
+//		String extInfo3 = "{\"createTime\":\"2018-11-02\",\"MDM_CODE\":\"\",\"shortName\":\"stt哈哈\",\"totalEmployee\":\"0601\"}";
+//		String msg3 = CustomerCenter.addCustomer(baseInfo3, extInfo3);
+//		System.out.println(msg3);
+//		JsonNode  node3=Utils.getJson(mapper, msg3);
+//		Assert.assertTrue(node3.get("status").asInt()==0);
+//		Assert.assertTrue(node3.get("msg").asText().equals("客户名称不能为空"));
+		
+		//新增客户时，如果sysCustomerId和name的值，是manager里低辨识度审核未审核的数据
+		//例如新增一个客户，此时没有审核。再新增一样的数据。此时应该给友好提示
+		String sysCustomerId=t;
+		String name="stt科技有限公司"+t;
+		System.out.println("***********************"+t+"***********************");
+		String baseInfo4 = "{\"sysCustomerId\":\""+sysCustomerId+"\",\"name\":\""+name+"\"}";
+		String extInfo4 = "";
+		//做一个待审的低辨识度数据
+		String msg4 = CustomerCenter.addCustomer(baseInfo4, extInfo4);
+		System.out.println(msg4);
+		JsonNode  node4=Utils.getJson(mapper, msg4);
+		Assert.assertTrue(node4.get("status").asInt()==0);
+		Assert.assertTrue(node4.get("msg").asText().equals("未找到客户工商信息，已放至审核队列"));	
+		//异常测试，应该给友好提示
+		String msg41 = CustomerCenter.addCustomer(baseInfo4, extInfo4);
+		System.out.println(msg41);
+		JsonNode  node41=Utils.getJson(mapper, msg41);
+		Assert.assertTrue(node41.get("status").asInt()==0);
+//		Assert.assertTrue(node41.get("msg").asText().equals("未找到客户工商信息，正在审核中，请勿重复提交"));	
+		
+	
+//		//参数为空
+//		String msg5 = CustomerCenter.addCustomer("", "");
+//		System.out.println(msg5);
+//		JsonNode  node5=Utils.getJson(mapper, msg5);
+//		Assert.assertTrue(node5.get("status").asInt()==0);
+//		Assert.assertTrue(node5.get("msg").asText().equals("客户基本信息不可为空"));
+//		
+//		//参数为null
+//		String msg6 = CustomerCenter.addCustomer(null, null);
+//		System.out.println(msg6);
+//		JsonNode  node6=Utils.getJson(mapper, msg6);
+//		Assert.assertTrue(node6.get("status").asInt()==0);
+//		Assert.assertTrue(node6.get("msg").asText().equals("客户基本信息不可为空"));
+//		
+//		
+//		//只填必输字段,加一个错误的字段,会过滤掉不正确的字段。只要其他正确的字段能够添加客户，就会添加客户
+//		String sysCustomerId7="07"+t;
+//		String name7="stt科技有限公司07"+t;
+//		String baseInfo7 = "{\"sysCustomerId\":\""+sysCustomerId7+"\",\"name\":\""+name7+"\",\"nameaaaa\":\"\"}";
+//		String extInfo7 = "";
+//		String msg7 = CustomerCenter.addCustomer(baseInfo7, extInfo7);
+//		System.out.println(msg7);
+//		JsonNode  node7=Utils.getJson(mapper, msg7);
+//		Assert.assertTrue(node7.get("status").asInt()==0);	
+//		Assert.assertTrue(node7.get("msg").asText().equals("未找到客户工商信息，已放至审核队列"));	
+//		
+	}
+	
+	@Test
+	/* 根据主数据编码或各应用中客户ID查询客户信息
+	 * 异常情况的测试
+	 */
+	public void  getByCodeExceptionTest(){
+
+		//参数时随便输入的值
+		String msg1 = CustomerCenter.getByCode("随便乱输入的内容hahaaaaaa111","随便乱输入的内容hahaaaaaa111");
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("未查询到客户主数据信息"));
+
+		//参数为空
+		String msg2 = CustomerCenter.getByCode("","");
+		System.out.println(msg2);
+		JsonNode  node2=Utils.getJson(mapper, msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+		Assert.assertTrue(node2.get("msg").asText().equals("客户主数据编码和应用下客户ID不可同时为空"));
+		
+		//参数为null
+		String msg3 = CustomerCenter.getByCode(null,null);
+		System.out.println(msg3);
+		JsonNode  node3=Utils.getJson(mapper, msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+		Assert.assertTrue(node3.get("msg").asText().equals("客户主数据编码和应用下客户ID不可同时为空"));
 		
 	}
+	
+	@Test
+	/* 根据名称精确查询客户信息
+	 * 异常情况的测试
+	 */
+	public void  getByNameExceptionTest(){
+
+		//参数是随便输入的值
+		String msg1 = CustomerCenter.getByName("随便乱输入的内容hahaaaaaa");
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("未查询到客户主数据信息"));
+
+		//参数为空
+		String msg2 = CustomerCenter.getByName("");
+		System.out.println(msg2);
+		JsonNode  node2=Utils.getJson(mapper, msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+		Assert.assertTrue(node2.get("msg").asText().equals("客户名称不能为空"));
+		
+		//参数为null
+		String msg3 = CustomerCenter.getByName(null);
+		System.out.println(msg3);
+		JsonNode  node3=Utils.getJson(mapper, msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+		Assert.assertTrue(node3.get("msg").asText().equals("客户名称不能为空"));
+		
+	}
+	
+	
+	@Test
+	/* 客户名称变更
+	 * 异常情况的测试
+	 */
+	public void  updateCustomerNameExceptionTest(){
+
+		//变更名字与原名称相同
+		String masterDataCode = "";
+		String sysCustomerId = "77778888";
+		String name = "stt科技有限公司888";
+		String msg = CustomerCenter.updateCustomerName(masterDataCode, sysCustomerId,name);
+		System.out.println(msg);
+		JsonNode  node=Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt()==0);	
+		Assert.assertTrue(node.get("msg").asText().equals("客户新旧名称相同"));	
+		
+		
+		//参数时随便输入的值
+		String msg1 = CustomerCenter.updateCustomerName("随便乱输入的内容hahaaaaaa111","随便乱输入的内容hahaaaaaa111","随便乱输入的内容hahaaaaaa111");
+		System.out.println(msg1);
+		JsonNode  node1=Utils.getJson(mapper, msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("未查询到客户主数据信息"));
+
+		//参数为空
+		String msg2 = CustomerCenter.updateCustomerName("","","");
+		System.out.println(msg2);
+		JsonNode  node2=Utils.getJson(mapper, msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+		Assert.assertTrue(node2.get("msg").asText().equals("客户主数据编码和应用下客户ID不可同时为空"));
+		
+		//参数为null
+		String msg3 = CustomerCenter.updateCustomerName(null,null,null);
+		System.out.println(msg3);
+		JsonNode  node3=Utils.getJson(mapper, msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+		Assert.assertTrue(node3.get("msg").asText().equals("客户主数据编码和应用下客户ID不可同时为空"));
+		
+
+	
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+

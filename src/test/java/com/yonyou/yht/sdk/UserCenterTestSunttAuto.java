@@ -291,31 +291,90 @@ public class UserCenterTestSunttAuto {
 		 * 第四个是返回值应该返回的 flag的值，由于后面Assert判断
 		*/
 		public void isUserExist3Test() throws JsonProcessingException, IOException {			
-			String [][] value={
-					{"YHT-18810039018","","","0"},
+//			String [][] value={
+//					{"YHT-18810039018","","","0"},
+//					{"","18810039018","","5"},
+//					{"","","suntt@yonyou.com","6"},
+//					{"","18867896789","","7"},
+//					{"","","suntt123456789@yonyou.com","7"},
+//					{"","18810039018","suntt@yonyou.com","5"},
+//					{"","18867896789","suntt@yonyou.com","6"},
+//					{"","18810039018","suntt123456789@yonyou.com","5"},
+//					{"12345678900000","18810039018","suntt@yonyou.com","5"},
+//					{"YHT-18810039018","18867896789","","4"},
+//					{"YHT-18810039018","","suntt123456789@yonyou.com","4"},
 //					{"YHT-18810039018","18810039018","suntt123456789@yonyou.com","1"},
 //					{"YHT-18810039018","18867896789","suntt@yonyou.com","2"},
-					{"YHT-18810039018","18810039018","suntt@yonyou.com","3"},
-					{"YHT-18810039018","","suntt123456789@yonyou.com","4"},
-					{"YHT-18810039018","18867896789","","4"},
-					{"","18810039018","","5"},
-					{"","18810039018","suntt@yonyou.com","5"},
-					{"","18810039018","suntt123456789@yonyou.com","5"},
-					{"12345678900000","18810039018","suntt@yonyou.com","5"},
-					{"","","suntt@yonyou.com","6"},
-					{"","18867896789","suntt@yonyou.com","6"},
-					{"","18867896789","","7"},
-					{"","","suntt123456789@yonyou.com","7"},
-					{"YHT-18810039018dsafasdfas","18810039018","suntt@yonyou.com","10"}
-};			
-			for(int j=0;j<value.length;j++){
-			String msg = UserCenter.isUserExist(value[j][0],value[j][1],value[j][2]);
-			System.out.println(msg);
-			JsonNode node = mapper.readTree(msg);
-			String i=value[j][3];
-			System.out.println("--------------"+j+"--------------------------");
-			Assert.assertTrue(node.get("status").asInt() == Integer.valueOf(i));
-			}
+//					{"YHT-18810039018","18810039018","suntt@yonyou.com","3"}
+//					};			
+//			for(int j=0;j<14;j++){
+//			String msg = UserCenter.isUserExist(value[j][0],value[j][1],value[j][2]);
+//			System.out.println(msg);
+//			JsonNode node = mapper.readTree(msg);
+//			String i=value[j][3];
+//			Assert.assertTrue(node.get("status").asInt() == Integer.valueOf(i));
+//			}
+				String str1 = UserCenter.isUserExist("18800000005", "18800000005",null);
+				System.out.println("usercode与手机号一样且匹配：1");
+				System.out.println(str1);
+				JsonNode node1 = mapper.readTree(str1);
+//				Assert.assertTrue(node1.get("status").asInt()==1);
+				//status:2
+				str1= UserCenter.isUserExist("656897109@qq.com",null ,"656897109@qq.com");
+				System.out.println("usercode与邮箱一样且匹配:2");
+				System.out.println(str1);
+			     node1 = mapper.readTree(str1);
+//				Assert.assertTrue(node1.get("status").asInt()==2);
+				//status:3
+				str1= UserCenter.isUserExist("yy_6301897661993714695zFaRaH","13581555702","zhangpanm@yonyou.com");
+				System.out.println("usercode、手机、邮箱完全且匹配:3");
+				System.out.println(str1);
+			     node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==3);
+				//status:4
+				 str1 = UserCenter.isUserExist( "yy_6301897661993714695zFaRaH",null,"zhang@yonyou.com");
+				System.out.println("usercode匹配，手机、邮箱都不匹配:4");
+				System.out.println(str1);
+			    node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==4);
+				
+				//status:5
+				str1 =  UserCenter.isUserExist( null,"13581555702","dddddd@e.com");
+				System.out.println("只有手机号匹配:5");
+				System.out.println(str1);
+			    node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==5);
+				//status:6
+				str1 = UserCenter.isUserExist( null,"13581550002","zhangpanm@yonyou.com");
+				System.out.println("只有邮箱匹配:6");
+				System.out.println(str1);
+			    node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==6);
+				//status:7
+				str1 = UserCenter.isUserExist( "ewe","13581550002","dddddd@e.com");
+				System.out.println("都不匹配，不存在存在这样的用户：7");
+				System.out.println(str1);
+				node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==7);
+				//status:8
+				str1 =UserCenter.isUserExist( null,"15890832158","dddddd@e.com");
+				System.out.println("该手机号作为另一个用户的usercode已经存在:8");
+				System.out.println(str1);
+				node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==8);
+				//status:9
+				str1  = UserCenter.isUserExist( null,"13581550002","656897109@qq.com");
+				System.out.println("该邮箱作为另一个用户的usercode已经存在:9");
+				System.out.println(str1);
+				node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==9);
+				//status:10
+				str1  = UserCenter.isUserExist( null,"13581555702","zhangpanm@yonyou.com");
+				System.out.println("手机，邮箱匹配:10");
+				System.out.println(str1);
+				node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==10);
+			
 	}
 	
 		
@@ -327,27 +386,35 @@ public class UserCenterTestSunttAuto {
 		/* 
 		 * 批量根据userCode、userMobile、userEmail判断是否能够增加用户
 		 * 正常情况的测试
+		 * 如果为0，表示手机号和邮箱不能同时为空；
+		 * 如果为0，表示手机号和邮箱不能同时为空；
+		 * 如果为1，表示用户账号已经存在且手机号一致，用户已存在；
+		 * 如果为2，表示用户账号已经存在且邮箱一致，用户已存在；
+		 * 如果为3，表示用户账号已经存在且手机号,邮箱一致，用户已存在；
+		 * 如果为4，表示用户账号已存在；
+		 * 如果为5，表示手机号已存在；
+		 * 如果为6，表示邮箱已存在；
+		 * 如果为7，表示用户账号,手机号,邮箱都不存在，可以创建新用户。
+		 * 如果为8，表示用户手机号作为另一个用户的usercode已经存在。
+		 * 如果为9，表示用户邮箱作为另一个用户的usercode已经存在。
+		 * 如果为10，表示当userEmail已存在数据库中，且邮箱手机号匹配，不可以添加新用户,未检查usercode
 		 */
 		public void isUsersExistTest() throws JsonProcessingException, IOException {		
 			Map<String, Object> params = new HashMap<String, Object>();			
 			List<Object> users = new ArrayList<Object>();			
 			String [][] value={
-					{"YHT-18810039018","","","4"},
-					{"","18810039018","","5"},
-					{"","","suntt@yonyou.com","6"},
-					{"","18867896789","","7"},
-					{"","","suntt123456789@yonyou.com","7"},
-					{"","18810039018","suntt@yonyou.com","5"},
-					{"","18867896789","suntt@yonyou.com","6"},
-					{"","18810039018","suntt123456789@yonyou.com","5"},
-					{"12345678900000","18810039018","suntt@yonyou.com","5"},
-					{"YHT-18810039018","18867896789","","4"},
-					{"YHT-18810039018","","suntt123456789@yonyou.com","4"},
-					{"YHT-18810039018","18810039018","suntt123456789@yonyou.com","1"},
-					{"YHT-18810039018","18867896789","suntt@yonyou.com","2"},
-					{"YHT-18810039018","18810039018","suntt@yonyou.com","3"}
+					{"18800000005", "18800000005",null,"1"},
+					{"656897109@qq.com",null,"656897109@qq.com","2"},
+					{"yy_6301897661993714695zFaRaH","13581555702","zhangpanm@yonyou.com","3"},
+					{"yy_6301897661993714695zFaRaH",null,"zhang@yonyou.com","4"},
+					{null,"13581555702","dddddd@e.com","5"},
+					{null,"13581550002","zhangpanm@yonyou.com","6"},
+					{"ewe","13581550002","dddddd@e.com","7"},
+					{null,"15890832158","dddddd@e.com","8"},
+					{null,"13581550002","656897109@qq.com","9"},
+					{null,"13581555702","zhangpanm@yonyou.com","10"}
 					};
-			for(int j=0;j<14;j++){
+			for(int j=0;j<value.length;j++){
 			Map<String, String> user = new HashMap<String, String>() ;
 			user.put("userCode",value[j][0]);
 			user.put("userMobile", value[j][1]);
@@ -360,9 +427,10 @@ public class UserCenterTestSunttAuto {
 			String msg = UserCenter.isUsersExist(jsonStr);		
 			System.out.println(msg);
 			
-			for(int j=0;j<14;j++){
+			for(int j=0;j<value.length;j++){
 			JsonNode node = mapper.readTree(msg);
 			String i=value[j][3];
+			System.out.println(j+"*******************************************");
 			Assert.assertTrue(node.get( String.valueOf(j)).get("status").asInt() == Integer.valueOf(i));
 			}
 	       }
@@ -1440,13 +1508,13 @@ public class UserCenterTestSunttAuto {
 			//上传头像
 			String userName = "18611286701"; 
 			String userId = UserCenterUtil.getUserIdByLoginName(userName);
-			String msg = UserCenter.uploadUserAvator(userId, "F:\\手持身份证合照.png");
+			String msg = UserCenter.uploadUserAvator(userId, "//172.16.72.88/质量管理部/自动化脚本附件/友户通/手持身份证合照.png");
 			System.out.println(msg);
 			JsonNode node = mapper.readTree(msg);
 			Assert.assertTrue(node.get("status").asInt() == 1);
 			
 			//还原头像，为下次自动化准备
-			String msg1 = UserCenter.uploadUserAvator(userId, "F:\\头像.png");
+			String msg1 = UserCenter.uploadUserAvator(userId, "//172.16.72.88/质量管理部/自动化脚本附件/友户通/身份证扫描件正面.png");
 			System.out.println(msg1);						
 		}
 		
@@ -1570,12 +1638,14 @@ public class UserCenterTestSunttAuto {
 			System.out.println(msg);
 			JsonNode node = mapper.readTree(msg);
 			Assert.assertTrue(node.get("status").asInt() == 1);
+			Assert.assertTrue(node.get("flag").asInt() == 1);
 			
 			//不存在的标签
 			String msg1 = UserCenter.isTagExist(userId,"随便乱输入的内容哈哈");
 			System.out.println(msg1);
 			JsonNode node1 = mapper.readTree(msg1);
 			Assert.assertTrue(node1.get("status").asInt() == 1);
+			Assert.assertTrue(node.get("flag").asInt() == 0);
 		}
 		
 		@Test  
@@ -1607,7 +1677,7 @@ public class UserCenterTestSunttAuto {
 		
 		public void modifyTagTest() throws JsonProcessingException, IOException {
 			//修改标签
-			String userName = "18810039018"; 
+			String userName = "18611286701"; 
 			String userId = UserCenterUtil.getUserIdByLoginName(userName);
 			String msg = UserCenter.modifyTag(userId,"阳光","阳光宝贝");
 			System.out.println(msg);
@@ -1620,33 +1690,12 @@ public class UserCenterTestSunttAuto {
 			Assert.assertTrue(node1.get("status").asInt() == 1);
 		}
 		
-		
-
-		
-		@Test  
-		/* 设置用户的Profile
-		 * 正常情况的测试
-		*/
-		
-		public void setProfileTest() throws JsonProcessingException, IOException {
-			String userName = "18810039018"; 
-			String userId = UserCenterUtil.getUserIdByLoginName(userName);
-			String msg = UserCenter.setProfile(userId,"market","","O(∩_∩)O哈哈~");
-			System.out.println(msg);
-			JsonNode node = mapper.readTree(msg);
-			Assert.assertTrue(node.get("status").asInt() == 1);
-			Assert.assertTrue(node.get("msg").asText().equals("设置成功"));
-		}
-		
-		
 		@Test  
 		/* 查询用户的Profile
 		 * 正常情况的测试
 		*/
 		
 		public void getProfileTest() throws JsonProcessingException, IOException, InterruptedException {
-			
-			Thread.sleep(300000);
 			String userName = "18810039018"; 
 			String userId = UserCenterUtil.getUserIdByLoginName(userName);
 			String msg = UserCenter.getProfile(userId,"market");
@@ -1656,6 +1705,25 @@ public class UserCenterTestSunttAuto {
 			Assert.assertTrue(node.get("msg").asText().equals("O(∩_∩)O哈哈~"));
 		}
 		
+
+		
+		@Test  
+		/* 设置用户的Profile
+		 * 正常情况的测试
+		*/
+		
+		public void setProfileTest() throws JsonProcessingException, IOException {
+			String userName = "18611286701"; 
+			String userId = UserCenterUtil.getUserIdByLoginName(userName);
+			String msg = UserCenter.setProfile(userId,"market","","O(∩_∩)O哈哈~");
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+			Assert.assertTrue(node.get("status").asInt() == 1);
+			Assert.assertTrue(node.get("msg").asText().equals("设置成功"));
+		}
+		
+		
+
 		@Test  
 		/* 删除用户的Profile
 		 * 正常情况的测试

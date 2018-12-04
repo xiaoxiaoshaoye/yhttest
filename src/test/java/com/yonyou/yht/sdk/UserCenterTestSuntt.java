@@ -24,7 +24,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yonyou.yht.sdkutils.PropertyUtil;
 
+import net.sf.json.JSONObject;
 import yhttest.UserCenterUtil;
+import com.yonyou.iuap.context.InvocationInfoProxy;
+
 // xiezhengnan 6e3e49a2-aa13-4ed5-ad4b-557bd6d0e7a8
 // test_001 3d5aae38-8be1-4bdd-866a-bf29a3540e8c
 // test_002 8693be50-42a5-413b-a27e-59ded6dbd6a1
@@ -56,6 +59,7 @@ public class UserCenterTestSuntt {
 	  	System.setProperty("yht.load.order","2");
 		String path="idtestsdk.properties";
 	//	String authfile="market.properties";
+	//	String authfile="yht2.properties";
 		String authfile="uculture.properties";
 		String oauthfile="oauth2_dd.properties";
 		Properties p = PropertyUtil.loadFile(path);
@@ -271,33 +275,97 @@ public class UserCenterTestSuntt {
 		 * 如果为5，表示手机号已存在；
 		 * 如果为6，表示邮箱已存在；
 		 * 如果为7，表示用户账号,手机号,邮箱都不存在，可以创建新用户。
+		 * 如果为8，表示用户手机号作为另一个用户的usercode已经存在。
+		 * 如果为9，表示用户邮箱作为另一个用户的usercode已经存在。
+		 * 如果为10，表示当userEmail已存在数据库中，且邮箱手机号匹配，不可以添加新用户,未检查usercode
 		 * String [][] value数组里前三个是userCode、userMobile、userEmail参数
 		 * 第四个是返回值应该返回的 flag的值，由于后面Assert判断
 		*/
 		public void isUserExist3Test() throws JsonProcessingException, IOException {			
-			String [][] value={
-					{"YHT-18810039018","","","0"},
-					{"","18810039018","","5"},
-					{"","","suntt@yonyou.com","6"},
-					{"","18867896789","","7"},
-					{"","","suntt123456789@yonyou.com","7"},
-					{"","18810039018","suntt@yonyou.com","5"},
-					{"","18867896789","suntt@yonyou.com","6"},
-					{"","18810039018","suntt123456789@yonyou.com","5"},
-					{"12345678900000","18810039018","suntt@yonyou.com","5"},
-					{"YHT-18810039018","18867896789","","4"},
-					{"YHT-18810039018","","suntt123456789@yonyou.com","4"},
-					{"YHT-18810039018","18810039018","suntt123456789@yonyou.com","1"},
-					{"YHT-18810039018","18867896789","suntt@yonyou.com","2"},
-					{"YHT-18810039018","18810039018","suntt@yonyou.com","3"}
-					};			
-			for(int j=0;j<14;j++){
-			String msg = UserCenter.isUserExist(value[j][0],value[j][1],value[j][2]);
-			System.out.println(msg);
-			JsonNode node = mapper.readTree(msg);
-			String i=value[j][3];
-			Assert.assertTrue(node.get("status").asInt() == Integer.valueOf(i));
-			}
+//			String [][] value={
+//					{"YHT-18810039018","","","0"},
+//					{"","18810039018","","5"},
+//					{"","","suntt@yonyou.com","6"},
+//					{"","18867896789","","7"},
+//					{"","","suntt123456789@yonyou.com","7"},
+//					{"","18810039018","suntt@yonyou.com","5"},
+//					{"","18867896789","suntt@yonyou.com","6"},
+//					{"","18810039018","suntt123456789@yonyou.com","5"},
+//					{"12345678900000","18810039018","suntt@yonyou.com","5"},
+//					{"YHT-18810039018","18867896789","","4"},
+//					{"YHT-18810039018","","suntt123456789@yonyou.com","4"},
+//					{"YHT-18810039018","18810039018","suntt123456789@yonyou.com","1"},
+//					{"YHT-18810039018","18867896789","suntt@yonyou.com","2"},
+//					{"YHT-18810039018","18810039018","suntt@yonyou.com","3"}
+//					};			
+//			for(int j=0;j<14;j++){
+//			String msg = UserCenter.isUserExist(value[j][0],value[j][1],value[j][2]);
+//			System.out.println(msg);
+//			JsonNode node = mapper.readTree(msg);
+//			String i=value[j][3];
+//			Assert.assertTrue(node.get("status").asInt() == Integer.valueOf(i));
+//			}
+				String str1 = UserCenter.isUserExist("18800000005", "18800000005",null);
+				System.out.println("usercode与手机号一样且匹配：1");
+				System.out.println(str1);
+				JsonNode node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==1);
+				//status:2
+				str1= UserCenter.isUserExist("656897109@qq.com",null ,"656897109@qq.com");
+				System.out.println("usercode与邮箱一样且匹配:2");
+				System.out.println(str1);
+			     node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==2);
+				//status:3
+				str1= UserCenter.isUserExist("yy_6301897661993714695zFaRaH","13581555702","zhangpanm@yonyou.com");
+				System.out.println("usercode、手机、邮箱完全且匹配:3");
+				System.out.println(str1);
+			     node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==3);
+				//status:4
+				 str1 = UserCenter.isUserExist( "yy_6301897661993714695zFaRaH",null,"zhang@yonyou.com");
+				System.out.println("usercode匹配，手机、邮箱都不匹配:4");
+				System.out.println(str1);
+			    node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==4);
+				
+				//status:5
+				str1 =  UserCenter.isUserExist( null,"13581555702","dddddd@e.com");
+				System.out.println("只有手机号匹配:5");
+				System.out.println(str1);
+			    node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==5);
+				//status:6
+				str1 = UserCenter.isUserExist( null,"13581550002","zhangpanm@yonyou.com");
+				System.out.println("只有邮箱匹配:6");
+				System.out.println(str1);
+			    node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==6);
+				//status:7
+				str1 = UserCenter.isUserExist( "ewe","13581550002","dddddd@e.com");
+				System.out.println("都不匹配，不存在存在这样的用户：7");
+				System.out.println(str1);
+				node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==7);
+				//status:8
+				str1 =UserCenter.isUserExist( null,"15890832158","dddddd@e.com");
+				System.out.println("该手机号作为另一个用户的usercode已经存在:8");
+				System.out.println(str1);
+				node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==8);
+				//status:9
+				str1  = UserCenter.isUserExist( null,"13581550002","656897109@qq.com");
+				System.out.println("该邮箱作为另一个用户的usercode已经存在:9");
+				System.out.println(str1);
+				node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==9);
+				//status:10
+				str1  = UserCenter.isUserExist( null,"13581555702","zhangpanm@yonyou.com");
+				System.out.println("手机，邮箱匹配:10");
+				System.out.println(str1);
+				node1 = mapper.readTree(str1);
+				Assert.assertTrue(node1.get("status").asInt()==10);
+			
 	}
 	
 		
@@ -546,7 +614,7 @@ public class UserCenterTestSuntt {
 		public void searchUserByName1Test() throws JsonProcessingException, IOException {
 
 
-			String msg = UserCenter.searchUserByName("stt");
+			String msg = UserCenter.searchUserByName("liulc");
 			System.out.println(msg);
 //			JsonNode node = mapper.readTree(msg);
 //			Assert.assertTrue(node.get("users").get(0).get("userCode").asText().equals("YHT-18611286701-code"));
@@ -2709,8 +2777,143 @@ public class UserCenterTestSuntt {
 
 			}
 	
+
 			
 
+			@Test
+			/*
+			 * 测试多语
+			 * @throws IOException 
+			 * @throws JsonProcessingException 
+			 * sendcode非用户发送手机或邮箱验证码
+			 * 正常情况的测试
+			 */
+			public void testNccMultiLanguage() throws JsonProcessingException, IOException{
+				
+				//繁体
+				InvocationInfoProxy.setLocale("zh_TW");
+				String msg = UserCenter.isUserExist(null,"13581555702","zhangpanm@yonyou.com");
+			    System.out.println(msg);
+				JsonNode node = mapper.readTree(msg);
+				Assert.assertTrue(node.get("status").asInt() == 10);
+				Assert.assertTrue(node.get("msg").asText().equals("郵箱及手機號已存在"));
+			    
+			    //英文
+			    InvocationInfoProxy.setLocale("en");
+				String msg1 = UserCenter.isUserExist(null,"13581555702","zhangpanm@yonyou.com");
+			    System.out.println(msg1);
+				JsonNode node1 = mapper.readTree(msg1);
+				Assert.assertTrue(node1.get("status").asInt() == 10);
+				Assert.assertTrue(node1.get("msg").asText().equals("The email address and the mobile No. already exists."));
+				
+			    //中文简体
+			    InvocationInfoProxy.setLocale("zh_CN");	
+				String msg2 = UserCenter.isUserExist(null,"13581555702","zhangpanm@yonyou.com");
+			    System.out.println(msg2);
+				JsonNode node2 = mapper.readTree(msg2);
+				Assert.assertTrue(node2.get("status").asInt() == 10);
+				Assert.assertTrue(node2.get("msg").asText().equals("邮箱及手机号已存在"));
+				
+			    //英文
+			    InvocationInfoProxy.setLocale("en");
+			    String msg3 = UserCenter.sendcode("zhangpanm@yonyou.com", "email", "123", "1234");
+			//    String msg3 = UserCenter.sendcode("15210040725", "mobile", "1541641185000987978", "TDQN");			    
+			    System.out.println(msg3);
+				JsonNode node3 = mapper.readTree(msg3);
+				Assert.assertTrue(node3.get("status").asInt() == 0);
+				Assert.assertTrue(node3.get("msg").asText().equals("Wrong verification code."));
+				
+				//繁体
+				InvocationInfoProxy.setLocale("zh_TW");
+			    String msg4 = UserCenter.sendcode("zhangpanm@yonyou.com", "email", "123", "1234");
+			    System.out.println(msg4);
+				JsonNode node4 = mapper.readTree(msg4);
+				Assert.assertTrue(node4.get("status").asInt() == 0);
+				Assert.assertTrue(node4.get("msg").asText().equals("驗證碼錯誤"));
+				
+			    //中文简体
+			    InvocationInfoProxy.setLocale("zh_CN");	
+			    String msg5 = UserCenter.sendcode("zhangpanm@yonyou.com", "email", "123", "1234");
+			    System.out.println(msg5);
+				JsonNode node5 = mapper.readTree(msg5);
+				Assert.assertTrue(node5.get("status").asInt() == 0);
+				Assert.assertTrue(node5.get("msg").asText().equals("验证码错误"));
+				
+			}
+			
+			
+			
+			@Test
+			/* 根据临时token获取用户的上下文
+			 * 正常流程测试
+			 * 未登录时输出：
+			 * yhtjsonpcallback({"msg":"请登录后再执行操作","needrelogin":true,"status":false})
+			 * 已登录时输出：
+			 * yhtjsonpcallback({"msg":"已登录，请直接前往目的URL","needrelogin":false,"status":true,"token":"ef9bb47d7c37c3ed81186e7184bc054409d9b4dcaf5db5e9c3233d35d912614b"})
+			 * 测试环境：https://idtest.yyuap.com/cas/checkLoginGeToken
+			 * 正式环境：https://euc.yonyoucloud.com/cas/checkLoginGeToken
+			 * 一次性用例
+			 */
+			public void getUserInfoContextByTempTokenTest() throws JsonProcessingException, IOException{
+				String tmpToken = "f76cc6de69a2e5a45fea465c8d1d14b0a70e70d7e12f3293f9289e49a66398d5"; 
+				String msg=UserCenter.getUserInfoContextByTempToken(tmpToken);
+				System.out.println(msg);
+				JsonNode node = mapper.readTree(msg);
+				Assert.assertTrue(node.get("status").asInt() == 1);
+				Assert.assertTrue(node.get("loginname").asText().equals("18810039018"));
+		
+			}
+			
+			@Test
+			/* 根据accessToken设置用户的上下文
+			 * 正常流程测试
+			 */
+			public void setUserInfoContextByAccessTokenTest() throws JsonProcessingException, IOException{
+				String accessToken = "fa3b148a-84ae-4da3-a009-57a07127ad38"; 		
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("loginname", "13621031586");
+				params.put("loginType", "YHTSYSID");
+				params.put("authToken", "04928ec9bdc3c87333557fcca63d26ab");
+				params.put("userAvatar", "https://cdn.yonyoucloud.com/dev/yht/avatar/style/images/avatar/e35ac485-5661-4d0e-b259-10a6fad6046a/middle/middle.png");
+				params.put("timeZone", "UTC");
+				params.put("userSysId", "yht");
+				params.put("userName", "冯青平");
+				params.put("userId", "e35ac485-5661-4d0e-b259-10a6fad6046a");
+				params.put("userCode", "YHT-14-2171525936969761");
+				params.put("btmptoken", "87550fe9-0d12-4e47-a917-0b936d689aec");
+				params.put("userMobileCountrycode", "86");
+				params.put("tenantId", "-1");
+				params.put("userType", "-1");
+				params.put("lang", "zh");
+				params.put("ts", "2018-09-13 12:02:57");
+				String msg=UserCenter.setUserInfoContextByAccessToken(accessToken,params);
+				System.out.println(msg);
+				JsonNode node = mapper.readTree(msg);
+				Assert.assertTrue(node.get("status").asInt() == 1);		
+			}
+			
+
+			@Test
+			/*
+			 * 测试环境执行的数据，使用yzt2.properties屏蔽敏感词过滤
+			 * @throws IOException 
+			 * @throws JsonProcessingException 
+			 */
+			public void getUserByPks2() throws JsonProcessingException, IOException {
+				
+				String str = UserCenter.getUserByPks(new String[]{"f292cb70-04a5-41d0-b414-fb3a05e40a7c","f0a142ac-16a9-4faa-b2aa-c75fc6330d5c","bdfcc722-2bb4-4e27-97d4-81dc0b975aee"}); 
+				System.out.println(str);
+				
+				String userName = "18810039018"; 
+				String userId = UserCenterUtil.getUserIdByLoginName(userName);
+				String msg=UserCenter.getUserById(userId);
+				System.out.println(msg);
+				JsonNode node = mapper.readTree(msg);
+				Assert.assertTrue(node.get("status").asInt() == 1);
+				Assert.assertTrue(node.get("user").get("userName").asText().equals("孙婷婷"));
+
+			}
+			
 }
 
 

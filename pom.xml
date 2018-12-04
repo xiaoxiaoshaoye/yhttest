@@ -26,7 +26,7 @@
 		<dependency>
  			 <groupId>com.yonyou.iuap</groupId>
  			 <artifactId>iuap-tenant-sdk</artifactId>
- 			 <version>2.0.4-SNAPSHOT</version>
+ 			 <version>2.0.6-SNAPSHOT</version>
 		</dependency>
 
 
@@ -86,13 +86,13 @@
     	<dependency>
 			<groupId>com.yonyou.yht</groupId>
 			<artifactId>yht-sdk</artifactId>
-			<version>0.5.6-SNAPSHOT</version>
+			<version>0.6.3-SNAPSHOT</version>
 		</dependency>
 	
 		<dependency>
       		<groupId>com.yonyou.yht</groupId>
       		<artifactId>yht-sdk-external</artifactId>   
-     		<version>1.9.2-SNAPSHOT</version>
+     		<version>1.9.3-SNAPSHOT</version>
 		</dependency>
 	
 
@@ -127,6 +127,11 @@
 			<artifactId>spring-web</artifactId>
 			<version>4.0.5.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.3</version>
+		</dependency>
 		<!-- 系统互信 -->
 		<!-- <dependency>
 			<groupId>com.yonyou.iuap</groupId>
@@ -150,6 +155,34 @@
 				</exclusion>
 			</exclusions>
 		</dependency> -->
+		<dependency>
+            <groupId>com.yonyou.iuap</groupId>
+            <artifactId>iuap-security</artifactId>
+            <version>3.0.0-RC001</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xom</groupId>
+                    <artifactId>xom</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>json-lib</artifactId>
+                    <groupId>net.sf.json-lib</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>bcprov-jdk16</artifactId>
+                    <groupId>org.bouncycastle</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

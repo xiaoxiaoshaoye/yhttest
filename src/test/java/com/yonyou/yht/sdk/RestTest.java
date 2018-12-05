@@ -19,6 +19,7 @@ public class RestTest {
 	String baseurl;
 	String casurl;
 	ObjectMapper mapper;
+
 	@Before
 	public void init() {
 		baseurl = CasClientPropertyUtil.getPropertyByKey("yht.user.base.url");
@@ -29,12 +30,12 @@ public class RestTest {
 	@Test
 	public void sendcodeTest() {
 		String url = baseurl + "/user/sendcode";
-//		String userName = "13716968294";
+		// String userName = "13716968294";
 		// String userName = "shicz@yonyou.com";
 		String userName = "shicz@ufida.com.cn";
 		String userId = UserCenterUtil.getUserIdByLoginName(userName);
 		Map<String, String> params = new HashMap<String, String>();
-//		String type = "mobile";
+		// String type = "mobile";
 		String type = "email";
 		params.put("type", type);
 		params.put("userId", userId);
@@ -51,9 +52,9 @@ public class RestTest {
 	@Test
 	public void sendcode2Test() {
 		String url = "http://idtest.yyuap.com/user/sendcode2";
-//		String contact = "shicz@yonyou.com";
-//		String contact = "shicz@ufida.com.cn";
-//		String contact = "shicz@ufsoft.com.cn";
+		// String contact = "shicz@yonyou.com";
+		// String contact = "shicz@ufida.com.cn";
+		// String contact = "shicz@ufsoft.com.cn";
 		String contact = "13716968294";
 		Map<String, String> params = new HashMap<String, String>();
 		String type = "email";
@@ -69,7 +70,7 @@ public class RestTest {
 
 		String msg = SignUtils.signAndPost(url, params);
 		System.out.println(msg);
-		
+
 		JsonNode node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
 	}
@@ -77,12 +78,12 @@ public class RestTest {
 	@Test
 	public void validatecodeTest() {
 		String url = baseurl + "/user/validatecode";
-//		String userName = "13716968294";
-//		String userName = "shicz@yonyou.com";
+		// String userName = "13716968294";
+		// String userName = "shicz@yonyou.com";
 		String userName = "shicz@ufida.com.cn";
 		String userId = UserCenterUtil.getUserIdByLoginName(userName);
 		Map<String, String> params = new HashMap<String, String>();
-//		String type = "mobile";
+		// String type = "mobile";
 		String type = "email";
 		params.put("type", type);
 		params.put("userId", userId);
@@ -169,14 +170,14 @@ public class RestTest {
 		String msg = SignUtils.signAndPost(url, jsonStr);
 		System.out.println(msg);
 	}
-	
+
 	@Test
 	public void loginlogTest() {
 		String url = baseurl + "/userlogin/loginlog";
 		String userName = "13716968294";
-//		String userName = "shicz@ufida.com.cn";
-//		String userName = "shicz@yonyou.com";
-//		String userName = "shicz";
+		// String userName = "shicz@ufida.com.cn";
+		// String userName = "shicz@yonyou.com";
+		// String userName = "shicz";
 		String userId = UserCenterUtil.getUserIdByLoginName(userName);
 		System.out.println(userId);
 		Map<String, String> params = new HashMap<String, String>();
@@ -189,7 +190,7 @@ public class RestTest {
 		String msg = SignUtils.signAndPost(url, jsonStr);
 		Assert.assertNotNull(msg);
 		System.out.println(msg);
-		
+
 		JsonNode node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
 		Assert.assertTrue(node.has("loginlog"));

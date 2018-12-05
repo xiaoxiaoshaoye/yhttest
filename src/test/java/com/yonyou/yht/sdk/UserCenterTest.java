@@ -25,7 +25,7 @@ import com.yonyou.yht.entity.UserInfo;
 public class UserCenterTest {
 
 	ObjectMapper mapper;
-	
+
 	@Before
 	public void init() {
 		mapper = new ObjectMapper();
@@ -36,24 +36,24 @@ public class UserCenterTest {
 		Map<String, Object> m = Utils.getMap(mapper, msg);
 		Assert.assertTrue(m.get("status").toString().equals("1"));
 		@SuppressWarnings("unchecked")
-		Map<String, Object> user = (Map<String, Object>)m.get("user");
+		Map<String, Object> user = (Map<String, Object>) m.get("user");
 		if (user.get("userId") == null) {
 			return null;
 		}
 		UserInfo userInfo = new UserInfo();
-		userInfo.setUserId((String)user.get("userId"));
-		userInfo.setUserCode((String)user.get("userCode"));
-		userInfo.setUserMobile((String)user.get("userMobile"));
-		userInfo.setUserName((String)user.get("userName"));
-		userInfo.setUserAvator((String)user.get("userAvator"));
-		userInfo.setStatus((Integer)user.get("status"));
-		userInfo.setRegisterDate((String)user.get("registerDate"));
+		userInfo.setUserId((String) user.get("userId"));
+		userInfo.setUserCode((String) user.get("userCode"));
+		userInfo.setUserMobile((String) user.get("userMobile"));
+		userInfo.setUserName((String) user.get("userName"));
+		userInfo.setUserAvator((String) user.get("userAvator"));
+		userInfo.setStatus((Integer) user.get("status"));
+		userInfo.setRegisterDate((String) user.get("registerDate"));
 		return userInfo;
 	}
-	
+
 	@Test
 	public void t1() {
-//		String userName = "13716968294";
+		// String userName = "13716968294";
 		String userName = "shicz@ufida.com.cn";
 		String msg = UserCenter.getUserByLoginName(userName);
 		System.out.println(msg);
@@ -117,7 +117,7 @@ public class UserCenterTest {
 
 	@Test
 	public void isUserExistTest() throws IOException {
-//		String userCode = "xiezhengnan";
+		// String userCode = "xiezhengnan";
 		String userCode = "xiezhengnan_1";
 		String userMobile = "13621333820_1";
 		String userEmail = "";
@@ -141,7 +141,7 @@ public class UserCenterTest {
 		System.out.println(msg);
 		node = mapper.readTree(msg);
 		Assert.assertTrue(node.get("status").asInt() == 4);
-		
+
 		userCode = "xiezhengnan";
 		userMobile = "13621333820";
 		userEmail = "";
@@ -149,7 +149,7 @@ public class UserCenterTest {
 		System.out.println(msg);
 		node = mapper.readTree(msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
-		
+
 		userCode = "xiezhengnan";
 		userMobile = "";
 		userEmail = "";
@@ -161,6 +161,7 @@ public class UserCenterTest {
 
 	/**
 	 * 根据登录名和Sysid判断用户是否存在
+	 * 
 	 * @throws IOException
 	 */
 	@Test
@@ -172,7 +173,7 @@ public class UserCenterTest {
 		JsonNode node = mapper.readTree(msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
 		Assert.assertTrue(node.get("flag").asInt() == 1);
-		
+
 		userName = "shicztest_007";
 		sysid = "00000000";
 		msg = UserCenter.isUserExist(userName, sysid);
@@ -181,15 +182,15 @@ public class UserCenterTest {
 		Assert.assertTrue(node.get("status").asInt() == 1);
 		Assert.assertTrue(node.get("flag").asInt() == 0);
 	}
-	
+
 	@Test
 	public void addUserTest() {
 		Map<String, String> params = new HashMap<String, String>();
-//		String userCode = "test_002";
-//		params.put("tenantId", "00000000");
-//		params.put("userCode", userCode);
-//		params.put("userName", userCode);
-//		params.put("userMobile", "13700000002");
+		// String userCode = "test_002";
+		// params.put("tenantId", "00000000");
+		// params.put("userCode", userCode);
+		// params.put("userName", userCode);
+		// params.put("userMobile", "13700000002");
 		String index = String.format("%03d", 10);
 		System.out.println(index);
 		String userCode = "shicztest_" + index;
@@ -199,7 +200,7 @@ public class UserCenterTest {
 		params.put("userMobile", "13700000" + index);
 		params.put("userEmail", "shicztest_" + index + "@yonyou.com");
 		params.put("userPassword", userCode);
-		
+
 		String msg = UserCenter.addUser(params);
 		System.out.println(msg);
 		JsonNode node = Utils.getJson(mapper, msg);
@@ -217,14 +218,14 @@ public class UserCenterTest {
 		params.put("userName", userCode);
 		params.put("userMobile", "1370000100" + index);
 		params.put("userEmail", "shicztest_00" + index + "@yonyou.com");
-		
+
 		String msg = UserCenter.addUser(params);
 		System.out.println(msg);
 		JsonNode node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
 		Assert.assertTrue(node.get("user").get("userCode").asText().equals(userCode));
 	}
-	
+
 	@Test
 	public void profileTest() {
 		String userName = "test_001";
@@ -235,7 +236,7 @@ public class UserCenterTest {
 		System.out.println(msg);
 		Map<String, Object> node = Utils.getMap(mapper, msg);
 		Assert.assertTrue(node.get("status").toString().equals("0"));
-		
+
 		String value = "123";
 		String newProfile = "{a:" + value + "}";
 		String sysUserId = "";
@@ -249,18 +250,18 @@ public class UserCenterTest {
 		node = Utils.getMap(mapper, msg);
 		Assert.assertTrue(node.get("status").toString().equals("1"));
 		Assert.assertTrue(Utils.getMap(mapper, node.get("msg").toString()).get("a").toString().equals(value));
-		
+
 		msg = UserCenter.removeProfile(userId, sysId);
 		System.out.println(msg);
 		node = Utils.getMap(mapper, msg);
 		Assert.assertTrue(node.get("status").toString().equals("1"));
-		
+
 		msg = UserCenter.getProfile(userId, sysId);
 		System.out.println(msg);
 		node = Utils.getMap(mapper, msg);
 		Assert.assertTrue(node.get("status").toString().equals("0"));
 	}
-	
+
 	@Test
 	public void tagTest() {
 		String userName = "test_001";
@@ -272,20 +273,20 @@ public class UserCenterTest {
 		Map<String, Object> node = Utils.getMap(mapper, msg);
 		Assert.assertTrue(node.get("status").toString().equals("1"));
 		Assert.assertTrue(node.get("flag").toString().equals("0"));
-		
+
 		msg = UserCenter.setTag(userId, tag);
 		System.out.println(msg);
 		Assert.assertNotNull(msg);
 		node = Utils.getMap(mapper, msg);
 		Assert.assertTrue(node.get("status").toString().equals("1"));
 		Assert.assertTrue(node.get("flag").toString().equals("1"));
-		
+
 		msg = UserCenter.isTagExist(userId, tag);
 		System.out.println(msg);
 		node = Utils.getMap(mapper, msg);
 		Assert.assertTrue(node.get("status").toString().equals("1"));
 		Assert.assertTrue(node.get("flag").toString().equals("1"));
-		
+
 		String newTag = "tag_02";
 		msg = UserCenter.modifyTag(userId, tag, newTag);
 		System.out.println(msg);
@@ -305,7 +306,7 @@ public class UserCenterTest {
 		node = Utils.getMap(mapper, msg);
 		Assert.assertTrue(node.get("status").toString().equals("1"));
 		Assert.assertTrue(node.get("flag").toString().equals("1"));
-		
+
 		msg = UserCenter.removeTag(userId, newTag);
 		System.out.println(msg);
 		Assert.assertNotNull(msg);
@@ -318,48 +319,48 @@ public class UserCenterTest {
 		node = Utils.getMap(mapper, msg);
 		Assert.assertTrue(node.get("status").toString().equals("1"));
 		Assert.assertTrue(node.get("flag").toString().equals("0"));
-		
+
 	}
-//
-//	@Test
-//	public void setTagTest() {
-//		String userName = "test_001";
-//		UserInfo user = getUserByLoginName(userName);
-//		String userId = user.getUserId();
-//		String tag = "tag_01";
-//		String msg = UserCenter.setTag(userId, tag);
-//		System.out.println(msg);
-//		Assert.assertNotNull(msg);
-//		Map<String, Object> node = Utils.getMap(mapper, msg);
-//		Assert.assertTrue(node.get("status").toString().equals("1"));
-//	}
-//
-//	@Test
-//	public void modifyTagTest() {
-//		String userName = "test_001";
-//		UserInfo user = getUserByLoginName(userName);
-//		String userId = user.getUserId();
-//		String oldTag = "tag_01";
-//		String newTag = "tag_02";
-//		String msg = UserCenter.modifyTag(userId, oldTag, newTag);
-//		System.out.println(msg);
-//		Assert.assertNotNull(msg);
-//		Map<String, Object> node = Utils.getMap(mapper, msg);
-//		Assert.assertTrue(node.get("status").toString().equals("1"));
-//	}
-//
-//	@Test
-//	public void removeTagTest() {
-//		String userName = "test_001";
-//		UserInfo user = getUserByLoginName(userName);
-//		String userId = user.getUserId();
-//		String tag = "tag_02";
-//		String msg = UserCenter.removeTag(userId, tag);
-//		System.out.println(msg);
-//		Assert.assertNotNull(msg);
-//		Map<String, Object> node = Utils.getMap(mapper, msg);
-//		Assert.assertTrue(node.get("status").toString().equals("1"));
-//	}
+	//
+	// @Test
+	// public void setTagTest() {
+	// String userName = "test_001";
+	// UserInfo user = getUserByLoginName(userName);
+	// String userId = user.getUserId();
+	// String tag = "tag_01";
+	// String msg = UserCenter.setTag(userId, tag);
+	// System.out.println(msg);
+	// Assert.assertNotNull(msg);
+	// Map<String, Object> node = Utils.getMap(mapper, msg);
+	// Assert.assertTrue(node.get("status").toString().equals("1"));
+	// }
+	//
+	// @Test
+	// public void modifyTagTest() {
+	// String userName = "test_001";
+	// UserInfo user = getUserByLoginName(userName);
+	// String userId = user.getUserId();
+	// String oldTag = "tag_01";
+	// String newTag = "tag_02";
+	// String msg = UserCenter.modifyTag(userId, oldTag, newTag);
+	// System.out.println(msg);
+	// Assert.assertNotNull(msg);
+	// Map<String, Object> node = Utils.getMap(mapper, msg);
+	// Assert.assertTrue(node.get("status").toString().equals("1"));
+	// }
+	//
+	// @Test
+	// public void removeTagTest() {
+	// String userName = "test_001";
+	// UserInfo user = getUserByLoginName(userName);
+	// String userId = user.getUserId();
+	// String tag = "tag_02";
+	// String msg = UserCenter.removeTag(userId, tag);
+	// System.out.println(msg);
+	// Assert.assertNotNull(msg);
+	// Map<String, Object> node = Utils.getMap(mapper, msg);
+	// Assert.assertTrue(node.get("status").toString().equals("1"));
+	// }
 
 	@Test
 	public void getUserByCodeTest() {
@@ -368,20 +369,20 @@ public class UserCenterTest {
 		System.out.println(msg);
 		JsonNode node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
-		
+
 	}
-	
+
 	@Test
 	public void getUserByIdTest() {
-//		String userId = "906c8e75-2da4-473f-b14d-4ed8acaaab4f";
+		// String userId = "906c8e75-2da4-473f-b14d-4ed8acaaab4f";
 		String userId = "06db845c-d260-4044-b3d1-82784a74b384";
 		String msg = UserCenter.getUserById(userId);
 		System.out.println(msg);
 		JsonNode node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
-		
+
 	}
-	
+
 	@Test
 	public void searchUserByNameTest() {
 		String name = "shicztest_00";
@@ -406,10 +407,10 @@ public class UserCenterTest {
 		Assert.assertTrue(node.get("status").toString().equals("1"));
 		Assert.assertNotNull(node.get("users"));
 	}
-	
+
 	@Test
 	public void getUserByPksTest() {
-		String[] pks = new String[] {"3d5aae38-8be1-4bdd-866a-bf29a3540e8c", "8693be50-42a5-413b-a27e-59ded6dbd6a1"};
+		String[] pks = new String[] { "3d5aae38-8be1-4bdd-866a-bf29a3540e8c", "8693be50-42a5-413b-a27e-59ded6dbd6a1" };
 		String msg = UserCenter.getUserByPks(pks);
 		System.out.println(msg);
 		Assert.assertNotNull(msg);
@@ -419,14 +420,14 @@ public class UserCenterTest {
 
 	@Test
 	public void getUserByCodesTest() {
-		String[] codes = new String[] {"test_001", "test_002"};
+		String[] codes = new String[] { "test_001", "test_002" };
 		String msg = UserCenter.getUserByCodes(codes);
 		System.out.println(msg);
 		Assert.assertNotNull(msg);
 		Map<String, Object> node = Utils.getMap(mapper, msg);
 		Assert.assertTrue(node.get("status").toString().equals("1"));
 	}
-	
+
 	@Test
 	public void addUsersTest() {
 		String systemCode = "test";
@@ -451,9 +452,9 @@ public class UserCenterTest {
 		System.out.println(jsonStr);
 		String msg = UserCenter.addUsers(systemCode, jsonStr);
 		System.out.println(msg);
-		
+
 	}
-	
+
 	@Test
 	public void searchUserTest() {
 		String userName1 = "test_001";
@@ -462,8 +463,8 @@ public class UserCenterTest {
 		String id1 = getUserByLoginName(userName1).getUserId();
 		String id2 = getUserByLoginName(userName2).getUserId();
 		String id3 = getUserByLoginName(userName3).getUserId();
-		
-		String[] pks = new String[] {id1, id2};
+
+		String[] pks = new String[] { id1, id2 };
 		String msg = UserCenter.searchUser(pks, userName1);
 		System.out.println(msg);
 		Assert.assertNotNull(msg);
@@ -479,9 +480,9 @@ public class UserCenterTest {
 		Assert.assertTrue(node.get("status").asInt() == 1);
 		Assert.assertTrue(node.get("users").get("totalElements").asInt() == 1);
 		Assert.assertTrue(node.get("users").get("content").get(0).get("userId").asText().equals(id2));
-		
+
 		Assert.assertNotNull(id3);
-		
+
 		msg = UserCenter.searchUser(pks, userName3);
 		System.out.println(msg);
 		Assert.assertNotNull(msg);
@@ -498,12 +499,12 @@ public class UserCenterTest {
 		String id1 = getUserByLoginName(userName1).getUserId();
 		String id2 = getUserByLoginName(userName2).getUserId();
 		String id3 = getUserByLoginName(userName3).getUserId();
-		
-		String[] pks = new String[] {id1, id2, id3};
+
+		String[] pks = new String[] { id1, id2, id3 };
 		String userName = "test";
 		String ps = "2";
 		String pn = "1";
-//		String sortType = "auto";
+		// String sortType = "auto";
 		String sortType = "name";
 		String isIn = "true";
 		String sysid = "test";
@@ -515,7 +516,7 @@ public class UserCenterTest {
 		Assert.assertTrue(node.get("status").asInt() == 1);
 		Assert.assertTrue(node.get("users").get("totalElements").asInt() == 3);
 		Assert.assertTrue(node.get("users").get("numberOfElements").asInt() == 2);
-		
+
 		pn = "2";
 		msg = UserCenter.searchUser(pks, userName, ps, pn, sortType, isIn, sysid, secretKey);
 		System.out.println(msg);
@@ -532,8 +533,8 @@ public class UserCenterTest {
 		String userName2 = "shicztest_002";
 		String id1 = getUserByLoginName(userName1).getUserId();
 		String id2 = getUserByLoginName(userName2).getUserId();
-		
-		String[] pks = new String[] {id1, id2};
+
+		String[] pks = new String[] { id1, id2 };
 		String msg = UserCenter.searchUser(pks, userName1);
 		System.out.println(msg);
 		Assert.assertNotNull(msg);
@@ -548,33 +549,33 @@ public class UserCenterTest {
 		node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
 		Assert.assertTrue(node.get("users").get("totalElements").asInt() == 0);
-		
+
 	}
 
 	@Test
 	public void sendcodeTest() {
-//		String contact = "13716968294";
-//		String type = "mobile";
+		// String contact = "13716968294";
+		// String type = "mobile";
 		String contact = "shicz@yonyou.com";
 		String type = "email";
 		String key = "1495615240000";
 		String code = "z38r";
 		String msg = UserCenter.sendcode(contact, type, key, code);
 		System.out.println(msg);
-		
+
 	}
-	
+
 	@Test
 	public void validateCode() {
-//		String contact = "13716968294";
-//		String type = "mobile";
+		// String contact = "13716968294";
+		// String type = "mobile";
 		String contact = "shicz@yonyou.com";
 		String type = "email";
 		String code = "174090";
 		String msg = UserCenter.validateCode(contact, type, code);
 		System.out.println(msg);
 	}
-	
+
 	@Test
 	public void sendMsgByEmailTest() {
 		String userName = "shicz@yonyou.com";
@@ -582,7 +583,7 @@ public class UserCenterTest {
 		String massage = "massage test";
 		String title = "title test";
 		String msg = UserCenter.sendMsgByEmail(userId, massage, title);
-//		String msg = UserCenter.sendMsgByEmail(userId, massage);
+		// String msg = UserCenter.sendMsgByEmail(userId, massage);
 		System.out.println(msg);
 	}
 
@@ -611,12 +612,12 @@ public class UserCenterTest {
 
 	@Test
 	public void getUserByContactTest() {
-//		String email = "shicz@yonyou.com";
+		// String email = "shicz@yonyou.com";
 		String email = "shicz@ufida.com.cn";
 		String mobile = "13716968294";
 		String contact = email;
 		String type = "mobile";
-//		String type = "email";
+		// String type = "email";
 		if (type.equals("mobile")) {
 			contact = mobile;
 		}
@@ -626,11 +627,11 @@ public class UserCenterTest {
 
 	@Test
 	public void modifyContactTest() {
-//		String userName = "shicz@yonyou.com";
+		// String userName = "shicz@yonyou.com";
 		String userName = "shicz@ufida.com.cn";
-//		String userName = "13716968294";
+		// String userName = "13716968294";
 		String userId = UserCenterUtil.getUserIdByLoginName(userName);
-//		String contact = "shicz@ufida.com.cn";
+		// String contact = "shicz@ufida.com.cn";
 		String contact = "13716968294";
 		String sid = "05130b16f94b5263263d580a56d706c6";
 		String msg = UserCenter.modifyContact(userId, contact, sid);
@@ -639,8 +640,8 @@ public class UserCenterTest {
 
 	@Test
 	public void generateOauthTokenTest() {
-//		String userName = "shicz@yonyou.com";
-//		String userName = "shicz@ufida.com.cn";
+		// String userName = "shicz@yonyou.com";
+		// String userName = "shicz@ufida.com.cn";
 		String userName = "13716968294";
 		String userId = UserCenterUtil.getUserIdByLoginName(userName);
 		String clientId = "2";
@@ -663,7 +664,7 @@ public class UserCenterTest {
 		String msg = UserCenter.getUserByToken(accessToken);
 		System.out.println(msg);
 	}
-	
+
 	@Test
 	public void verifyHSYUserTest() {
 		String tenantCode = "";
@@ -690,15 +691,15 @@ public class UserCenterTest {
 		String userName = "shicztest_009";
 		String password = "shicztest_009";
 		String clientId = "2";
-		
+
 		String msg = UserCenter.createAccessToken(tenantId, userName, password, clientId);
 		System.out.println(msg);
 		JsonNode node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
 		Assert.assertTrue(node.get("data").has("access_token"));
-		
+
 		password = "shicztest_009_err";
-		
+
 		msg = UserCenter.createAccessToken(tenantId, userName, password, clientId);
 		System.out.println(msg);
 		node = Utils.getJson(mapper, msg);
@@ -719,7 +720,7 @@ public class UserCenterTest {
 		Assert.assertTrue(node.get("data").has("access_token"));
 		System.out.println(node.get("data").get("access_token").asText());
 	}
-	
+
 	@Test
 	public void isUserActivateTest() {
 		String loginname = "13716968294";
@@ -728,7 +729,7 @@ public class UserCenterTest {
 		JsonNode node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 0);
 		Assert.assertTrue(node.get("msg").asText().equals("active"));
-		
+
 		loginname = "13716968295";
 		msg = UserCenter.isUserActivate(loginname);
 		System.out.println(msg);
@@ -750,8 +751,8 @@ public class UserCenterTest {
 		Assert.assertTrue(node.get("status").asInt() == 1);
 		Assert.assertTrue(node.get("code").asText().equals("0"));
 	}
-	
-	@Test 
+
+	@Test
 	public void activateUserTest() {
 		String userContact = "shicz@ufida.com.cn";
 		String userpwd = "12345678";
@@ -777,12 +778,12 @@ public class UserCenterTest {
 		JsonNode node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
 	}
-	
+
 	@Test
 	public void getConflictUserByIdTest() {
-//		String userName = "13716968294";
-//		String userName = "shicz@ufida.com.cn";
-//		String userName = "shicz";
+		// String userName = "13716968294";
+		// String userName = "shicz@ufida.com.cn";
+		// String userName = "shicz";
 		String userName = "shicz@yonyou.com";
 		String userId = UserCenterUtil.getUserIdByLoginName(userName);
 		String msg = UserCenter.getConflictUserById(userId);
@@ -796,9 +797,9 @@ public class UserCenterTest {
 	@Test
 	public void getUserLoginLogTest() {
 		String userName = "13716968294";
-//		String userName = "shicz@ufida.com.cn";
-//		String userName = "shicz";
-//		String userName = "shicz@yonyou.com";
+		// String userName = "shicz@ufida.com.cn";
+		// String userName = "shicz";
+		// String userName = "shicz@yonyou.com";
 		String userId = UserCenterUtil.getUserIdByLoginName(userName);
 		System.out.println(userId);
 		String msg = UserCenter.getUserLoginLog(userId + "00000");
@@ -806,5 +807,5 @@ public class UserCenterTest {
 		JsonNode node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
 	}
-	
+
 }

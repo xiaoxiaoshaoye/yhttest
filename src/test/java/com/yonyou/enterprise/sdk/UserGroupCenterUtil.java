@@ -15,24 +15,25 @@ public class UserGroupCenterUtil {
 
 	static ObjectMapper mapper = new ObjectMapper();
 
-//	public static UserGroup getGroupByName(String enterpriseId, String groupName) {
-//		String msg = UserGroupCenter.listUserGroup(enterpriseId);
-//		System.out.println(msg);
-//		Assert.assertNotNull(msg);
-//		Map<String, Object> m = Utils.getMap(mapper, msg);
-//		Assert.assertTrue("1".equals(m.get("status").toString()));
-////		List<UserGroup> groups = Utils.getList(mapper, m.get("groupList")
-////				.toString(), UserGroup.class);
-//		List<UserGroup> groups = Utils.getObject(mapper, m.get("groupList")
-//				.toString(), new TypeReference<List<UserGroup>>() {
-//				});
-//		for (UserGroup group : groups) {
-//			if (group.getGroupName().equals(groupName)) {
-//				return group;
-//			}
-//		}
-//		return null;
-//	}
+	// public static UserGroup getGroupByName(String enterpriseId, String
+	// groupName) {
+	// String msg = UserGroupCenter.listUserGroup(enterpriseId);
+	// System.out.println(msg);
+	// Assert.assertNotNull(msg);
+	// Map<String, Object> m = Utils.getMap(mapper, msg);
+	// Assert.assertTrue("1".equals(m.get("status").toString()));
+	//// List<UserGroup> groups = Utils.getList(mapper, m.get("groupList")
+	//// .toString(), UserGroup.class);
+	// List<UserGroup> groups = Utils.getObject(mapper, m.get("groupList")
+	// .toString(), new TypeReference<List<UserGroup>>() {
+	// });
+	// for (UserGroup group : groups) {
+	// if (group.getGroupName().equals(groupName)) {
+	// return group;
+	// }
+	// }
+	// return null;
+	// }
 
 	public static UserGroup getGroupByName(String enterpriseId, String groupName) {
 		String msg = UserGroupCenter.listUserGroup(enterpriseId);
@@ -41,7 +42,7 @@ public class UserGroupCenterUtil {
 		Map<String, Object> m = Utils.getMap(mapper, msg);
 		Assert.assertTrue("1".equals(m.get("status").toString()));
 		@SuppressWarnings("unchecked")
-		List<Map<String, Object>> groups = (List<Map<String, Object>>)m.get("groupList");
+		List<Map<String, Object>> groups = (List<Map<String, Object>>) m.get("groupList");
 		for (Map<String, Object> group : groups) {
 			if (group.get("groupName").equals(groupName)) {
 				UserGroup ug = new UserGroup();
@@ -64,16 +65,16 @@ public class UserGroupCenterUtil {
 		}
 		return null;
 	}
-	
+
 	public static String getGroupIdByName(String enterpriseId, String groupName) {
 		UserGroup group = getGroupByName(enterpriseId, groupName);
 		Assert.assertNotNull(group);
 		return group.getGroupId();
 	}
-	
+
 	public static UserGroup add(String groupName, String enterpriseId) {
 		UserGroup userGroup = new UserGroup();
-		
+
 		userGroup.setGroupName(groupName);
 		if (enterpriseId != null) {
 			userGroup.setEnterpriseId(enterpriseId);
@@ -82,7 +83,7 @@ public class UserGroupCenterUtil {
 		System.out.println(msg);
 		JsonNode node = Utils.getJson(mapper, msg);
 		Assert.assertTrue(node.get("status").asInt() == 1);
-		
+
 		return Utils.getObject(mapper, node.get("usergroup").asText(), UserGroup.class);
 	}
 }

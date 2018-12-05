@@ -35,13 +35,13 @@ public class UserCenterUtil {
 		userInfo.setRegisterDate((String) user.get("registerDate"));
 		return userInfo;
 	}
-	
+
 	public static String getUserIdByLoginName(String userName) {
 		UserInfo user = getUserByLoginName(userName);
 		Assert.assertNotNull(user);
 		return user.getUserId();
 	}
-	
+
 	public static UserInfo addUser(String userCode, String userMobile) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("tenantId", "00000000");

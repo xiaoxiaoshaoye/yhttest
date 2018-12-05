@@ -17,8 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Utils {
 
 	public static Random random = new Random();
-	public static SimpleDateFormat sdf = new SimpleDateFormat(
-			"YYYY-MM-dd_HH:mm:ss");
+	public static SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd_HH:mm:ss");
 
 	public static String suffixTimeAndRandom(String s) {
 		return s + "_" + sdf.format(new Date()) + "_" + random.nextInt();
@@ -39,8 +38,7 @@ public class Utils {
 		return node;
 	}
 
-	public static <T> T getObject(ObjectMapper mapper, String msg,
-			Class<T> clazz) {
+	public static <T> T getObject(ObjectMapper mapper, String msg, Class<T> clazz) {
 		T obj = null;
 		try {
 			obj = mapper.readValue(msg, clazz);
@@ -51,8 +49,7 @@ public class Utils {
 		return obj;
 	}
 
-	public static <T> T getObject(ObjectMapper mapper, String msg,
-			TypeReference<T> ref) {
+	public static <T> T getObject(ObjectMapper mapper, String msg, TypeReference<T> ref) {
 		T obj = null;
 		try {
 			obj = mapper.readValue(msg, ref);
@@ -75,20 +72,18 @@ public class Utils {
 		return getObject(mapper, msg, ref);
 	}
 
-	public static <T> List<T> getList(ObjectMapper mapper, String msg,
-			Class<T> clazz) {
+	public static <T> List<T> getList(ObjectMapper mapper, String msg, Class<T> clazz) {
 		TypeReference<List<T>> ref = new TypeReference<List<T>>() {
 		};
 		return getObject(mapper, msg, ref);
 	}
 
-	public static <T> List<T> getList(ObjectMapper mapper, String msg,
-			TypeReference<T> clazz) {
+	public static <T> List<T> getList(ObjectMapper mapper, String msg, TypeReference<T> clazz) {
 		TypeReference<List<T>> ref = new TypeReference<List<T>>() {
 		};
 		return getObject(mapper, msg, ref);
 	}
-	
+
 	public static String getJsonStr(ObjectMapper mapper, Object obj) {
 		try {
 			return mapper.writeValueAsString(obj);

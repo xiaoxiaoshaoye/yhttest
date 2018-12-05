@@ -551,17 +551,17 @@ public class TenantCenterExceptionTestSuntt {
 	 * 异常流程测试
 	*/
 	public void getUserIdsByTenantIdExceptionTest() throws JsonProcessingException, IOException{
-//		//参数都为空
-//		String msg=UserCenter.getUserIdsByTenantId("");	
-//		System.out.println(msg);
-//		JsonNode node = mapper.readTree(msg);
-//		Assert.assertTrue(node.get("status").asInt() == 0);
-//				
-//		//参数都为null
-//		String msg1=UserCenter.getUserIdsByTenantId(null);	
-//		System.out.println(msg1);
-//		JsonNode node1 = mapper.readTree(msg1);
-//		Assert.assertTrue(node1.get("status").asInt() == 0);
+		//参数都为空
+		String msg=UserCenter.getUserIdsByTenantId("");	
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt() == 0);
+				
+		//参数都为null
+		String msg1=UserCenter.getUserIdsByTenantId(null);	
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt() == 0);
 		
 		//参数值随便输入，不符合要求
 		String msg2=UserCenter.getUserIdsByTenantId("随便乱输入的内容haha");	
@@ -572,6 +572,165 @@ public class TenantCenterExceptionTestSuntt {
 	}
 	
 	
+	@Test
+	/* 根据类型查询应用  
+	 * 异常流程测试
+	*/
+	public void queryAppsExceptionTest() throws JsonProcessingException, IOException{
+		//参数都为空
+		String msg=TenantCenter.queryApps("");	
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt() == 0);
+				
+		//参数都为null
+		String msg1=TenantCenter.queryApps(null);	
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt() == 0);
+		
+		//参数值随便输入，不符合要求
+		String msg2=TenantCenter.queryApps("随便乱输入的内容haha");	
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt() == 0);
+	}
+	
+	@Test
+	/* 根据应用编码及租户关键字搜索租户  
+	 * 异常流程测试
+	*/
+	public void PageTenantsExceptionTest() throws JsonProcessingException, IOException{
+		
+		String resCode="u8";
+		String ps="6";
+		String pn="1";
+		String searchcode="stt520";
+		String sortType="";
+		//一页的条数为小数
+		String ps1="6.1";
+		String msg=TenantCenter.PageTenants(resCode,ps1,pn,searchcode,sortType);	
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt() == 0);
+
+		//页码为小数
+		String pn2="10.1";
+		String msg2=TenantCenter.PageTenants(resCode,ps,pn2,searchcode,sortType);	
+		System.out.println(msg2);
+		JsonNode node2 = mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt() == 0);
+		
+		//resCode不存在
+		String resCode3="哈哈哈不存在的resCode";
+		String msg3=TenantCenter.PageTenants(resCode3,ps,pn,searchcode,sortType);	
+		System.out.println(msg3);
+		JsonNode node3 = mapper.readTree(msg3);
+		Assert.assertTrue(node3.get("status").asInt() == 0);
+		
+		//sortType不正确
+		String sortType4="哈哈哈不存在的sortType";
+		String msg4=TenantCenter.PageTenants(resCode,ps,pn,searchcode,sortType4);	
+		System.out.println(msg4);
+		JsonNode node4 = mapper.readTree(msg4);
+		Assert.assertTrue(node4.get("status").asInt() == 0);
+		
+		//参数都为空
+		String msg5=TenantCenter.PageTenants("","","","","");	
+		System.out.println(msg5);
+		JsonNode node5 = mapper.readTree(msg5);
+//		Assert.assertTrue(node5.get("status").asInt() == 0);
+				
+		//参数都为null
+		String msg6=TenantCenter.PageTenants(null,null,null,null,null);	
+		System.out.println(msg6);
+		JsonNode node6 = mapper.readTree(msg6);
+//		Assert.assertTrue(node6.get("status").asInt() == 0);
+		
+
+	}
+	
+	
+	@Test
+	/*
+	 * 新增管理员信息
+	 * 异常测试
+	 * 用户 stt2018092701@test1988.com 密码 yonyou11
+	 * 企业帐号dd的tenantCode是stt2018092701dd
+	 */
+	public void addAdminExceptionTest() throws JsonProcessingException, IOException{
+		
+		//根据编码获取租户id
+		String msg=TenantCenter.getTenantByTenantCode("stt2018092701dd");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		String tenantId=node.get("tenant").get("tenantId").asText();
+		//为了用户不存在，使用当前日期时间
+		SimpleDateFormat date =new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		String t =date.format(new Date());
+		
+		//手机号、邮箱同时为空
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("userCode", t+"sttAdmin001");
+		params.put("userName", t+"stt管理员001");
+		params.put("tenantId", tenantId);		
+		String msg1=TenantCenter.addAdmin(params);
+		System.out.println(msg1);
+		JsonNode node1=mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==0);
+		Assert.assertTrue(node1.get("msg").asText().equals("手机号和邮箱不能同时为空"));
+		
+		//邮箱已存在
+		Map<String, String> params2 = new HashMap<String, String>();
+		params2.put("userCode", t+"sttAdmin002");
+		params2.put("userName", t+"stt管理员002");
+		params2.put("userEmail", "suntt@yonyou.com");
+		params2.put("tenantId", tenantId);		
+		String msg2=TenantCenter.addAdmin(params2);
+		System.out.println(msg2);
+		JsonNode node2=mapper.readTree(msg2);
+		Assert.assertTrue(node2.get("status").asInt()==0);
+		Assert.assertTrue(node2.get("msg").asText().equals("suntt@yonyou.com 邮箱已存在"));
+	
+		//手机已存在
+		Map<String, String> params3 = new HashMap<String, String>();
+		params3.put("userCode", t+"sttAdmin002");
+		params3.put("userName", t+"stt管理员002");
+		params3.put("userMobile", "18611286701");
+		params3.put("tenantId", tenantId);		
+		String msg3=TenantCenter.addAdmin(params3);
+		System.out.println(msg3);
+		JsonNode node3=mapper.readTree(msg3);
+		Assert.assertTrue(node3.get("status").asInt()==0);
+		Assert.assertTrue(node3.get("msg").asText().equals("18611286701 手机号已存在"));
+	
+		//邮箱格式不正确
+		Map<String, String> params4 = new HashMap<String, String>();
+		params4.put("userCode", t+"sttAdmin002");
+		params4.put("userName", t+"stt管理员002");
+		params4.put("userEmail", "sunttEmail");
+		params4.put("tenantId", tenantId);		
+		String msg4=TenantCenter.addAdmin(params4);
+		System.out.println(msg4);
+		JsonNode node4=mapper.readTree(msg4);
+		Assert.assertTrue(node4.get("status").asInt()==0);
+		Assert.assertTrue(node4.get("msg").asText().equals("suntt@yonyou.com 邮箱已存在"));
+	
+		
+		//手机号格式不正确
+		Map<String, String> params5 = new HashMap<String, String>();
+		params5.put("userCode", t+"sttAdmin002");
+		params5.put("userName", t+"stt管理员002");
+		params5.put("userMobile", "sunttMobile");
+		params5.put("tenantId", tenantId);		
+		String msg5=TenantCenter.addAdmin(params5);
+		System.out.println(msg5);
+		JsonNode node5=mapper.readTree(msg5);
+		Assert.assertTrue(node5.get("status").asInt()==0);
+		Assert.assertTrue(node5.get("msg").asText().equals("suntt@yonyou.com 邮箱已存在"));
+	
+		
+	}
 	
 	/**
      * 根据账号判断是否是管理员

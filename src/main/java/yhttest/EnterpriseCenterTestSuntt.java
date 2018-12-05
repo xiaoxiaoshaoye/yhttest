@@ -537,6 +537,19 @@ public class EnterpriseCenterTestSuntt {
 	}
 	
 	@Test
+	/* 根据企业ID获取云市场企业信息
+	 * 正常情况的测试
+	 */
+	public void  getMarketEnterInfoTest1(){
+		String enterId="a89ed630-80cd-432d-bad0-2f0602015d83";
+		String msg = EnterpriseCenter.getMarketEnterInfo(enterId,"02fdb2dd-c3a8-479a-b3fc-c5d8a33c0eac");
+		System.out.println(msg);
+		JsonNode  node=Utils.getJson(mapper, msg);
+		Assert.assertTrue(node.get("status").asInt()==1);		
+	}
+	
+	
+	@Test
 	/* 企业认证信息回写接口
 	 * 正常情况的测试
 	 * 企业未认证，则直接认证。如果企业不存在，则创建企业，再认证。

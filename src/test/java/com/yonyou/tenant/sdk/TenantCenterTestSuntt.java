@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yonyou.iuap.tenant.entity.Tenant;
 import com.yonyou.iuap.tenant.sdk.TenantCenter;
 import com.yonyou.iuap.tenant.sdk.UserCenter;
+import com.yonyou.yht.sdk.NCUserCenter;
 import com.yonyou.yht.sdkutils.PropertyUtil;
 
 import yhttest.UserCenterUtil;
@@ -436,6 +437,90 @@ public class TenantCenterTestSuntt {
 	
 	
 	
+	@Test
+	/* 根据类型查询应用
+	 * 正常流程测试
+	 * 001 云应用  008 nc、ncc、u8c
+	*/
+	public void queryAppsTest() throws JsonProcessingException, IOException{
+		String msg=TenantCenter.queryApps("008");	
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+	}
+	
+	
+	@Test
+	/* 根据应用编码及租户关键字搜索租户
+	 * 正常流程测试
+	 * @param resCode 应用的编码
+	 * @param ps      一页的条数
+	 * @param pn   页码
+	 * @param searchcode 搜索的关键字
+	 * @param sortType  排序类型 auto    name
+	 * 用户 stt2018092701@test1988.com 密码 yonyou11
+	 * 企业帐号stt520aa、stt520bb有u8，stt520cc没有u8
+	*/
+	public void PageTenantsTest() throws JsonProcessingException, IOException{
+		//一页显示6个数据，第一页。所有两个数据都能查出来
+		String resCode="u8";
+		String ps="6";
+		String pn="1";
+		String searchcode="stt520";
+		String sortType="";
+		String msg=TenantCenter.PageTenants(resCode,ps,pn,searchcode,sortType);	
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		Assert.assertTrue(node.get("status").asInt() == 1);
+		Assert.assertTrue(node.get("tenants").get("content").get(0).get("tenantName").asText().equals("stt520bb"));
+		Assert.assertTrue(node.get("tenants").get("content").get(1).get("tenantName").asText().equals("stt520aa"));
+
+		//一页显示1条数据，显示第二页
+		String resCode1="u8";
+		String ps1="1";
+		String pn1="2";
+		String searchcode1="stt520";
+		String sortType1="";
+		String msg1=TenantCenter.PageTenants(resCode1,ps1,pn1,searchcode1,sortType1);	
+		System.out.println(msg1);
+		JsonNode node1 = mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt() == 1);
+		Assert.assertTrue(node1.get("tenants").get("content").get(0).get("tenantName").asText().equals("stt520aa"));
+
+	}
+	
+	@Test
+	/*
+	 * 新增管理员信息
+	 * 正常测试
+	 * 用户 stt2018092701@test1988.com 密码 yonyou11
+	 * 企业帐号dd的tenantCode是stt2018092701dd
+	 */
+	public void addAdminTest() throws JsonProcessingException, IOException{
+		
+		//根据编码获取租户id
+		String msg=TenantCenter.getTenantByTenantCode("stt2018092701dd");
+		System.out.println(msg);
+		JsonNode node = mapper.readTree(msg);
+		String tenantId=node.get("tenant").get("tenantId").asText();
+		//为了用户不存在，使用当前日期时间
+		SimpleDateFormat date =new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		String t =date.format(new Date());
+		//本接口测试
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("userCode", t+"sttAdmin001");
+		params.put("userName", t+"stt管理员001");
+		params.put("userEmail", t+"@test1988.com");
+		params.put("tenantId", tenantId);		
+		String msg1=TenantCenter.addAdmin(params);
+		System.out.println(msg1);
+		JsonNode node1=mapper.readTree(msg1);
+		Assert.assertTrue(node1.get("status").asInt()==1);
+		Assert.assertTrue(node1.get("msg").asText().equals("注册成功"));
+	}
+	
+	
+	
 	
 	@Test
 		public void addAndActiveTest() {
@@ -701,8 +786,5 @@ public class TenantCenterTestSuntt {
 		Assert.assertTrue(node.get("success").get(10).get("resCode").asText().equals("diwork"));	
 	
 	}
-	
-
-	
-	
+		
 }

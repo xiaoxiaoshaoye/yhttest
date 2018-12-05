@@ -86,7 +86,7 @@
     	<dependency>
 			<groupId>com.yonyou.yht</groupId>
 			<artifactId>yht-sdk</artifactId>
-			<version>0.6.3-SNAPSHOT</version>
+			<version>0.6.6-SNAPSHOT</version>
 		</dependency>
 	
 		<dependency>

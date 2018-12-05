@@ -27,6 +27,7 @@ import com.yonyou.yht.sdkutils.PropertyUtil;
 import net.sf.json.JSONObject;
 import yhttest.UserCenterUtil;
 import com.yonyou.iuap.context.InvocationInfoProxy;
+import com.yonyou.iuap.tenant.sdk.TenantCenter;
 
 // xiezhengnan 6e3e49a2-aa13-4ed5-ad4b-557bd6d0e7a8
 // test_001 3d5aae38-8be1-4bdd-866a-bf29a3540e8c
@@ -2914,6 +2915,33 @@ public class UserCenterTestSuntt {
 
 			}
 			
+			@Test
+			/*
+			 * 新增NC租户白名单接口
+			 * 正常流程测试
+			 * 用户 stt2018092701@test1988.com 密码 yonyou11
+			 * 一次性用例，因为一个租户只能设置一次
+			 */
+			public void addNcTenantWhiteTest() throws JsonProcessingException, IOException {
+				
+//				//根据编码获取租户id
+//				String msg=TenantCenter.getTenantByTenantCode("stt2018092701dd");
+//				System.out.println(msg);
+//				JsonNode node = mapper.readTree(msg);
+//				String tenantId=node.get("tenant").get("tenantId").asText();
+				
+				
+				String tenantId="d81iksxc";
+				//本接口测试
+				String loginType="NC65";
+				String msg1=NCUserCenter.addNcTenantWhite(tenantId,loginType);
+				System.out.println(msg1);
+				JsonNode node1 = mapper.readTree(msg1);
+				Assert.assertTrue(node1.get("status").asInt() == 1);
+				Assert.assertTrue(node1.get("msg").asText().equals("保存成功"));
+
+			}
+				
 }
 
 

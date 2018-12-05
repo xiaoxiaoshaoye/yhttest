@@ -3562,6 +3562,35 @@ ObjectMapper mapper= new ObjectMapper();
 //			Assert.assertTrue(node2.get("status").asInt() == 0);
 //			Assert.assertTrue(node2.get("msg").asText().equals("哈哈哈呀呀呀用户不存在"));
 		}
+		
+		
+		@Test  
+		/* 新增NC租户白名单接口
+		 * 异常情况的测试
+		*/
+		
+		public void addNcTenantWhiteExceptionTest() throws JsonProcessingException, IOException  {
+			
+			//参数为空
+			String msg = NCUserCenter.addNcTenantWhite("","");
+			System.out.println(msg);
+			JsonNode node = mapper.readTree(msg);
+//			Assert.assertTrue(node.get("status").asInt() == 0);
+			
+			//参数是随便输入的值
+			String msg1 = NCUserCenter.addNcTenantWhite("随便乱输入的内容哈哈哈哈哈","随便乱输入的内容哈哈哈哈哈");
+			System.out.println(msg1);
+			JsonNode node1 = mapper.readTree(msg1);
+//			Assert.assertTrue(node1.get("status").asInt() == 0);
+			
+			//参数是null
+			String msg2 = NCUserCenter.addNcTenantWhite(null,null);
+			System.out.println(msg2);
+			JsonNode node2 = mapper.readTree(msg2);
+//			Assert.assertTrue(node2.get("status").asInt() == 0);
+		}
+		
+		
 }
 	
 

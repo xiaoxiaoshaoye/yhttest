@@ -14,12 +14,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import yhttest.UserCenterUtil;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yonyou.yht.entity.UserInfo;
+import com.yonyou.enterprise.sdk.UserCenterUtil;
 import com.yonyou.yht.sdkutils.PropertyUtil;
 
 

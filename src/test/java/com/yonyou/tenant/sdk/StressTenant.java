@@ -3,10 +3,10 @@ package com.yonyou.tenant.sdk;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.yonyou.enterprise.sdk.UserCenterUtil;
 import com.yonyou.iuap.tenant.sdk.TenantCenter;
 import com.yonyou.iuap.tenant.sdk.UserCenter;
 
-import yhttest.UserCenterUtil;
 
 public class StressTenant {
 	

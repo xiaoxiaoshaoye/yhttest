@@ -2,12 +2,8 @@ package com.yonyou.yht.sdk;
 
 import java.io.IOException;
 
-import org.junit.Assert;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-
-import yhttest.UserCenterUtil;
+import com.yonyou.enterprise.sdk.UserCenterUtil;
 
 
 

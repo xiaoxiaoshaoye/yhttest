@@ -16,9 +16,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yonyou.enterprise.sdk.UserCenterUtil;
 import com.yonyou.yht.sdkutils.PropertyUtil;
-
-import yhttest.UserCenterUtil;
 
 public class ZUserCenterTestSuntt {
 	ObjectMapper mapper= new ObjectMapper();

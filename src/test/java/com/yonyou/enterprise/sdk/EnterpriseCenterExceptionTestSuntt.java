@@ -1,4 +1,4 @@
-package yhttest;
+package com.yonyou.enterprise.sdk;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -15,7 +15,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import yhttest.UserCenterUtil;
+
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

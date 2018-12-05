@@ -1,20 +1,11 @@
 package com.yonyou.tenant.sdk;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,13 +13,10 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yonyou.iuap.tenant.entity.Tenant;
+import com.yonyou.enterprise.sdk.UserCenterUtil;
 import com.yonyou.iuap.tenant.sdk.TenantCenter;
 import com.yonyou.iuap.tenant.sdk.UserCenter;
-import com.yonyou.yht.sdk.NCUserCenter;
-import com.yonyou.yht.sdkutils.PropertyUtil;
 
-import yhttest.UserCenterUtil;
 
 
 public class TenantCenterTestSuntt {

@@ -9,11 +9,11 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yonyou.enterprise.sdk.UserCenterUtil;
 import com.yonyou.yht.sdkutils.CasClientPropertyUtil;
 import com.yonyou.yht.sdkutils.sign.SignUtils;
 
 import net.sf.json.JSONObject;
-import yhttest.UserCenterUtil;
 
 public class RestTest {
 	String baseurl;

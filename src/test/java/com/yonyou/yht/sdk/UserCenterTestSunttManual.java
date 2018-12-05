@@ -1,20 +1,11 @@
 package com.yonyou.yht.sdk;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,12 +13,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yonyou.enterprise.sdk.UserCenterUtil;
 import com.yonyou.yht.sdkutils.PropertyUtil;
-
-import yhttest.UserCenterUtil;
-// xiezhengnan 6e3e49a2-aa13-4ed5-ad4b-557bd6d0e7a8
-// test_001 3d5aae38-8be1-4bdd-866a-bf29a3540e8c
-// test_002 8693be50-42a5-413b-a27e-59ded6dbd6a1
 
 // caojj1@yonyou.com b5298ade-5c7e-4880-8521-f2542c2a6dab
 // daixd@yonyou.com 906c8e75-2da4-473f-b14d-4ed8acaaab4f

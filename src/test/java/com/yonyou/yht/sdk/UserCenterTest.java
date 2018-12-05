@@ -11,10 +11,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import yhttest.UserCenterUtil;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yonyou.enterprise.sdk.UserCenterUtil;
 import com.yonyou.yht.entity.UserInfo;
 // xiezhengnan 6e3e49a2-aa13-4ed5-ad4b-557bd6d0e7a8
 // test_001 3d5aae38-8be1-4bdd-866a-bf29a3540e8c

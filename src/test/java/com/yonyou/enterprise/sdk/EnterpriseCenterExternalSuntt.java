@@ -1,4 +1,4 @@
-package yhttest;
+package com.yonyou.enterprise.sdk;
 
 import java.util.Enumeration;
 import java.util.Properties;

@@ -16,8 +16,6 @@ import com.yonyou.yht.ex.sdk.NCUserCenter;
 import com.yonyou.yht.ex.sdk.UserCenter;
 import com.yonyou.yht.sdkutils.PropertyUtil;
 
-import yhttest.UserCenterUtil;
-
 public class YhtSdkExternalSuntt {
 	
 ObjectMapper mapper= new ObjectMapper();

@@ -22,12 +22,11 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yonyou.enterprise.sdk.UserCenterUtil;
 import com.yonyou.iuap.tenant.entity.Tenant;
 import com.yonyou.iuap.tenant.sdk.TenantCenter;
 import com.yonyou.iuap.tenant.sdk.UserCenter;
 import com.yonyou.yht.sdkutils.PropertyUtil;
-
-import yhttest.UserCenterUtil;
 
 
 public class TenantCenterExceptionTestSuntt {

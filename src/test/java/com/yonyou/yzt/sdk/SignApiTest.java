@@ -1,4 +1,4 @@
-package yzttest;
+package com.yonyou.yzt.sdk;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.yonyou.iuap</groupId>
@@ -11,25 +12,34 @@
 		<cas.version>0.4-SNAPSHOT</cas.version>
 		<junit.version>4.12</junit.version>
 		<assertj.version>3.6.2</assertj.version>
+		<poi.version>3.15</poi.version>
 	</properties>
+	
 	<dependencies>
+	<dependency>
+		<groupId>org.apache.poi</groupId>
+		<artifactId>poi</artifactId>
+		<version>${poi.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.poi</groupId>
+		<artifactId>poi-ooxml</artifactId>
+		<version>${poi.version}</version>
+	</dependency>
 	
 		<dependency>
-			<groupId>com.yonyou.yht</groupId>
-			<artifactId>app-sdk</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
 		</dependency>
-	
-
-
-
+		<!-- <dependency> <groupId>com.yonyou.yht</groupId> <artifactId>yht-sdk-external</artifactId> 
+			<version>2.0-SNAPSHOT</version> </dependency> -->
 		<dependency>
- 			 <groupId>com.yonyou.iuap</groupId>
- 			 <artifactId>iuap-tenant-sdk</artifactId>
- 			 <version>2.0.6-SNAPSHOT</version>
+			<groupId>com.yonyou.iuap</groupId>
+			<artifactId>iuap-tenant-sdk</artifactId>
+			<version>5.0.13-SNAPSHOT</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -70,32 +80,18 @@
 			</exclusions>
 		</dependency>
 		<!--集成友户通登录需要 -->
-		<!-- <dependency>
-			<groupId>com.yonyou.yht</groupId>
-			<artifactId>yht-sso-client</artifactId>
-			<version>0.4-SNAPSHOT</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.yonyou.yht</groupId> <artifactId>yht-sso-client</artifactId> 
+			<version>0.4-SNAPSHOT</version> </dependency> -->
 		<!-- 登录后使用Redis存储session时需要 -->
-		<!-- <dependency>
-			<groupId>com.yonyou.yht</groupId>
-			<artifactId>yht-sso-cache</artifactId>
-			<version>0.4-SNAPSHOT</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.yonyou.yht</groupId> <artifactId>yht-sso-cache</artifactId> 
+			<version>0.4-SNAPSHOT</version> </dependency> -->
 		<!--调用友户通SDK的依赖 -->
 
-    	<dependency>
+		<dependency>
 			<groupId>com.yonyou.yht</groupId>
 			<artifactId>yht-sdk</artifactId>
-			<version>0.6.6-SNAPSHOT</version>
+			<version>5.0.13-SNAPSHOT</version>
 		</dependency>
-	
-		<dependency>
-      		<groupId>com.yonyou.yht</groupId>
-      		<artifactId>yht-sdk-external</artifactId>   
-     		<version>1.9.3-SNAPSHOT</version>
-		</dependency>
-	
-
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
@@ -132,57 +128,33 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.3</version>
 		</dependency>
-		<!-- 系统互信 -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.yonyou.iuap</groupId>
 			<artifactId>iuap-security</artifactId>
-			<version>3.0.0-RC001</version>
+			<version>5.0.0-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
-					declare the exclusion here
 					<groupId>xml-apis</groupId>
 					<artifactId>xml-apis</artifactId>
 				</exclusion>
 				<exclusion>
-					declare the exclusion here
 					<groupId>org.slf4j</groupId>
 					<artifactId>jcl-over-slf4j</artifactId>
 				</exclusion>
 				<exclusion>
-					declare the exclusion here
 					<groupId>xom</groupId>
 					<artifactId>xom</artifactId>
 				</exclusion>
+				<exclusion>
+					<artifactId>json-lib</artifactId>
+					<groupId>net.sf.json-lib</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>bcprov-jdk16</artifactId>
+					<groupId>org.bouncycastle</groupId>
+				</exclusion>
 			</exclusions>
-		</dependency> -->
-		<dependency>
-            <groupId>com.yonyou.iuap</groupId>
-            <artifactId>iuap-security</artifactId>
-            <version>3.0.0-RC001</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>xml-apis</groupId>
-                    <artifactId>xml-apis</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>jcl-over-slf4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>xom</groupId>
-                    <artifactId>xom</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>json-lib</artifactId>
-                    <groupId>net.sf.json-lib</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>bcprov-jdk16</artifactId>
-                    <groupId>org.bouncycastle</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -195,55 +167,84 @@
 			<version>${assertj.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <version>4.0.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>4.0.0</version>
+    </dependency>
 	</dependencies>
 	<repositories>
-	<repository>
-			<id>soma</id>
-			<name>soma</name>
-			<url>http://soma.yonyou.com/nexus/content/repositories/yht/</url>
-			<layout>default</layout>
+		<repository>
+			<id>yht-cloud-release</id>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
+			<name>yht-cloud-release</name>
+			<url>http://maven.yonyou.com/nexus/content/repositories/YHTCloud-Release/</url>
+		</repository>
+		<repository>
+			<id>yht-cloud-snapshot</id>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository>
-<!--
-		<repository>
-			<id>yhtSnapshots</id>
-			<name>yhtSnapshots</name>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<name>yht-cloud-snapshot</name>
 			<url>http://maven.yonyou.com/nexus/content/repositories/YHTCloud-Snapshot/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
 		</repository>
--->
 		<repository>
-          <id>yhtSnapshots</id>
-          <name>yhtSnapshots</name>
-	    	<url>https://eucdaily.yyuap.com/nexus/content/groups/yhtgroup/</url>
-          <layout>default</layout>
-          <releases>
-             <enabled>false</enabled>
-          </releases>
-          <snapshots>
-             <enabled>true</enabled>
-          </snapshots>
-    	</repository>
-
-		<repository>
-			<id>iUAP</id>
-			<name>iUAP-Snapshots</name>
-			<url>http://maven.yonyou.com/nexus/content/repositories/iUAP-Snapshots/</url>
+			<id>yonyou-cloud-release</id>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
+			<name>yonyou-cloud-release</name>
+			<url>http://maven.yonyou.com/nexus/content/repositories/YonyouCloud-Release/</url>
+		</repository>
+		<repository>
+			<id>yonyou-cloud-snapshot</id>
 			<snapshots>
+				<enabled>true</enabled>
 			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<name>yonyou-cloud-snapshot</name>
+			<url>http://maven.yonyou.com/nexus/content/repositories/YonyouCloud-Snapshot/</url>
+		</repository>
+		<repository>
+			<id>iuap-stage</id>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<name>iuap-stage</name>
+			<url>https://maven.yonyou.com/nexus/repository/iUAP-Stagings/</url>
+		</repository>
+		<repository>
+			<id>iuap-snap</id>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<name>iuap-snap</name>
+			<url>https://maven.yonyou.com/nexus/repository/iUAP-Snapshots/</url>
 		</repository>
 	</repositories>
+
 </project>

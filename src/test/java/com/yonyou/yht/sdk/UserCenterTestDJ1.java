@@ -607,9 +607,11 @@ public class UserCenterTestDJ1 {
 		//		System.out.println(accessToken);
 		// 本测试方法的代码
 //		String accessToken = "bttekNPQjVkM1QyWHJnbjVXbGVxUHkxRDJMUkltZk0yUVdsa244YWpuQUJJYkdNRTArdHlGbWN5RmJWY3Q5SCtiUStJeGlmWjJHczNlcTRkRTh0blhNM3BxNmxPZGN5RTBqMW4za2toM1Q1RGs9Xzk5ZWE3NjU1LTAwYTItNGJkYS1iMjNjLTE5YWRlMzdlYTU3NF9pZHRlc3QueXl1YXAuY29tXzE1NzU5NDMwMDI5ODY";
-		String accessToken = "2dad9e01-1850-4dca-aebf-354559563e04";
+//		String accessToken = "2dad9e01-1850-4dca-aebf-354559563e04";
+		String accessToken = "20788331-3962-40d9-b8a1-61e4909b413e";
 		String version_accessToken = "2dad9e01-1850-4dca-aebf-354559563e04__9da765949a7f59686b0bc5ef1388f48c_1587625581732";
-		String msg2 = UserCenter.getUserByToken(version_accessToken);
+//		String msg2 = UserCenter.getUserByToken(version_accessToken);
+		String msg2 = UserCenter.getUserByToken(accessToken);
 		System.out.println(" 根据accesstoken获取用户信息 "+msg2);
 		JsonNode node2 = mapper.readTree(msg2);
 		Assert.assertTrue(node2.get("status").asInt() == 1);
@@ -2227,7 +2229,117 @@ String	发起操作的应用代码
 		System.out.println(msg); 
 		
 	}
+	//添加域用户
+	/**
+	 * 
+	 * 
+	 * scope  String 是域的名称
+     scopeCode	String	是	在该域下的账号名，注意：scope+scopeCode 组成了唯一索引，不可重复
+     scopeMobile	String	否	手机号
+     scopeEmail	String	否	邮箱
+     userName	String	否	用户昵称
+     userPassword	String	否	用户密码，注意：如果不填，则使用友户通的默认密码，一般情况下，默认密码为：yonyou@1988
+
+	 */
+		@Test
+		public void addScopeUserTest() throws JsonProcessingException,IOException{
+//			
+			String scope = "33";
+			String scopeCode = "33";
+			String scopeMobile = "15210142172";
+			String scopeEmail = "";
+			String userName = "";
+			String userPassword = "";
+			String msg = UserCenter.addScopeUser(scope, scopeCode, scopeMobile, scopeEmail, userName, userPassword);
+			System.out.println(msg); 
+			
+		}
+		@Test
+		/*
+		 * 修改域用户
+		 * 
+		 * */
+		public void modifyScopeUserTest() throws JsonProcessingException,IOException{
+//			
+			String scope = "33";
+			String scopeCode = "33";  
+			String scopeMobile = "";
+			String scopeEmail = "";
+			String userName = "";
+			String userPassword = "qwaszx12";
+			String msg = UserCenter. modifyScopeUser(scopeCode, scope, scopeMobile, scopeEmail, userName, userPassword);
+			System.out.println(msg); 
+			
+		}
+		@Test
+		/*
+		 * 通过域和该域下的账号，获取域用户信息
+		 * scope String是域的名称
+
+            scopeCode	String	是	在该域下的账号名，注意：scope+scopeCode 组成了唯一索引，不可重复
+		 * */
+		public void getScopeUserInfoTest() throws JsonProcessingException,IOException{
+//			
+			String scope = "33";
+			String scopeCode = "33";       
+			String msg = UserCenter.getScopeUserInfo(scope, scopeCode);
+			System.out.println(msg); 
+			
+		}
+		//根据密码和域获取accessToken
+		
+		@Test
+		/*
+		 * 根据密码和域获取accessToken
+		 * getUserByTokenTestdd()-根据AccessToken获取用户
+		 * scopecode
+		 * String是登录名（即为域用户表中scope_code 字段）
+         password	String	是	明文密码
+          multiLogin	boolean	是	是否支持多端登录
+         scope	String	是	域的名称
+		 * 
+		 * */
+		public void generateAccessTokenWithScopeTest() throws JsonProcessingException,IOException{
+//			
+			String scope = "33";
+			String scopecode = "33"; 
+			String password = "qwaszx12";
+			boolean multiLogin = false;
+			String msg = UserCenter.generateAccessTokenWithScope(scopecode, password, multiLogin, scope);
+			System.out.println(msg); 
+			
+		}
+		@Test
+		/*
+		 * 根据accessToken获取logintoken
+		 * 在根据logintoken登录
+		 * https://idtest.yyuap.com/cas/login?token=ea0e9ceb1f838284c2caaaf0c1efbae17f6b907628f33a2838f3a50ddb85f452
+		 * 
+		 * */
+		public void getLoginTokenByAccessTokenTest() throws JsonProcessingException,IOException{
+//			
+			String accessToken = "e645b900-5b78-4b14-ba9a-8f16ed252493";
+			String msg = UserCenter.getLoginTokenByAccessToken(accessToken);
+			System.out.println(msg); 
+			
+		}
+		
+		@Test
+		/*
+		 * 根据密码和域获取loginToken
+		 * 
+		 * */
+		public void genLoginTokenWithScopeTest() throws JsonProcessingException,IOException{
+//			
+			String scope = "33";
+			String scopeCode = "33"; 
+			String password = "qwaszx12";
+			String msg = UserCenter.genLoginTokenWithScope(scopeCode, password, scope);
+			System.out.println(msg); 
+			
+		}
 	
+		
 	
 }
 

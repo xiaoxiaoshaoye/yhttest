@@ -781,7 +781,7 @@ public class TenantCenterTestDJ {
 	 */
 	public void enableAppTest() throws JsonProcessingException, IOException {
   
-		String tenantId = "xrm3dc84";//xrm3dc84  p54qfanq
+		String tenantId = "j79lt8np";//xrm3dc84  p54qfanq   预发环境j79lt8np
 		String resCode = "diwork";
 		String msg = TenantCenter.enableApp(tenantId, resCode);
 		System.out.println(msg);
